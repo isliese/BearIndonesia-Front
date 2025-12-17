@@ -1,6 +1,5 @@
-// src/data/totalData.js (
+// total data
 // 모든 412개의 데이터 합산
-// Vite/CRA는 JSON import를 지원합니다.
 import BPOM from "../data/BPOM.json";
 import CNBC from "../data/CNBC.json";
 import CNN from "../data/CNN.json";

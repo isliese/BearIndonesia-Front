@@ -2,8 +2,8 @@
 import React, { useState } from 'react';
 
 const NewsDetailPage = ({ news, setCurrentPage, prevPage }) => {
-  const [lang, setLang] = useState("ko"); 
-
+  const [titleLang, setTitleLang] = useState("ko"); 
+  const [contentTab, setContentTab] = useState("ko"); 
   if (!news) {
     return (
       <div style={{
@@ -15,17 +15,20 @@ const NewsDetailPage = ({ news, setCurrentPage, prevPage }) => {
     );
   }
 
-  const titleKO   = news.korTitle || news.title || '';
-  const titleEN   = news.engTitle || news.title || '';
+  const titleKO   = news.korTitle || '';
+  const titleID   = news.title || '';
   const summaryKO = news.korSummary || '';
-  const summaryEN = news.engSummary || '';
+  const summaryID = news.summary || '';
+  const imageURL = news.img || '';
+  const contentKO = news.korContent || '';
+  const contentID = news.content || '';
   const insight   = news.importanceRationale || news.importance_rationale || '';
   const author    = news.source || '';
   const date      = news.date || '';
   const link      = news.link || '';
   const tags      = Array.isArray(news.tags) ? news.tags : [];
 
-  // **굵게** -> 포인트 컬러 굵게 (배경 없음) + 개행 유지
+  // 텍스트 하이라이트
   const renderHighlighted = (text) => {
     if (!text) return null;
     const parts = String(text).split(/(\*\*[^*]+\*\*)/g);
@@ -59,10 +62,18 @@ const NewsDetailPage = ({ news, setCurrentPage, prevPage }) => {
           top: '3.5rem',
           left: '15rem',
           background: 'rgba(255, 255, 255, 0.1)',
-          border: '1px solid rgba(255, 140, 66, 0.5)', borderRadius: '50%',
-          width: '50px', height: '50px', color: '#ff8c42', fontSize: '1.5rem',
-          cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-          transition: 'all 0.3s ease', zIndex: 10
+          border: '1px solid rgba(255, 140, 66, 0.5)', 
+          borderRadius: '50%',
+          width: '50px', 
+          height: '50px', 
+          color: '#ff8c42', 
+          fontSize: '1.5rem',
+          cursor: 'pointer', 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'center',
+          transition: 'all 0.3s ease', 
+          zIndex: 10
         }}
         onMouseEnter={(e) => {
           e.currentTarget.style.background = 'rgba(255, 140, 66, 0.2)';
@@ -78,9 +89,12 @@ const NewsDetailPage = ({ news, setCurrentPage, prevPage }) => {
 
       <div style={{ maxWidth: '900px', margin: '0 auto', marginTop: '1rem' }}>
         <div style={{
-          background: 'rgba(255, 255, 255, 0.08)', backdropFilter: 'blur(20px)',
-          borderRadius: '25px', border: '1px solid rgba(255, 255, 255, 0.1)',
-          overflow: 'hidden', boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)'
+          background: 'rgba(255, 255, 255, 0.08)', 
+          backdropFilter: 'blur(20px)',
+          borderRadius: '25px', 
+          border: '1px solid rgba(255, 255, 255, 0.1)',
+          overflow: 'hidden', 
+          boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)'
         }}>
           {/* 헤더 */}
           <div style={{
@@ -88,31 +102,36 @@ const NewsDetailPage = ({ news, setCurrentPage, prevPage }) => {
             padding: '3rem 3rem 2rem',
             borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
           }}>
-            {/* ✅ 드롭다운 + 제목 */}
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            {/* 제목 + 드롭다운 */}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "1rem" }}>
               <h1 style={{
-                fontSize: '2.2rem', fontWeight: '700', lineHeight: '1.3',
-                marginBottom: '2rem', color: 'white',
-                textShadow: '0 2px 10px rgba(0, 0, 0, 0.3)'
+                fontSize: '2.2rem', 
+                fontWeight: '700', 
+                lineHeight: '1.3',
+                marginBottom: '2rem', 
+                color: 'white',
+                textShadow: '0 2px 10px rgba(0, 0, 0, 0.3)',
+                flex: 1
               }}>
-                {lang === "ko" ? titleKO : titleEN}
+                {titleLang === "ko" ? titleKO : titleID}
               </h1>
 
               <select
-                value={lang}
-                onChange={(e) => setLang(e.target.value)}
+                value={titleLang}
+                onChange={(e) => setTitleLang(e.target.value)}
                 style={{
-                  background: "rgba(255,255,255,0.1)",
-                  color: "black",
+                  background: "rgba(255,255,255,0.15)",
+                  color: "white",
                   border: "1px solid rgba(255,255,255,0.3)",
                   borderRadius: "8px",
-                  padding: "0.4rem 0.6rem",
+                  padding: "0.5rem 0.8rem",
                   fontSize: "0.9rem",
-                  cursor: "pointer"
+                  cursor: "pointer",
+                  flexShrink: 0
                 }}
               >
-                <option value="ko">한국어 제목</option>
-                <option value="en">영어 제목</option>
+                <option value="ko" style={{color: 'black'}}>한국어 제목</option>
+                <option value="id" style={{color: 'black'}}>원문 제목</option>
               </select>
             </div>
 
@@ -197,67 +216,231 @@ const NewsDetailPage = ({ news, setCurrentPage, prevPage }) => {
             )}
           </div>
 
-          {/* 본문 & 요약 */}
-          <div style={{ padding: '3rem' }}>
-            {/* ✅ AI 요약(한국어) */}
-            {summaryKO && (
-              <div style={{ marginBottom: '2rem' }}>
-                <h3 style={{
-                  color: '#ff8c42', fontSize: '1.3rem', fontWeight: 600,
-                  marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem'
-                }}>
-                  <span>🤖</span>AI 요약
-                </h3>
-                <div
-                  style={{
-                    color: '#d0d0d0',
-                    marginBottom: '1rem',
-                    lineHeight: '1.6',
-                    display: '-webkit-box',
-                    WebkitLineClamp: 5,
-                    WebkitBoxOrient: 'vertical',
-                    overflow: 'hidden'
-                  }}
-                >
-                  {renderHighlighted(summaryKO)}
-                </div>
-              </div>
-            )}
+          {/* 탭 + 본문 */}
+          <div style={{ padding: '0' }}>
+            {/* 크롬 스타일 탭 */}
+            <div style={{ 
+              display: 'flex', 
+              background: 'rgba(0, 0, 0, 0.2)',
+              borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+            }}>
+              <button
+                onClick={() => setContentTab("ko")}
+                style={{
+                  padding: '1rem 12rem',
+                  background: contentTab === "ko" ? 'rgba(255, 255, 255, 0.08)' : 'transparent',
+                  border: 'none',
+                  borderTopLeftRadius: '12px',
+                  borderTopRightRadius: '12px',
+                  color: contentTab === "ko" ? '#ff8c42' : 'rgba(255, 255, 255, 0.6)',
+                  fontSize: '1rem',
+                  fontWeight: contentTab === "ko" ? '600' : '400',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                  position: 'relative',
+                  borderBottom: contentTab === "ko" ? 'none' : '1px solid rgba(255, 255, 255, 0.1)',
+                  whiteSpace: 'nowrap',
+                  flexShrink: 0,
+                  minWidth: '160px',
+                }}
+                onMouseEnter={(e) => {
+                  if (contentTab !== "ko") {
+                    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.03)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (contentTab !== "ko") {
+                    e.currentTarget.style.background = 'transparent';
+                  }
+                }}
+              >
+                한국어
+              </button>
+              
+              <button
+                onClick={() => setContentTab("id")}
+                style={{
+                  padding: '1rem 12rem',
+                  background: contentTab === "id" ? 'rgba(255, 255, 255, 0.08)' : 'transparent',
+                  border: 'none',
+                  borderTopLeftRadius: '12px',
+                  borderTopRightRadius: '12px',
+                  color: contentTab === "id" ? '#ff8c42' : 'rgba(255, 255, 255, 0.6)',
+                  fontSize: '1rem',
+                  fontWeight: contentTab === "id" ? '600' : '400',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                  position: 'relative',
+                  borderBottom: contentTab === "id" ? 'none' : '1px solid rgba(255, 255, 255, 0.1)',
+                  whiteSpace: 'nowrap',
+                  flexShrink: 0,
+                }}
+                onMouseEnter={(e) => {
+                  if (contentTab !== "id") {
+                    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.03)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (contentTab !== "id") {
+                    e.currentTarget.style.background = 'transparent';
+                  }
+                }}
+              >
+                인도네시아어
+              </button>
+            </div>
 
-            {/* ✅ AI 요약(영어) */}
-            {summaryEN && (
-              <div style={{ marginBottom: '2rem' }}>
-                <h3 style={{
-                  color: '#ff8c42', fontSize: '1.3rem', fontWeight: 600,
-                  marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem'
-                }}>
-                  <span>🤖</span>AI 요약(영어)
-                </h3>
-                <div
-                  style={{
-                    color: '#d0d0d0',
-                    marginBottom: '1rem',
-                    lineHeight: '1.6',
-                    display: '-webkit-box',
-                    WebkitLineClamp: 5,
-                    WebkitBoxOrient: 'vertical',
-                    overflow: 'hidden'
-                  }}
-                >
-                  {renderHighlighted(summaryEN)}
-                </div>
-              </div>
-            )}
+            {/* 탭 내용 */}
+            <div style={{ padding: '3rem' }}>
+              {contentTab === "ko" ? (
+                <>
+                  {/* AI 요약(한국어) */}
+                  {summaryKO && (
+                    <div style={{ marginBottom: '2.5rem' }}>
+                      <h3 style={{
+                        color: '#ff8c42', 
+                        fontSize: '1.3rem', 
+                        fontWeight: 600,
+                        marginBottom: '1rem', 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        gap: '0.5rem'
+                      }}>
+                        <span>🤖</span>AI 요약
+                      </h3>
+                      <div style={{
+                        color: '#d0d0d0',
+                        lineHeight: '1.8',
+                        fontSize: '1.05rem'
+                      }}>
+                        {renderHighlighted(summaryKO)}
+                      </div>
+                    </div>
+                  )}
 
-            {/* ✅ 인사이트 */}
-            {insight && (
-              <div style={{ marginBottom: '2rem' }}>
-                <h3 style={{ color: '#ff8c42', fontSize: '1.15rem', fontWeight: 600, marginBottom: '0.75rem' }}>
-                  인사이트
-                </h3>
-                <p style={{ color: '#e0e0e0', lineHeight: 1.7 }}>{insight}</p>
-              </div>
-            )}
+                  {/* 뉴스 대표 이미지 */}
+                  {imageURL && (
+                    <div style={{
+                      margin: '2.5rem 0',
+                      display: 'flex',
+                      justifyContent: 'center'
+                    }}>
+                      <img
+                        src={imageURL}
+                        alt="뉴스 대표 이미지"
+                        style={{
+                          maxWidth: '100%',
+                          maxHeight: '420px',
+                          objectFit: 'cover',
+                          borderRadius: '18px',
+                          boxShadow: '0 10px 30px rgba(0,0,0,0.35)',
+                          border: '1px solid rgba(255,255,255,0.12)'
+                        }}
+                        loading="lazy"
+                      />
+                    </div>
+                  )}
+
+                  {/* 원문(한국어) */}
+                  {contentKO && (
+                    <div style={{ marginBottom: '2.5rem' }}>
+                      <h3 style={{
+                        color: '#ff8c42', 
+                        fontSize: '1.3rem', 
+                        fontWeight: 600,
+                        marginBottom: '1rem'
+                      }}>
+                        📄 원문
+                      </h3>
+                      <div style={{
+                        color: '#e0e0e0',
+                        lineHeight: '1.8',
+                        fontSize: '1.02rem',
+                        whiteSpace: 'pre-wrap'
+                      }}>
+                        {contentKO}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* 인사이트 */}
+                  {insight && (
+                    <div style={{ marginBottom: '2rem' }}>
+                      <h3 style={{ 
+                        color: '#ff8c42', 
+                        fontSize: '1.3rem', 
+                        fontWeight: 600, 
+                        marginBottom: '1rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem'
+                      }}>
+                        💡 인사이트
+                      </h3>
+                      <div style={{ 
+                        color: '#e0e0e0', 
+                        lineHeight: 1.8,
+                        fontSize: '1.02rem',
+                        background: 'rgba(255, 140, 66, 0.08)',
+                        padding: '1.5rem',
+                        borderRadius: '12px',
+                        border: '1px solid rgba(255, 140, 66, 0.2)'
+                      }}>
+                        {insight}
+                      </div>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <>
+                  {/* AI 요약(인도네시아어) */}
+                  {summaryID && (
+                    <div style={{ marginBottom: '2.5rem' }}>
+                      <h3 style={{
+                        color: '#ff8c42', 
+                        fontSize: '1.3rem', 
+                        fontWeight: 600,
+                        marginBottom: '1rem', 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        gap: '0.5rem'
+                      }}>
+                        <span>🤖</span>AI Ringkasan
+                      </h3>
+                      <div style={{
+                        color: '#d0d0d0',
+                        lineHeight: '1.8',
+                        fontSize: '1.05rem'
+                      }}>
+                        {renderHighlighted(summaryID)}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* 원문(인도네시아어) */}
+                  {contentID && (
+                    <div style={{ marginBottom: '2.5rem' }}>
+                      <h3 style={{
+                        color: '#ff8c42', 
+                        fontSize: '1.3rem', 
+                        fontWeight: 600,
+                        marginBottom: '1rem'
+                      }}>
+                        📄 Artikel Asli
+                      </h3>
+                      <div style={{
+                        color: '#e0e0e0',
+                        lineHeight: '1.8',
+                        fontSize: '1.02rem',
+                        whiteSpace: 'pre-wrap'
+                      }}>
+                        {contentID}
+                      </div>
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
           </div>
         </div>
 
