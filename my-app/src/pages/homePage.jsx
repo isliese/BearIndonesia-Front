@@ -1,3 +1,4 @@
+// 홈 페이지
 import septemberData from "../data/september.json";
 import React, { useState, useMemo } from 'react';
 
@@ -44,7 +45,7 @@ const HomePage = ({ onSearch }) => {
         WebkitTextFillColor: 'transparent',
         backgroundClip: 'text'
       }}>
-        BaioBrief
+        BearIndonesia
       </h1>
       <p style={{
         fontSize: '1.4rem',

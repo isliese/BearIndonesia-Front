@@ -5,10 +5,9 @@ const Navigation = ({ currentPage, setCurrentPage }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   
   const navItems = [
-    { id: 'news', label: '이달의 뉴스' },
-    { id: 'section-news', label: '분야별 뉴스' },
-    { id: 'calendar', label: '인터렉티브 캘린더' },
-    { id: 'about', label: '서비스 소개' }
+    { id: 'about', label: '서비스 소개' },
+    { id: 'news', label: 'News' },
+    { id: 'calendar', label: '인터렉티브 캘린더' }
   ];
 
   const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
@@ -31,7 +30,7 @@ const Navigation = ({ currentPage, setCurrentPage }) => {
         style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#ff8c42', cursor: 'pointer' }}
         onClick={() => setCurrentPage('home')}
       >
-        BaioBrief X 대웅재단
+        BearIndonesia
       </div>
 
       {/* 네비게이션 */}

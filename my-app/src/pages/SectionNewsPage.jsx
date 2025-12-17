@@ -1,9 +1,7 @@
-// src/pages/SectionNewsPage.jsx
+// 분야별 뉴스 페이지
 import React, { useState, useMemo } from "react";
 import {
-  getAllArticles,
-  getAllNewsDatesSorted, // (필요 시 유지)
-  getNewsForDate,       // (필요 시 유지)
+  getAllArticles
 } from "../data/totalData";
 
 /* -------------------- 유틸 함수 -------------------- */
@@ -37,7 +35,7 @@ const renderHighlighted = (text = "") => {
 const SectionNewsPage = ({ setCurrentPage, setSelectedNews, setPrevPage }) => {
   const [activeTag, setActiveTag] = useState("all");
 
-  // ✅ 6개 파일에서 합쳐진 전체 기사 로드
+  // 6개 파일에서 합쳐진 전체 기사 로드
   const allNews = useMemo(() => getAllArticles(), []);
 
   const tags = [
@@ -52,7 +50,7 @@ const SectionNewsPage = ({ setCurrentPage, setSelectedNews, setPrevPage }) => {
     { id: "대웅제약", label: "대웅제약" },
   ];
 
-  // ✅ activeTag에 따라 필터링
+  // activeTag에 따라 필터링
   const filteredNews = useMemo(() => {
     if (activeTag === "all") return allNews;
     return allNews.filter((news) => (news?.tag ?? news?.category) === activeTag);

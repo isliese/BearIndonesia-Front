@@ -1,3 +1,4 @@
+// 인터렉티브 캘린더 페이지
 import React, { useState, useEffect, useMemo } from 'react';
 import { 
   getNewsForDate, 

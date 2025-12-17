@@ -1,3 +1,5 @@
+// 검색 결과 페이지
+
 import React, { useState, useMemo, useEffect } from 'react';
 
 // API 호출 함수

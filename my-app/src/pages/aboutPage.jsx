@@ -1,3 +1,4 @@
+// 서비스 소개 페이지
 import React from 'react';
 
 const AboutPage = () => {
@@ -35,7 +36,7 @@ const AboutPage = () => {
           marginBottom: '1.5rem'
         }}>
           복잡하고 빠르게 변화하는 인도네시아 제약 시장, 정보의 홍수 속에서 핵심을 놓치고 계신가요?
-          <br></br>BaioBrief는 매일 쏟아지는 뉴스 속에서 당신이 반드시 알아야 할 인사이트를 AI 기술로 찾아드립니다.
+          <br></br>BearIndonesia는 매일 쏟아지는 뉴스 속에서 당신이 반드시 알아야 할 인사이트를 AI 기술로 찾아드립니다.
         </p>
         <div style={{
           display: 'grid',
@@ -129,7 +130,7 @@ const AboutPage = () => {
           lineHeight: '1.8',
           marginBottom: '1.5rem'
         }}>
-          BaioBrief의 강력한 기능들을 아래 3단계로 간단하게 활용해 보세요.
+          BearIndonesia의 강력한 기능들을 아래 3단계로 간단하게 활용해 보세요.
           <br></br>매일 업데이트되는 제약 산업의 핵심 정보를 놓치지 않고 따라갈 수 있습니다.
         </p>
         <div style={{

@@ -1,8 +1,8 @@
-// src/pages/NewsDetailPage.jsx
+// 뉴스 상세 페이지
 import React, { useState } from 'react';
 
 const NewsDetailPage = ({ news, setCurrentPage, prevPage }) => {
-  const [lang, setLang] = useState("ko"); // ✅ 드롭다운 상태 추가
+  const [lang, setLang] = useState("ko"); 
 
   if (!news) {
     return (

@@ -1,4 +1,3 @@
-// src/pages/NewsPage.jsx
 import React, { useMemo, useState, useCallback, useEffect } from "react";
 import * as XLSX from "xlsx";
 import septemberData from "../data/september.json";
@@ -15,35 +14,33 @@ function getInitials(text = "") {
 
 /** 섹션 정의 */
 const TAG_SECTIONS = {
-  General: [
+  일반: [
     "제약","의약품","치료","화장품","백신","건강","건강기능식품","건강보조식품",
     "의사","약국","보건복지부 장관","국민건강보험","병원","질병","질환",
   ],
-  "Regulation & Authorities": [
-    "대웅제약","Fexuprazan (펙수프라잔)","Envlo (SGLT-2 억제제)","Crezet (로수바스타틴+에제티미브 복합제)",
-    "Letybo (보툴리눔 톡신)","Selatoxin","Kalbe Farma","Kimia Farma","Bio Farma","Dexa Medica",
+  "규제·당국": [
     "BPOM (식약청)","Kementerian Kesehatan (보건부)","BKPM (투자조정청)","BPJS (국민건강보험)","KOMNAS (윤리심의위원회)",
     "허가","임상시험","전임상시험","의약품 승인","인증","의약품 GMP","의약품 GDP","의약품 등록",
     "약물감시","보건 정책","의약품 규제","보건부","의약품관련정부규정","의약품 전자 카탈로그",
   ],
-  "Industry & Market": [
+  "산업·시장": [
     "제약 산업","제약 비즈니스","의약품 유통","의약품 판매","의약품 가격","제네릭","브랜드 제네릭",
     "의약품 특허","의약품 공급망","의약품 수입","의약품 수출","제약 투자","의약품 현지 생산","제약 협력","제약사 합병•인수",
   ],
-  "Products & Therapeutics": [
+  "제품·치료제": [
     "신약","바이오시밀러","바이올로직스","제네릭 의약품","전통 의약품","건강 보조제","의료기기","전문 의약품","일반의약품 (OTC)",
   ],
-  "Companies & Skateholders": [
+  "경쟁사·주주": [
     "칼베 파르마","키미아 파르마","바이오 파르마","덱사 메디카","산베 파르마","템포스캔","파프로스","피리당 파르마",
     "화이자","노바티스","로슈","사노피","GSK","바이엘","아스트라제네카",
   ],
-  "Trends & Innovation": [
+  "트렌드·혁신": [
     "디지털 헬스","원격의료","보건 빅데이터","제약 4.0","헬스 스타트업","의약품 연구","의약품 개발","인도네시아 임상시험",
   ],
-  "Risk & Conpliance": [
+  "위험·법규/개정": [
     "위조 의약품","의약품 회수","의약품 안전성","약물 부작용","BPOM 규정 위반","의약품 유통 관리","약물 오남용",
   ],
-  Daewoong: [
+  대웅제약: [
     "대웅제약","Fexuprazan (펙수프라잔)","Envlo (SGLT-2 억제제)","Crezet (로수바스타틴+에제티미브 복합제)",
     "Letybo (보툴리눔 톡신)","Selatoxin"
   ],
@@ -51,31 +48,17 @@ const TAG_SECTIONS = {
 
 /** 표시 순서 */
 const SECTION_ORDER = [
-  "General",
-  "Regulation & Authorities",
-  "Industry & Market",
-  "Products & Therapeutics",
-  "Companies & Skateholders",
-  "Trends & Innovation",
-  "Risk & Conpliance",
-  "Daewoong",
+  "일반",
+  "규제·당국",
+  "산업·시장",
+  "제품·치료제",
+  "경쟁사·주주",
+  "트렌드·혁신",
+  "위험·법규/개정",
+  "대웅제약",
 ];
 
-/** 한국어 라벨 */
-const SECTION_LABELS_KO = {
-  General: "일반",
-  "Regulation & Authorities": "규제·당국",
-  "Industry & Market": "산업·시장",
-  "Products & Therapeutics": "제품·치료제",
-  "Companies & Skateholders": "경쟁사·주주",
-  "Trends & Innovation": "트렌드·혁신",
-  "Risk & Conpliance": "위험·법규/개정",
-  Daewoong: "대웅제약",
-};
-
-/* -------------------- 하이라이팅 (SectionNewsPage 스타일) --------------------
-   **굵게** 처리만 간결하게 적용. (줄바꿈은 브라우저에 맡김)
--------------------------------------------------------------------------- */
+/* -------------------- 하이라이팅 -------------------- */
 const renderHighlighted = (text = "") => {
   const segments = String(text).split(/(\*\*[^*]+\*\*)/g);
   return segments.map((seg, idx) => {
@@ -111,6 +94,14 @@ const NewsCard = ({ article, onOpen }) => {
         cursor: "pointer",
         overflow: "hidden",
         border: "1px solid rgba(255,255,255,0.12)",
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.transform = "translateY(-2px)";
+        e.currentTarget.style.boxShadow = "0 8px 24px rgba(255, 140, 66, 0.2)";
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.transform = "none";
+        e.currentTarget.style.boxShadow = "none";
       }}
     >
       <div style={{ display: "flex", alignItems: "center", marginBottom: "0.8rem" }}>
@@ -179,8 +170,10 @@ const NewsCard = ({ article, onOpen }) => {
 };
 
 /* -------------------- 페이지 -------------------- */
-const NewsPage = ({ setCurrentPage, setSelectedNews, setPrevPage }) => {
+const UnifiedNewsPage = ({ setCurrentPage, setSelectedNews, setPrevPage }) => {
+  const [activeSection, setActiveSection] = useState("all");
   const [activeTag, setActiveTag] = useState("all");
+  const [showWordCloud, setShowWordCloud] = useState(false);
 
   // 9월 데이터 정규화
   const articles = useMemo(() => {
@@ -207,32 +200,41 @@ const NewsPage = ({ setCurrentPage, setSelectedNews, setPrevPage }) => {
     return m;
   }, [articles]);
 
-  // 섹션별 표시 태그
-  const sectionRows = useMemo(() => {
-    return SECTION_ORDER
-      .map((section) => {
-        const tags = TAG_SECTIONS[section] || [];
-        const visible = tags.filter((name) => tagCount.get(name) > 0);
-        return { section, tags: visible };
-      })
-      .filter((row) => row.tags.length > 0);
-  }, [tagCount]);
+  // 현재 섹션의 태그만 필터링
+  const currentSectionTags = useMemo(() => {
+    if (activeSection === "all") return [];
+    const tags = TAG_SECTIONS[activeSection] || [];
+    return tags.filter((name) => tagCount.get(name) > 0);
+  }, [activeSection, tagCount]);
 
-  // activeTag가 사라지면 all로
+  // 섹션 변경 시 태그 초기화
   useEffect(() => {
-    if (activeTag === "all") return;
-    const exists = tagCount.get(activeTag) > 0;
-    if (!exists) setActiveTag("all");
-  }, [activeTag, tagCount]);
+    setActiveTag("all");
+  }, [activeSection]);
 
-  // 필터링
+  // 필터링된 기사
   const filtered = useMemo(() => {
-    return activeTag === "all"
-      ? articles
-      : articles.filter((a) => a.tags.some((t) => t.name === activeTag));
-  }, [activeTag, articles]);
+    let result = articles;
+    
+    // 섹션 필터
+    if (activeSection !== "all") {
+      const sectionTags = TAG_SECTIONS[activeSection] || [];
+      result = result.filter((a) => 
+        a.tags.some((t) => sectionTags.includes(t.name))
+      );
+    }
+    
+    // 태그 필터
+    if (activeTag !== "all") {
+      result = result.filter((a) => 
+        a.tags.some((t) => t.name === activeTag)
+      );
+    }
+    
+    return result;
+  }, [activeSection, activeTag, articles]);
 
-  // 엑셀
+  // 엑셀 다운로드
   const downloadExcel = useCallback(() => {
     if (articles.length === 0) {
       alert("9월 뉴스 데이터가 없습니다.");
@@ -260,127 +262,81 @@ const NewsPage = ({ setCurrentPage, setSelectedNews, setPrevPage }) => {
     XLSX.writeFile(wb, "9월_뉴스.xlsx");
   }, [articles]);
 
-  // 워드클라우드: 생성 트리거(이미지 표시 제거)
-  const triggerWordCloud = useCallback(() => {
-    setShowWordCloud(true);  // ✅ 버튼 누르면 이미지 표시
-  }, []);
-
-  
-
-
-  // PDF URL (환경변수 우선)
-  const pdfUrl =
-  import.meta?.env?.VITE_REPORT_PDF_URL ||
-  "https://github.com/isliese/AI-Hackathon-Daewoong-Web-Crawling/blob/main/Newsletter_2025-09.pdf?raw=1";
-
-  const [showWordCloud, setShowWordCloud] = useState(false);
-
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        padding: "2rem"
-      }}
-    >
-      <h1 style={{ fontSize: "2.3rem", color: "#ff8c42", textAlign: "center", marginBottom: "1.6rem" }}>
-        이달의 뉴스
-      </h1>
-
-      {/* 상단 액션 버튼 */}
-      <div style={{ display: "flex", justifyContent: "center", gap: "0.8rem", marginBottom: "1.0rem", flexWrap: "wrap" }}>
-        <button
-          onClick={triggerWordCloud}
-          style={{
-            background: "rgba(100, 181, 246, 0.1)",
-            border: "1px solid rgba(100, 181, 246, 0.3)",
-            borderRadius: "50px",
-            padding: "0.65rem 1.1rem",
-            color: "white",
-            cursor: "pointer",
-            fontSize: "0.95rem",
-            fontWeight: "bold",
-          }}
-        >
-          워드클라우드 생성
-        </button>
-
-        {showWordCloud && (
+    <div style={{ minHeight: "100vh", display: "flex" }}>
+      {/* 왼쪽 사이드바 - 분야 선택 */}
+      <div
+        style={{
+          width: "240px",
+          background: "rgba(255, 255, 255, 0.05)",
+          backdropFilter: "blur(10px)",
+          padding: "2rem 1rem",
+          borderRight: "1px solid rgba(255, 255, 255, 0.1)",
+          position: "sticky",
+          top: 0,
+          height: "100vh",
+          overflowY: "auto",
+        }}
+      >
+        <h2 style={{ color: "#ff8c42", marginBottom: "1.5rem", fontSize: "1.3rem", textAlign: "center" }}>
+          분야별 뉴스
+        </h2>
+        
+        <div style={{ display: "flex", flexDirection: "column", gap: "0.7rem" }}>
+          {/* 전체 버튼 */}
           <div
+            onClick={() => setActiveSection("all")}
             style={{
-              position: "fixed",
-              top: 0,
-              left: 0,
-              width: "100%",
-              height: "100%",
-              backgroundColor: "rgba(0,0,0,0.6)",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              zIndex: 9999,
+              padding: "1rem",
+              borderRadius: "12px",
+              cursor: "pointer",
+              background: activeSection === "all" ? "#ff8c42" : "rgba(255,255,255,0.1)",
+              color: "white",
+              textAlign: "center",
+              transition: "all 0.3s ease",
+              userSelect: "none",
+              fontWeight: activeSection === "all" ? "bold" : "normal",
             }}
           >
+            전체
+          </div>
+          
+          {/* 각 분야 버튼 */}
+          {SECTION_ORDER.map((section) => (
             <div
+              key={section}
+              onClick={() => setActiveSection(section)}
               style={{
-                background: "white",
                 padding: "1rem",
                 borderRadius: "12px",
+                cursor: "pointer",
+                background: activeSection === section ? "#ff8c42" : "rgba(255,255,255,0.1)",
+                color: "white",
                 textAlign: "center",
+                transition: "all 0.3s ease",
+                userSelect: "none",
+                fontWeight: activeSection === section ? "bold" : "normal",
               }}
             >
-              <img
-                src="/image.png"
-                alt="워드클라우드"
-                style={{
-                  display: "block",
-                  borderRadius: "8px",
-                }}
-              />
-              <button
-                onClick={() => setShowWordCloud(false)}
-                style={{
-                  marginTop: "1rem",
-                  padding: "0.5rem 1rem",
-                  background: "#ff8c42",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "6px",
-                  cursor: "pointer",
-                }}
-              >
-                닫기
-              </button>
+              {section}
             </div>
-          </div>
-        )}
+          ))}
+        </div>
+      </div>
 
+      {/* 메인 콘텐츠 영역 */}
+      <div style={{ flex: 1, padding: "2rem" }}>
+        <h1 style={{ fontSize: "2.3rem", color: "#ff8c42", textAlign: "center", marginBottom: "1.6rem" }}>
+          News
+        </h1>
 
-
-        <button
-          onClick={downloadExcel}
-          style={{
-            background: "rgba(76, 175, 80, 0.1)",
-            border: "1px solid rgba(76, 175, 80, 0.3)",
-            borderRadius: "50px",
-            padding: "0.65rem 1.1rem",
-            color: "white",
-            cursor: "pointer",
-            fontSize: "0.95rem",
-            fontWeight: "bold",
-          }}
-        >
-          9월 기사 Excel 다운로드
-        </button>
-
-        <a
-          href="/Newsletter_2025-09.html"
-          target="_blank"
-          rel="noreferrer"
-          style={{ textDecoration: "none" }}
-        >
+        {/* 상단 액션 버튼 */}
+        <div style={{ display: "flex", justifyContent: "center", gap: "0.8rem", marginBottom: "2rem", flexWrap: "wrap" }}>
           <button
+            onClick={() => setShowWordCloud(true)}
             style={{
-              background: "rgba(255, 140, 66, 0.1)",
-              border: "1px solid rgba(255, 140, 66, 0.35)",
+              background: "rgba(100, 181, 246, 0.1)",
+              border: "1px solid rgba(100, 181, 246, 0.3)",
               borderRadius: "50px",
               padding: "0.65rem 1.1rem",
               color: "white",
@@ -389,116 +345,200 @@ const NewsPage = ({ setCurrentPage, setSelectedNews, setPrevPage }) => {
               fontWeight: "bold",
             }}
           >
-            9월 Newsletter 보러가기
+            워드클라우드 생성
           </button>
-        </a>
-      </div>
 
-      {/* ✅ '전체' 줄 */}
-      <div
-        style={{
-          maxWidth: 1400,
-          margin: "0 auto 0.4rem",
-          display: "grid",
-          gridTemplateColumns: "100px 1fr",
-          alignItems: "center",
-        }}
-      >
-        <div style={{ color: "#ff8c42", fontWeight: 700 }}>전체:</div>
-        <div>
           <button
-            onClick={() => setActiveTag("all")}
+            onClick={downloadExcel}
             style={{
-              padding: "0.35rem 0.8rem",
-              background: activeTag === "all" ? "#ff8c42" : "rgba(255, 255, 255, 0.1)",
-              border: "1px solid",
-              borderColor: activeTag === "all" ? "#ff8c42" : "rgba(255, 255, 255, 0.2)",
-              borderRadius: "20px",
+              background: "rgba(76, 175, 80, 0.1)",
+              border: "1px solid rgba(76, 175, 80, 0.3)",
+              borderRadius: "50px",
+              padding: "0.65rem 1.1rem",
               color: "white",
               cursor: "pointer",
-              fontSize: "0.85rem",
+              fontSize: "0.95rem",
+              fontWeight: "bold",
             }}
           >
-            전체
+            9월 기사 Excel 다운로드
           </button>
-        </div>
-      </div>
 
-      {/* ✅ 카테고리 섹션 */}
-      <div style={{ maxWidth: 1400, margin: "0 auto 1.0rem" }}>
-        {sectionRows.map(({ section, tags }) => (
-          <div
-            key={section}
-            style={{
-              display: "grid",
-              gridTemplateColumns: "100px 1fr",
-              alignItems: "center",
-              columnGap: "0.2rem",
-              marginBottom: "0.25rem",
-            }}
+          <a
+            href="/Newsletter_2025-09.html"
+            target="_blank"
+            rel="noreferrer"
+            style={{ textDecoration: "none" }}
           >
-            <div style={{ color: "#ff8c42", fontWeight: 700 }}>
-              {SECTION_LABELS_KO[section] ?? section}:
-            </div>
-
-            <div
+            <button
               style={{
-                display: "flex",
-                gap: "0.35rem",
-                flexWrap: "nowrap",
-                whiteSpace: "nowrap",
-                overflow: "visible",
+                background: "rgba(255, 140, 66, 0.1)",
+                border: "1px solid rgba(255, 140, 66, 0.35)",
+                borderRadius: "50px",
+                padding: "0.65rem 1.1rem",
+                color: "white",
+                cursor: "pointer",
+                fontSize: "0.95rem",
+                fontWeight: "bold",
               }}
             >
-              {tags.map((tag) => (
-                <div
+              9월 Newsletter 보러가기
+            </button>
+          </a>
+        </div>
+
+        {/* 세부 태그 필터 (분야가 선택되었을 때만 표시) */}
+        {activeSection !== "all" && currentSectionTags.length > 0 && (
+          <div
+            style={{
+              maxWidth: 1200,
+              margin: "0 auto 2rem",
+              padding: "1.5rem",
+              background: "rgba(255, 255, 255, 0.05)",
+              backdropFilter: "blur(10px)",
+              borderRadius: "16px",
+              border: "1px solid rgba(255, 255, 255, 0.1)",
+            }}
+          >
+            <div style={{ color: "#ff8c42", fontWeight: 700, marginBottom: "1rem", fontSize: "1.1rem" }}>
+              {activeSection} 세부 필터:
+            </div>
+            
+            <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+              <button
+                onClick={() => setActiveTag("all")}
+                style={{
+                  padding: "0.5rem 1rem",
+                  background: activeTag === "all" ? "#ff8c42" : "rgba(255, 255, 255, 0.1)",
+                  border: "1px solid",
+                  borderColor: activeTag === "all" ? "#ff8c42" : "rgba(255, 255, 255, 0.2)",
+                  borderRadius: "20px",
+                  color: "white",
+                  cursor: "pointer",
+                  fontSize: "0.9rem",
+                  transition: "all 0.2s ease",
+                }}
+              >
+                전체
+              </button>
+              
+              {currentSectionTags.map((tag) => (
+                <button
                   key={tag}
                   onClick={() => setActiveTag(tag)}
                   style={{
-                    flex: "0 0 auto",
-                    padding: "0.35rem 0.8rem",
+                    padding: "0.5rem 1rem",
                     background: activeTag === tag ? "#ff8c42" : "rgba(255, 255, 255, 0.1)",
                     border: "1px solid",
                     borderColor: activeTag === tag ? "#ff8c42" : "rgba(255, 255, 255, 0.2)",
                     borderRadius: "20px",
                     color: "white",
                     cursor: "pointer",
-                    fontSize: "0.85rem",
-                    transition: "all 0.15s ease",
+                    fontSize: "0.9rem",
+                    transition: "all 0.2s ease",
                   }}
                 >
                   {tag}
-                </div>
+                </button>
               ))}
             </div>
           </div>
-        ))}
+        )}
+
+        {/* 카드 목록 */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(350px, 1fr))",
+            gap: "1.2rem",
+            maxWidth: "1200px",
+            margin: "0 auto",
+          }}
+        >
+          {filtered.length > 0 ? (
+            filtered.map((article) => (
+              <NewsCard
+                key={article.id}
+                article={article}
+                onOpen={() => {
+                  setSelectedNews(article);
+                  setPrevPage("news");
+                  setCurrentPage("newsDetail");
+                }}
+              />
+            ))
+          ) : (
+            <div style={{ 
+              gridColumn: "1 / -1", 
+              textAlign: "center", 
+              color: "#999", 
+              padding: "3rem",
+              fontSize: "1.1rem" 
+            }}>
+              해당 분야의 뉴스가 없습니다.
+            </div>
+          )}
+        </div>
       </div>
 
-      {/* 카드 목록 */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(350px, 1fr))",
-          gap: "1.2rem",
-          maxWidth: "1200px",
-          margin: "0 auto",
-        }}
-      >
-        {filtered.map((article) => (
-          <NewsCard
-            key={article.id}
-            article={article}
-            onOpen={() => {
-              setSelectedNews(article);
-              setPrevPage("news");
-              setCurrentPage("newsDetail");
+      {/* 워드클라우드 모달 */}
+      {showWordCloud && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            backgroundColor: "rgba(0,0,0,0.6)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 9999,
+          }}
+        >
+          <div
+            style={{
+              background: "white",
+              padding: "2rem",
+              borderRadius: "16px",
+              textAlign: "center",
+              maxWidth: "90%",
+              maxHeight: "90%",
             }}
-          />
-        ))}
-      </div>
+          >
+            <img
+              src="/wordcloud.png"
+              alt="워드클라우드"
+              style={{
+                maxWidth: "100%",
+                maxHeight: "70vh",
+                display: "block",
+                borderRadius: "8px",
+                margin: "0 auto",
+              }}
+            />
+            <button
+              onClick={() => setShowWordCloud(false)}
+              style={{
+                marginTop: "1.5rem",
+                padding: "0.75rem 2rem",
+                background: "#ff8c42",
+                color: "white",
+                border: "none",
+                borderRadius: "8px",
+                cursor: "pointer",
+                fontSize: "1rem",
+                fontWeight: "bold",
+              }}
+            >
+              닫기
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
-export default NewsPage;
+export default UnifiedNewsPage;
