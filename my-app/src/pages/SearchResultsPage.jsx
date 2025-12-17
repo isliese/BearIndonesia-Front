@@ -298,7 +298,7 @@ const SearchCard = ({ article, onOpen, searchTerm, onTagClick }) => {
             color: '#FFD700',
             fontWeight: 'bold'
           }}>
-            ★ {(article?.importance ?? 0)}/10
+            ★ {(article?.importance ?? 0)}/100
           </span>
         </div>
         
