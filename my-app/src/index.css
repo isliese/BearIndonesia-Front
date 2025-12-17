@@ -1,0 +1,26 @@
+/* 페이지 전체의 흰색 테두리만 제거 */
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+  height: 100vh;
+  width: 100vw;
+}
+
+/* 페이지 컨테이너의 테두리 제거 */
+body {
+  box-sizing: border-box;
+}
+
+#root {
+  box-sizing: border-box;
+}
+
+/* 캘린더 드래그 시 텍스트 선택 방지  */
+.calendar-container {
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none;    /* Firefox */
+  -ms-user-select: none;     /* IE10+/Edge */
+  user-select: none;         /* Standard */
+}

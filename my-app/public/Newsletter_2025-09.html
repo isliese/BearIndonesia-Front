@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>제약 산업 뉴스레터</title>
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Malgun Gothic','맑은 고딕', Arial, sans-serif; background:#f8f9fa; line-height:1.6; color:#333; }
+        .newsletter-container { max-width: 800px; margin: 0 auto; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .header { position: relative; background: linear-gradient(135deg, #d35400 0%, #e67e22 100%); padding: 40px 30px; text-align:center; color:#fff; }
+        .header h1 { font-size: 2.2em; font-weight: 600; margin-bottom: 8px; }
+        .header .subtitle { font-size: 1.1em; font-weight: 300; opacity: 0.9; }
+        .header .date { position: absolute; top: 20px; right: 30px; background: rgba(255,255,255,0.15); padding: 6px 12px; border-radius: 15px; font-size: 0.9em; }
+        .content-section { padding: 35px 30px; border-bottom: 1px solid #eee; }
+        .content-section:last-child { border-bottom: none; }
+        .section-title { font-size: 1.6em; font-weight: 600; color: #2c3e50; margin-bottom: 25px; padding-bottom: 8px; border-bottom: 2px solid #e67e22; display:inline-block; }
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .section-header .section-title { margin-bottom: 0; }
+        .pdf-download-btn {
+            background: linear-gradient(135deg, #e67e22, #d35400);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 8px rgba(211, 84, 0, 0.3);
+            text-decoration: none;
+        }
+        .pdf-download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(211, 84, 0, 0.4);
+        }
+        .pdf-download-btn:active {
+            transform: translateY(0);
+        }
+        .pdf-icon {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+        .content-text { font-size: 1.05em; line-height: 1.8; color: #444; text-align: justify; }
+        .content-text h3 { color:#d35400; font-size:1.25em; font-weight:600; margin:30px 0 15px 0; padding-left:12px; border-left:4px solid #e67e22; }
+        .content-text p { margin-bottom: 18px; }
+        .content-text ul { margin: 15px 0 15px 20px; }
+        .content-text li { margin-bottom: 8px; }
+        .content-text strong, .content-text b {
+            background: #fff59d66;
+            padding: 0 2px;
+            border-radius: 3px;
+            color: inherit;
+            font-weight: 700;
+        }
+        .footer { background: #34495e; padding: 25px 30px; text-align:center; color:#fff; font-size:0.9em; }
+        .footer .footer-line { width: 50px; height: 2px; background: #e67e22; margin: 0 auto 15px; }
+        /* News cards */
+        .news-card { background:#fff; border:1px solid #eee; border-radius:8px; padding:16px; margin-bottom:16px; box-shadow:0 1px 3px rgba(0,0,0,0.04); }
+        .news-title { font-size:1.05em; font-weight:700; color:#d35400; text-decoration:none; }
+        .news-title:hover { text-decoration: underline; }
+        .news-meta { font-size:0.9em; color:#777; margin:8px 0 10px; }
+        .news-snippet { font-size:0.98em; color:#444; }
+        .news-link { display:inline-block; margin-top:10px; font-size:0.92em; color:#e67e22; text-decoration:none; }
+        .news-link:hover { text-decoration: underline; }
+        .highlight {
+            background: #fff59d66;
+            padding: 0 2px;
+            border-radius: 3px;
+        }
+        /* Tag chips */
+        .tag-row { margin-top: 10px; }
+        .tag-chip {
+            display: inline-block;
+            padding: 3px 8px;
+            margin: 0 6px 6px 0;
+            font-size: 0.85em;
+            border: 1px solid #ffd1a6;
+            background: #fff8f1;
+            color: #d35400;
+            border-radius: 999px;
+            vertical-align: middle;
+        }
+        /* Print Styles */
+        @media print {
+            body { background:#fff; }
+            .newsletter-container { box-shadow:none; max-width:none; }
+            .header { background:#d35400 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            a { color:#000; text-decoration: none; }
+            .pdf-download-btn { display: none; }
+        }
+        /* Responsive */
+        @media (max-width: 768px) {
+            .newsletter-container { margin: 10px; }
+            .header, .content-section { padding: 25px 20px; }
+            .header h1 { font-size: 1.8em; }
+            .header .date { position: static; display:inline-block; margin-top: 15px; }
+            .section-header { flex-direction: column; gap: 15px; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+    <div class="newsletter-container">
+        <div class="header">
+            <div class="date">2025년 9월</div>
+            <h1>제약 산업 뉴스레터</h1>
+            <div class="subtitle">Industry Trends & Strategic Insights</div>
+        </div>
+
+        <!-- 1. 핵심 뉴스 요약 -->
+        <div class="content-section">
+            <div class="section-header">
+                <h2 class="section-title">1. 핵심 뉴스 요약</h2>
+                <a href="/Newsletter_2025-09.pdf" target="_blank" class="pdf-download-btn" style="text-decoration: none; display: flex; align-items: center; gap: 8px;">
+                    <svg class="pdf-icon" viewBox="0 0 24 24">
+                        <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+                    </svg>
+                    PDF 보기
+                </a>
+            </div>
+            <div class="content-text">
+                
+        <h3>규제·당국</h3>
+        
+            <div class="news-card">
+                <a class="news-title" href="https://www.pom.go.id/berita/bpom-dan-who-perkuat-kolaborasi-tingkatkan-strategi-regulasi-dan-produksi-farmasi-indonesia" target="_blank" rel="noopener noreferrer">BPOM과 WHO, 협력 강화로 인도네시아 제약 규제 및 생산 전략 개선</a>
+                <div class="news-meta">2025-09-04 · BPOM</div>
+                <p class="news-snippet"><span class="highlight">BPOM</span> (Badan Pengawas Obat dan Makanan Indonesia)은 <span class="highlight">WHO</span>와 함께 인도네시아의 의약품 품질 향상에 대해 전략적인 회의를 진행했습니다. <span class="highlight">William Adi Teja</span>와 <span class="highlight">Lynda Kurnia Wardhani</span>가 BPOM을 대표하여 참석한 이 회의에서 인도네시아의 백신 및 생물학적 제품의 안전성과 접근성을 보장하기 위한 인도네시아의 약속을 강조했습니다. 이 토론은 또한 인도네시아가 혈액 제품 및 파생품을 개발하는 잠재력과 <span class="highlight">GMP</span> (좋은 제조 관행) 기준 및 엄격한 규제 감시의 중요성을 다루었습니다. 또한, BPOM은 <span class="highlight">WHO Listed Authority (WLA)</span>가 되기 위한 평가 과정에 있으며, 이는 그들의 글로벌 규제 기준에 대한 약속을 보여줍니다.</p>
+                <div class="tag-row"><span class="tag-chip">BPOM (식약청)</span><span class="tag-chip">백신</span><span class="tag-chip">의약품 GMP</span><span class="tag-chip">의약품</span></div>
+                <a class="news-link" href="https://www.pom.go.id/berita/bpom-dan-who-perkuat-kolaborasi-tingkatkan-strategi-regulasi-dan-produksi-farmasi-indonesia" target="_blank" rel="noopener noreferrer">원문 보기 →</a>
+            </div>
+            
+            <div class="news-card">
+                <a class="news-title" href="https://health.detik.com/berita-detikhealth/d-8092651/ciri-ciri-produk-herbal-dioplos-sildenafil-deksametason-bisa-bahayakan-jantung" target="_blank" rel="noopener noreferrer">허브 제품 &#x27;디옵로스&#x27; 시알리스-덱사메타손, 심장 위험 초래 가능</a>
+                <div class="news-meta">2025-09-02 · detikHealth</div>
+                <p class="news-snippet">인도네시아의 <span class="highlight">Badan Pengawas Obat dan Makanan (BPOM RI)</span>은 다양한 효능을 주장하는 위험한 <span class="highlight">허브 제품 및 보충제</span>를 다시 한번 식별했습니다. 이들 중 18개 제품은 <span class="highlight">유통 허가 번호(NIE)</span>가 없어 불법으로 분류되었습니다. BPOM은 이러한 제품들이 <span class="highlight">의약품 화학 성분(BKO)</span>을 포함하고 있으며, 이는 의료 감독 하에만 사용될 수 있음을 밝혔습니다.</p>
+                <div class="tag-row"><span class="tag-chip">BPOM (식약청)</span><span class="tag-chip">허가</span><span class="tag-chip">의약품 규제</span></div>
+                <a class="news-link" href="https://health.detik.com/berita-detikhealth/d-8092651/ciri-ciri-produk-herbal-dioplos-sildenafil-deksametason-bisa-bahayakan-jantung" target="_blank" rel="noopener noreferrer">원문 보기 →</a>
+            </div>
+            
+        
+
+        <h3>일반</h3>
+        
+            <div class="news-card">
+                <a class="news-title" href="https://www.cnnindonesia.com/internasional/20250926085951-120-1277869/israel-serang-houthi-yaman-pakai-drone-8-tewas-142-terluka" target="_blank" rel="noopener noreferrer">이스라엘, 드론으로 후티 예멘 공격… 8명 사망 142명 부상</a>
+                <div class="news-meta">2025-09-26 · CNN Indonesia</div>
+                <p class="news-snippet">인도네시아 제약 산업에 대한 최근 뉴스에 따르면, <span class="highlight">BPOM</span>은 새로운 <span class="highlight">약품 규제</span>를 발표했습니다. 이 규정은 <span class="highlight">임상 시험</span>과 <span class="highlight">약품의 시장 허가</span> 절차를 강화하는 내용을 담고 있습니다. <span class="highlight">Daewoong</span>의 위염 치료제 <span class="highlight">Fexuprazan</span>은 이 규제에 따라 추가 임상 시험을 진행해야 합니다. 이러한 변화는 인도네시아에서 제약 회사들의 제품 개발 및 출시에 중대한 영향을 미칠 것입니다.</p>
+                <div class="tag-row"><span class="tag-chip">Kementerian Kesehatan (보건부)</span><span class="tag-chip">의사</span><span class="tag-chip">병원</span></div>
+                <a class="news-link" href="https://www.cnnindonesia.com/internasional/20250926085951-120-1277869/israel-serang-houthi-yaman-pakai-drone-8-tewas-142-terluka" target="_blank" rel="noopener noreferrer">원문 보기 →</a>
+            </div>
+            
+            <div class="news-card">
+                <a class="news-title" href="https://www.cnbcindonesia.com/news/20250924151459-4-669868/jepang-akan-mengakui-negara-palestina-tapi" target="_blank" rel="noopener noreferrer">일본, 팔레스타인 국가 인정 예정 그러나...</a>
+                <div class="news-meta">2025-09-24 · NEWS</div>
+                <p class="news-snippet">인도네시아 제약 산업에 대한 최신 뉴스에 따르면, <span class="highlight">BPOM</span>은 새로운 위장약 <span class="highlight">Fexuprazan</span>에 대한 <span class="highlight">izin edar</span>를 승인했습니다. 이 약은 <span class="highlight">Daewoong</span> 제약 회사에서 개발되었으며, 최근 <span class="highlight">uji klinis</span> 결과가 긍정적으로 나타나 이번 승인을 받게 되었습니다. 이는 인도네시아에서 <span class="highlight">Fexuprazan</span>이 상업적으로 유통될 수 있는 첫 번째 사례입니다. <span class="highlight">pharmacovigilance</span> 계획의 일환으로, 추가 안전성 모니터링이 수행될 예정입니다.</p>
+                
+                <a class="news-link" href="https://www.cnbcindonesia.com/news/20250924151459-4-669868/jepang-akan-mengakui-negara-palestina-tapi" target="_blank" rel="noopener noreferrer">원문 보기 →</a>
+            </div>
+            
+            <div class="news-card">
+                <a class="news-title" href="https://www.cnbcindonesia.com/news/20250919131900-4-668489/update-gaza-israel-kuasai-pinggiran-gaza-bawa-tank-infanteri" target="_blank" rel="noopener noreferrer">가자 지구 업데이트: 이스라엘, 가자 변두리 장악 및 탱크와 보병 투입</a>
+                <div class="news-meta">2025-09-19 · NEWS</div>
+                <p class="news-snippet">인도네시아 제약 산업은 최근 <span class="highlight">BPOM</span>의 새로운 규제로 인해 큰 변화를 맞이하고 있습니다. 이 규제는 <span class="highlight">Fexuprazan</span>과 같은 신약의 <span class="highlight">izin edar</span>를 더 엄격하게 관리하며, <span class="highlight">Daewoong</span>과 같은 기업들은 이에 대응하기 위해 추가적인 <span class="highlight">uji klinis</span>를 계획하고 있습니다. 이러한 변화는 제약 회사들에게 큰 도전이자 기회로 작용하고 있으며, <span class="highlight">pharmacovigilance</span>의 중요성이 강조되고 있습니다.</p>
+                <div class="tag-row"><span class="tag-chip">Kementerian Kesehatan (보건부)</span><span class="tag-chip">병원</span></div>
+                <a class="news-link" href="https://www.cnbcindonesia.com/news/20250919131900-4-668489/update-gaza-israel-kuasai-pinggiran-gaza-bawa-tank-infanteri" target="_blank" rel="noopener noreferrer">원문 보기 →</a>
+            </div>
+            
+            <div class="news-card">
+                <a class="news-title" href="https://www.cnbcindonesia.com/news/20250919132556-4-668493/prancis-chaos-as-keluarkan-peringatan-baru-bagi-warganya" target="_blank" rel="noopener noreferrer">프랑스 혼란! 미국, 자국민에 새 경고 발령</a>
+                <div class="news-meta">2025-09-19 · NEWS</div>
+                <p class="news-snippet">인도네시아 제약 산업에 대한 최신 뉴스에 따르면, <span class="highlight">BPOM</span>은 새로운 <span class="highlight">약물</span>의 <span class="highlight">유통 허가</span>를 승인했습니다. 이 약물은 <span class="highlight">Daewoong</span> 제약사에서 개발한 <span class="highlight">Fexuprazan</span>으로, 위장 질환 치료에 사용됩니다. 이번 승인은 광범위한 <span class="highlight">임상 시험</span>을 거쳐 효능과 안전성이 입증된 후에 이루어졌으며, 인도네시아 내에서의 접근성을 높일 것으로 기대됩니다.</p>
+                <div class="tag-row"><span class="tag-chip">보건부</span><span class="tag-chip">국민건강보험</span></div>
+                <a class="news-link" href="https://www.cnbcindonesia.com/news/20250919132556-4-668493/prancis-chaos-as-keluarkan-peringatan-baru-bagi-warganya" target="_blank" rel="noopener noreferrer">원문 보기 →</a>
+            </div>
+            
+        
+            </div>
+        </div>
+
+        <!-- 2. 주요 산업 동향 -->
+        <div class="content-section">
+            <h2 class="section-title">2. 주요 산업 동향</h2>
+            <div class="content-text">
+                <p>최근 한 달(2025-09-01 이후) 보도에서는 <span class="highlight">규제 역량 강화</span>와 <span class="highlight">국제 협력</span> 이슈가 두드러졌습니다. 
+                BPOM의 GRP 도입·WLA 추진, 타 규제기관과의 협력 및 학습 프로그램이 반복적으로 언급되었습니다. 
+                이는 등록·허가 심사 및 실사 표준 고도화로 이어질 전망입니다.</p>
+
+                <p><span class="highlight">환자 안전</span>과 <span class="highlight">품질 보증</span> 이슈가 지속적으로 대두되었습니다. 
+                위조·부적합 의약품 대응과 약물감시(Pharmacovigilance) 강화, 디지털 채널 단속 등 사후관리 체계 고도화가 병행되고 있습니다.</p>
+
+                <p>제조 측면에서는 <span class="highlight">GMP</span> 준수와 <span class="highlight">QMS·QRM</span> 적용 요구가 확대되었습니다. 
+                시설 투자와 운영 디지털화가 병행되며 납기·품질·비용 균형을 모색하는 흐름입니다.</p>
+
+                <p><span class="highlight">해외 시장 진출</span>과 <span class="highlight">수출 접근성</span> 확대가 이슈화되었습니다. 
+                현지 규제 적합성과 공급망 관리 역량이 성공의 관건으로 부각됩니다.</p>
+            </div>
+        </div>
+
+        <!-- 3. 전략적 제안 -->
+        <div class="content-section">
+            <h2 class="section-title">3. 전략적 제안</h2>
+            <div class="content-text">
+                <ul>
+                    <li><span class="highlight">허가·실사 대응</span> 역량 강화: SOP·품질문서 정비 및 갭 분석을 분기 내 완료</li>
+                    <li><span class="highlight">Pharmacovigilance</span> 체계 고도화: 시그널 탐지·리스크 커뮤니케이션 표준화</li>
+                    <li><span class="highlight">불법 유통 대응</span>: 전자상거래 모니터링, 시리얼라이제이션·추적성 PoC 추진</li>
+                    <li><span class="highlight">GMP·QMS</span> 내재화: 공정 밸리데이션 재정의로 감사 대응력 상승</li>
+                    <li><span class="highlight">수출 전략</span>: 타깃 국가 규제 맵업과 제품·공장 동시 등록</li>
+                    <li><span class="highlight">디지털 운영</span>: ECM/CCM·실사 대응 대시보드 도입</li>
+                </ul>
+
+                <h4>Risk Watchouts</h4>
+                <ul>
+                    <li><span class="highlight">규제 변경</span> 가속화로 SOP 미정합 및 심사 지연</li>
+                    <li>디지털 채널 불법 유통 확산과 브랜드 훼손</li>
+                    <li><span class="highlight">GMP 투자 지연</span> 시 OOS/OOT 증가</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 4. 결론 -->
+        <div class="content-section">
+            <h2 class="section-title">4. 결론</h2>
+            <div class="content-text">
+                <p>이번 달 핵심은 '<span class="highlight">규제 정렬</span>'과 '<span class="highlight">실행 속도</span>'의 동시 달성입니다. 
+                등록·실사 대응을 체계화하고, 환자 안전·품질 리스크를 선제적으로 관리하는 기업만이 
+                성장의 과실을 선점할 수 있습니다.</p>
+            </div>
+        </div>
+
+
+        <div class="footer">
+            <div class="footer-line"></div>
+            <p>© 2025 제약 산업 분석 리포트</p>
+            <p>전략 기획팀 | 본 리포트는 GPT API를 활용하여 생성되었습니다</p>
+        </div>
+    </div>
+
+    <script>
+        async function downloadPDF() {
+            try {
+                // PDF 다운로드 중 버튼 비활성화
+                const button = document.querySelector('.pdf-download-btn');
+                button.innerHTML = '생성 중...';
+                button.disabled = true;
+
+                // jsPDF 초기화
+                const { jsPDF } = window.jspdf;
+                
+                // 뉴스레터 컨테이너 캡처
+                const element = document.querySelector('.newsletter-container');
+                
+                // html2canvas로 HTML을 이미지로 변환
+                const canvas = await html2canvas(element, {
+                    scale: 2, // 고해상도
+                    useCORS: true,
+                    allowTaint: true,
+                    backgroundColor: '#ffffff',
+                    width: element.scrollWidth,
+                    height: element.scrollHeight,
+                    scrollX: 0,
+                    scrollY: 0
+                });
+
+                // PDF 생성
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF({
+                    orientation: 'portrait',
+                    unit: 'mm',
+                    format: 'a4'
+                });
+
+                // A4 크기 계산
+                const imgWidth = 210; // A4 width in mm
+                const pageHeight = 297; // A4 height in mm
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                let heightLeft = imgHeight;
+                let position = 0;
+
+                // 첫 페이지 추가
+                pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+
+                // 필요한 경우 추가 페이지 생성
+                while (heightLeft >= 0) {
+                    position = heightLeft - imgHeight;
+                    pdf.addPage();
+                    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                }
+
+                // PDF 다운로드
+                pdf.save('Newsletter_2025-09.pdf');
+
+                // 버튼 복원
+                button.innerHTML = `
+                    <svg class="pdf-icon" viewBox="0 0 24 24">
+                        <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+                    </svg>
+                    PDF 다운로드
+                `;
+                button.disabled = false;
+
+            } catch (error) {
+                console.error('PDF 생성 중 오류 발생:', error);
+                alert('PDF 생성 중 오류가 발생했습니다. 다시 시도해 주세요.');
+                
+                // 버튼 복원
+                const button = document.querySelector('.pdf-download-btn');
+                button.innerHTML = `
+                    <svg class="pdf-icon" viewBox="0 0 24 24">
+                        <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+                    </svg>
+                    PDF 다운로드
+                `;
+                button.disabled = false;
+            }
