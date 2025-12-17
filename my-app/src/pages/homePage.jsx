@@ -1,30 +1,29 @@
 // 홈 페이지
-import septemberData from "../data/september.json";
 import React, { useState, useMemo } from 'react';
+import septemberData from "../data/september.json";
 
-const HomePage = ({ onSearch }) => {
+const HomePage = ({ onSearch, setCurrentPage = () => {}, setSelectedNews = () => {}, setPrevPage = () => {} }) => {
   const topHeadlines = useMemo(() => {
-  const arr = Array.isArray(septemberData) ? septemberData : [septemberData];
-  return arr
-    .filter(a => typeof a?.importance === "number")
-    .sort((a, b) => (b.importance ?? 0) - (a.importance ?? 0))
-    .slice(0, 6)
-    .map(a => ({
-      id: a.id,
-      title: a.korTitle || a.title || "(제목 없음)",
-      date: a.date || "",
-      source: a.source || "",
-      importance: a.importance ?? 0,
-      link: a.link || "#"
-    }));
-}, []);
+    const arr = Array.isArray(septemberData) ? septemberData : [septemberData];
+    return arr
+      .filter(a => typeof a?.importance === "number")
+      .sort((a, b) => (b.importance ?? 0) - (a.importance ?? 0))
+      .slice(0, 6);
+  }, []);
 
   const [searchTerm, setSearchTerm] = useState('');
 
   const handleSearch = () => {
     if (searchTerm.trim()) {
-      onSearch(searchTerm); // 부모로 검색어 전달
+      onSearch(searchTerm);
     }
+  };
+
+  const handleHeadlineClick = (article) => {
+    setSelectedNews(article);
+    setPrevPage("home");
+    setCurrentPage("newsDetail");
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
   
   return (
@@ -53,7 +52,7 @@ const HomePage = ({ onSearch }) => {
         marginBottom: '3rem',
         maxWidth: '1000px'
       }}>
-        AI 기반으로 인도네시아 제약 산업의 최신 뉴스와 허가 정보를 효과적으로 제공합니다. <br></br> 
+        AI 기반으로 인도네시아 제약 산업의 최신 뉴스와 허가 정보를 빠르고 정확하게 제공합니다. <br/> 
         검색을 통해 원하는 정보를 빠르게 찾아보세요.
       </p>
       <div style={{
@@ -100,78 +99,106 @@ const HomePage = ({ onSearch }) => {
         </button>
         
         {/* Top Headlines Section */}
-      <div style={{
-        width: '100%',
-        maxWidth: '1200px',
-        background: 'linear-gradient(135deg, rgba(255, 140, 66, 0.1), rgba(255, 167, 38, 0.05))',
-        marginTop: '100px',
-        backdropFilter: 'blur(15px)',
-        border: '1px solid rgba(255, 140, 66, 0.2)',
-        borderRadius: '20px',
-        padding: '2rem',
-        boxShadow: '0 8px 32px rgba(255, 140, 66, 0.1)'
-      }}>
         <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginBottom: '1.5rem'
+          width: '100%',
+          maxWidth: '1200px',
+          background: 'linear-gradient(135deg, rgba(255, 140, 66, 0.1), rgba(255, 167, 38, 0.05))',
+          marginTop: '100px',
+          backdropFilter: 'blur(15px)',
+          border: '1px solid rgba(255, 140, 66, 0.2)',
+          borderRadius: '20px',
+          padding: '2rem',
+          boxShadow: '0 8px 32px rgba(255, 140, 66, 0.1)'
         }}>
           <div style={{
-            width: '4px',
-            height: '24px',
-            background: 'linear-gradient(135deg, #ff8c42, #ffa726)',
-            borderRadius: '2px',
-            marginRight: '12px'
-          }}></div>
-          <h2 style={{
-            fontSize: '1.8rem',
-            color: '#ff8c42',
-            margin: '0',
-            fontWeight: '600'
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginBottom: '1.5rem'
           }}>
-            Top Headlines
-          </h2>
-        </div>
-        
-        <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'grid', gap: '0.8rem' }}>
-          {topHeadlines.map(item => (
-            <li key={item.id} style={{
-              display: 'grid',
-              gridTemplateColumns: '1fr auto',
-              alignItems: 'center',
-              gap: '0.6rem',
-              background: 'rgba(255,255,255,0.06)',
-              border: '1px solid rgba(255,140,66,0.20)',
-              borderRadius: '14px',
-              padding: '0.9rem 1rem'
+            <div style={{
+              width: '4px',
+              height: '24px',
+              background: 'linear-gradient(135deg, #ff8c42, #ffa726)',
+              borderRadius: '2px',
+              marginRight: '12px'
+            }}></div>
+            <h2 style={{
+              fontSize: '1.8rem',
+              color: '#ff8c42',
+              margin: '0',
+              fontWeight: '600'
             }}>
-              <div>
-                <div style={{ fontSize: '1.05rem', color: '#fff', fontWeight: 600, lineHeight: 1.35 }}>
-                  <a href={item.link} target="_blank" rel="noreferrer" style={{ color: 'inherit', textDecoration: 'none' }}>
-                    {item.title}
-                  </a>
+              Top Headlines
+            </h2>
+          </div>
+          
+          <ul style={{ 
+            listStyle: 'none', 
+            padding: 0, 
+            margin: 0, 
+            display: 'grid', 
+            gap: '0.8rem' 
+          }}>
+            {topHeadlines.map(item => (
+              <li 
+                key={item.id} 
+                onClick={() => handleHeadlineClick(item)}
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: '1fr auto',
+                  alignItems: 'center',
+                  gap: '0.6rem',
+                  background: 'rgba(255,255,255,0.06)',
+                  border: '1px solid rgba(255,140,66,0.20)',
+                  borderRadius: '14px',
+                  padding: '0.9rem 1rem',
+                  cursor: 'pointer',
+                  transition: 'all 0.25s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'rgba(255,255,255,0.10)';
+                  e.currentTarget.style.transform = 'translateX(4px)';
+                  e.currentTarget.style.borderColor = 'rgba(255,140,66,0.40)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'rgba(255,255,255,0.06)';
+                  e.currentTarget.style.transform = 'none';
+                  e.currentTarget.style.borderColor = 'rgba(255,140,66,0.20)';
+                }}
+              >
+                <div>
+                  <div style={{ 
+                    fontSize: '1.05rem', 
+                    color: '#fff', 
+                    fontWeight: 600, 
+                    lineHeight: 1.35 
+                  }}>
+                    {item.korTitle || item.title || "(제목 없음)"}
+                  </div>
+                  <div style={{ 
+                    marginTop: '0.25rem', 
+                    fontSize: '0.86rem', 
+                    color: '#c8c8c8' 
+                  }}>
+                    {item.date} · {item.source}
+                  </div>
                 </div>
-                <div style={{ marginTop: '0.25rem', fontSize: '0.86rem', color: '#c8c8c8' }}>
-                  {item.date} · {item.source}
-                </div>
-              </div>
-              <span style={{
-                fontSize: '0.8rem',
-                color: '#ff8c42',
-                border: '1px solid rgba(255,140,66,0.35)',
-                background: 'rgba(255,140,66,0.10)',
-                padding: '0.25rem 0.5rem',
-                borderRadius: '10px',
-                whiteSpace: 'nowrap'
-              }}>
-                중요도 {item.importance}
-              </span>
-            </li>
-          ))}
-        </ul>
-
-      </div>
+                <span style={{
+                  fontSize: '0.8rem',
+                  color: '#ff8c42',
+                  border: '1px solid rgba(255,140,66,0.35)',
+                  background: 'rgba(255,140,66,0.10)',
+                  padding: '0.25rem 0.5rem',
+                  borderRadius: '10px',
+                  whiteSpace: 'nowrap'
+                }}>
+                  중요도 {item.importance ?? 0}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   );

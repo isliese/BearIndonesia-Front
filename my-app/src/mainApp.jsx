@@ -12,7 +12,7 @@ const MainApp = () => {
   const [currentPage, setCurrentPage] = useState('home');
   const [prevPage, setPrevPage] = useState('home');
   const [selectedNews, setSelectedNews] = useState(null);
-  const [searchTerm, setSearchTerm] = useState(''); // 검색어 상태 추가
+  const [searchTerm, setSearchTerm] = useState('');
 
   // 검색 처리 함수
   const handleSearch = (term) => {
@@ -25,8 +25,13 @@ const MainApp = () => {
   const renderPage = () => {
     switch (currentPage) {
       case 'home':
-        return <HomePage onSearch={handleSearch} />;
-      
+        return <HomePage 
+          onSearch={handleSearch}
+          setCurrentPage={setCurrentPage}
+          setSelectedNews={setSelectedNews}
+          setPrevPage={setPrevPage}
+        />;
+              
       case 'news':
         return <NewsPage 
           setCurrentPage={setCurrentPage} 

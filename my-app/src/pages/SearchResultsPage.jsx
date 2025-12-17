@@ -77,9 +77,9 @@ function getInitials(text = "") {
 
 const getMatchTypeColor = (matchType) => {
   switch (matchType) {
-    case 'company': return '#4CAF50'; // 초록
-    case 'drug': return '#2196F3'; // 파랑
-    case 'clinical': return '#FF9800'; // 주황
+    case 'company': return '#4CAF50'; 
+    case 'drug': return '#2196F3';
+    case 'clinical': return '#FF9800';
     default: return '#ff8c42';
   }
 };
@@ -95,7 +95,6 @@ const getMatchTypeLabel = (matchType) => {
 
 /** tagsJson 혹은 article.tags를 안전하게 배열 문자열로 변환 */
 const parseTags = (article) => {
-  // article.tags 가 배열이면 [{name:".."}] / [".."] 모두 지원
   if (Array.isArray(article?.tags)) {
     return article.tags
       .map(v => (typeof v === 'string' ? v : v?.name))
