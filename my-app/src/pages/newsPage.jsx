@@ -193,7 +193,8 @@ const UnifiedNewsPage = ({ setCurrentPage, setSelectedNews, setPrevPage }) => {
   const [customStartDate, setCustomStartDate] = useState("");
   const [customEndDate, setCustomEndDate] = useState("");
   const [showCustomDate, setShowCustomDate] = useState(false);
-  const [showHourOptions, setShowHourOptions] = useState(false); 
+  const [showHourOptions, setShowHourOptions] = useState(false);
+  const [expandedPressCategories, setExpandedPressCategories] = useState({}); 
   
   // 워드클라우드 기간 선택
   const [wcYear, setWcYear] = useState(2025);
@@ -846,61 +847,136 @@ if (periodFilter === "직접입력" && customStartDate && customEndDate) {
 </div>
 
 
-            {/* 언론사 필터 (드롭다운) */}
-            <div style={{ marginBottom: "1.5rem" }}>
-              <div style={{ color: "#ff8c42", fontWeight: 700, marginBottom: "0.8rem", fontSize: "1rem" }}>
-                언론사
+{/* 언론사 필터 */}
+<div style={{ marginBottom: "1.5rem" }}>
+  <div style={{ color: "#ff8c42", fontWeight: 700, marginBottom: "0.8rem", fontSize: "1rem" }}>
+    언론사
+  </div>
+  
+  {pressList.type === "categorized" ? (
+    <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+      <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+        {/* 전체 버튼 */}
+        <button
+          onClick={() => {
+            setPressFilter("전체");
+            setExpandedPressCategories({});
+          }}
+          style={{
+            padding: "0.5rem 1rem",
+            background: pressFilter === "전체" ? "#ff8c42" : "rgba(255, 255, 255, 0.1)",
+            border: "1px solid",
+            borderColor: pressFilter === "전체" ? "#ff8c42" : "rgba(255, 255, 255, 0.2)",
+            borderRadius: "20px",
+            color: "white",
+            cursor: "pointer",
+            fontSize: "0.85rem",
+            transition: "all 0.2s ease",
+          }}
+        >
+          전체
+        </button>
+        
+        {/* 유형별 토글 버튼 */}
+        <button
+          onClick={() => {
+            const allExpanded = Object.keys(pressList.data).every(cat => expandedPressCategories[cat]);
+            if (allExpanded) {
+              setExpandedPressCategories({});
+            } else {
+              const expanded = {};
+              Object.keys(pressList.data).forEach(cat => expanded[cat] = true);
+              setExpandedPressCategories(expanded);
+            }
+          }}
+          style={{
+            padding: "0.5rem 1rem",
+            background: "rgba(255, 255, 255, 0.1)",
+            border: "1px solid rgba(255, 255, 255, 0.2)",
+            borderRadius: "20px",
+            color: "white",
+            cursor: "pointer",
+            fontSize: "0.85rem",
+            transition: "all 0.2s ease",
+            display: "flex",
+            alignItems: "center",
+            gap: "0.3rem",
+          }}
+        >
+          유형별
+          <span style={{ fontSize: "0.7rem" }}>
+            {Object.keys(expandedPressCategories).length > 0 ? "▲" : "▼"}
+          </span>
+        </button>
+      </div>
+
+      {/* 카테고리별 언론사 */}
+      {Object.keys(expandedPressCategories).length > 0 && (
+        <div style={{ display: "flex", flexDirection: "column", gap: "1rem", paddingLeft: "0.5rem" }}>
+          {Object.entries(pressList.data).map(([category, sources]) => (
+            expandedPressCategories[category] && (
+              <div key={category}>
+                <div style={{ 
+                  color: "white",
+                  fontSize: "0.9rem", 
+                  fontWeight: 600, 
+                  marginBottom: "0.5rem",
+                  paddingLeft: "0.5rem"
+                }}>
+                  {category} ({sources.length})
+                </div>
+                
+                <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap", paddingLeft: "1rem" }}>
+                  {sources.map((source) => (
+                    <button
+                      key={source}
+                      onClick={() => setPressFilter(source)}
+                      style={{
+                        padding: "0.5rem 1rem",
+                        background: pressFilter === source ? "#ff8c42" : "rgba(255, 255, 255, 0.1)",
+                        border: "1px solid",
+                        borderColor: pressFilter === source ? "#ff8c42" : "rgba(255, 255, 255, 0.2)",
+                        borderRadius: "20px",
+                        color: "white",
+                        cursor: "pointer",
+                        fontSize: "0.85rem",
+                        transition: "all 0.2s ease",
+                      }}
+                    >
+                      {source}
+                    </button>
+                  ))}
+                </div>
               </div>
-              
-              {pressList.type === "categorized" ? (
-                <select
-                  value={pressFilter}
-                  onChange={(e) => setPressFilter(e.target.value)}
-                  style={{
-                    background: "rgba(255, 255, 255, 0.1)",
-                    border: "1px solid rgba(255, 255, 255, 0.2)",
-                    borderRadius: "12px",
-                    padding: "0.6rem 1rem",
-                    color: "white",
-                    fontSize: "0.9rem",
-                    cursor: "pointer",
-                    minWidth: "200px",
-                  }}
-                >
-                  <option value="전체" style={{ background: "#1a1a2e" }}>전체</option>
-                  {Object.entries(pressList.data).map(([category, sources]) => (
-                    <optgroup key={category} label={category} style={{ background: "#1a1a2e", color: "#ff8c42" }}>
-                      {sources.map((source) => (
-                        <option key={source} value={source} style={{ background: "#1a1a2e", paddingLeft: "1rem" }}>
-                          {source}
-                        </option>
-                      ))}
-                    </optgroup>
-                  ))}
-                </select>
-              ) : (
-                <select
-                  value={pressFilter}
-                  onChange={(e) => setPressFilter(e.target.value)}
-                  style={{
-                    background: "rgba(255, 255, 255, 0.1)",
-                    border: "1px solid rgba(255, 255, 255, 0.2)",
-                    borderRadius: "12px",
-                    padding: "0.6rem 1rem",
-                    color: "white",
-                    fontSize: "0.9rem",
-                    cursor: "pointer",
-                    minWidth: "200px",
-                  }}
-                >
-                  {pressList.data.map((press) => (
-                    <option key={press} value={press} style={{ background: "#1a1a2e" }}>
-                      {press}
-                    </option>
-                  ))}
-                </select>
-              )}
-            </div>
+            )
+          ))}
+        </div>
+      )}
+    </div>
+  ) : (
+    <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+      {pressList.data.map((press) => (
+        <button
+          key={press}
+          onClick={() => setPressFilter(press)}
+          style={{
+            padding: "0.5rem 1rem",
+            background: pressFilter === press ? "#ff8c42" : "rgba(255, 255, 255, 0.1)",
+            border: "1px solid",
+            borderColor: pressFilter === press ? "#ff8c42" : "rgba(255, 255, 255, 0.2)",
+            borderRadius: "20px",
+            color: "white",
+            cursor: "pointer",
+            fontSize: "0.85rem",
+            transition: "all 0.2s ease",
+          }}
+        >
+          {press}
+        </button>
+      ))}
+    </div>
+  )}
+</div>
 
             {/* 옵션 버튼 */}
             <div style={{ display: "flex", gap: "1rem", alignItems: "center", paddingTop: "0.5rem" }}>
