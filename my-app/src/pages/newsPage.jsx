@@ -979,24 +979,33 @@ if (periodFilter === "직접입력" && customStartDate && customEndDate) {
 </div>
 
             {/* 옵션 버튼 */}
-            <div style={{ display: "flex", gap: "1rem", alignItems: "center", paddingTop: "0.5rem" }}>
-              <button
-                onClick={resetFilters}
-                style={{
-                  padding: "0.6rem 1.5rem",
-                  background: "rgba(244, 67, 54, 0.1)",
-                  border: "1px solid rgba(244, 67, 54, 0.3)",
-                  borderRadius: "20px",
-                  color: "#f44336",
-                  cursor: "pointer",
-                  fontSize: "0.9rem",
-                  fontWeight: "bold",
-                  transition: "all 0.2s ease",
-                }}
-              >
-                옵션 초기화
-              </button>
-              
+<div style={{ display: "flex", gap: "1rem", alignItems: "center", paddingTop: "0.5rem", borderTop: "1px solid rgba(255, 255, 255, 0.1)", marginTop: "1rem" }}>
+  <button
+    onClick={resetFilters}
+    style={{
+      padding: "0.6rem 1.5rem",
+      background: "transparent",
+      border: "1px solid rgba(255, 255, 255, 0.3)",
+      borderRadius: "50px",
+      color: "white",
+      cursor: "pointer",
+      fontSize: "0.9rem",
+      fontWeight: "normal",
+      transition: "all 0.2s ease",
+      display: "flex",
+      alignItems: "center",
+      gap: "0.5rem",
+    }}
+    onMouseEnter={(e) => {
+      e.currentTarget.style.background = "rgba(255, 255, 255, 0.1)";
+    }}
+    onMouseLeave={(e) => {
+      e.currentTarget.style.background = "transparent";
+    }}
+  >
+    <span style={{ fontSize: "1rem" }}>↻</span>
+    <span>옵션 초기화</span>
+  </button>
               {/* 토글 스위치 형태의 옵션 유지 */}
               <label style={{ display: "flex", alignItems: "center", gap: "0.5rem", cursor: "pointer" }}>
                 <span style={{ color: "#aaa", fontSize: "0.9rem" }}>옵션 유지</span>
