@@ -459,7 +459,7 @@ if (periodFilter === "직접입력" && customStartDate && customEndDate) {
       </div>
 
       {/* 메인 콘텐츠 */}
-      <div style={{ flex: 1, padding: "2rem" }}>
+      <div style={{ flex: 1, padding: "1rem" }}>
         <h1 style={{ fontSize: "2.3rem", color: "#ff8c42", textAlign: "center", marginBottom: "1.6rem" }}>
           News
         </h1>
