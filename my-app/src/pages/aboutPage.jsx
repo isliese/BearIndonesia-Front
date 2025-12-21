@@ -10,11 +10,11 @@ const AboutPage = () => {
       justifyContent: 'center',
       minHeight: 'calc(100vh - 80px)',
       textAlign: 'center',
-      padding: '2rem'
+      
     }}>
       <div style={{
         paddingTop: '30px',
-        marginTop: '100px',
+        marginTop: '50px',
         maxWidth: '840px',
         width: '100%',
         background: 'rgba(255, 255, 255, 0.1)',
