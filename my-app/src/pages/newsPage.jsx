@@ -655,9 +655,9 @@ const UnifiedNewsPage = ({ setCurrentPage, setSelectedNews, setPrevPage }) => {
                     onClick={() => setSortOrder(sort)}
                     style={{
                       padding: "0.5rem 1rem",
-                      background: periodFilter === period ? "#ff8c42" : "rgba(255, 255, 255, 0.1)",
+                      background: sortOrder === sort ? "#ff8c42" : "rgba(255, 255, 255, 0.1)",
                       border: "1px solid",
-                      borderColor: periodFilter === period ? "#ff8c42" : "rgba(255, 255, 255, 0.2)",
+                      borderColor: sortOrder === sort ? "#ff8c42" : "rgba(255, 255, 255, 0.2)",
                       borderRadius: "20px",
                       color: "white",
                       cursor: "pointer",
@@ -665,7 +665,7 @@ const UnifiedNewsPage = ({ setCurrentPage, setSelectedNews, setPrevPage }) => {
                       transition: "all 0.2s ease",
                     }}
                   >
-                    {period}
+                    {sort}
                   </button>
                 ))}
               </div>
@@ -967,38 +967,4 @@ const UnifiedNewsPage = ({ setCurrentPage, setSelectedNews, setPrevPage }) => {
 };
 
 export default UnifiedNewsPage;
-                      background: sortOrder === sort ? "#ff8c42" : "rgba(255, 255, 255, 0.1)",
-                      border: "1px solid",
-                      borderColor: sortOrder === sort ? "#ff8c42" : "rgba(255, 255, 255, 0.2)",
-                      borderRadius: "20px",
-                      color: "white",
-                      cursor: "pointer",
-                      fontSize: "0.85rem",
-                      transition: "all 0.2s ease",
-                    }}
-                  >
-                    {sort}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* 기간 필터 */}
-            <div style={{ marginBottom: "1.5rem" }}>
-              <div style={{ color: "#ff8c42", fontWeight: 700, marginBottom: "0.8rem", fontSize: "1rem" }}>
-                기간
-              </div>
-              <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap", marginBottom: "0.8rem" }}>
-                {["전체", "1시간", "1일", "1주", "1개월", "3개월", "6개월", "1년", "직접입력"].map((period) => (
-                  <button
-                    key={period}
-                    onClick={() => {
-                      setPeriodFilter(period);
-                      if (period === "직접입력") {
-                        setShowCustomDate(!showCustomDate);
-                      } else {
-                        setShowCustomDate(false);
-                      }
-                    }}
-                    style={{
-                      padding: "0.5rem 1rem",
+                    
