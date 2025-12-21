@@ -45,7 +45,6 @@ const TAG_SECTIONS = {
   ]
 };
 
-/** 표시 순서 */
 const SECTION_ORDER = [
   "일반",
   "대웅제약",
@@ -170,11 +169,42 @@ const NewsCard = ({ article, onOpen }) => {
 
 /* -------------------- 페이지 -------------------- */
 const UnifiedNewsPage = ({ setCurrentPage, setSelectedNews, setPrevPage }) => {
+  const getStoredValue = (key, defaultValue) => {
+    try {
+      const stored = localStorage.getItem(key);
+      return stored !== null ? stored : defaultValue;
+    } catch {
+      return defaultValue;
+    }
+  };
+
   const [activeSection, setActiveSection] = useState("all");
   const [activeTag, setActiveTag] = useState("all");
   const [showWordCloud, setShowWordCloud] = useState(false);
+  const [isFilterOpen, setIsFilterOpen] = useState(true);
+  
+  // 옵션 유지 체크박스
+  const [keepOptions, setKeepOptions] = useState(true);
+  
+  // 필터 state
+  const [sortOrder, setSortOrder] = useState(() => getStoredValue("newsFilter_sort", "최신순"));
+  const [periodFilter, setPeriodFilter] = useState(() => getStoredValue("newsFilter_period", "전체"));
+  const [pressFilter, setPressFilter] = useState(() => getStoredValue("newsFilter_press", "전체"));
+  const [customStartDate, setCustomStartDate] = useState("");
+  const [customEndDate, setCustomEndDate] = useState("");
+  const [showCustomDate, setShowCustomDate] = useState(false);
+  
+  // 워드클라우드 기간 선택
+  const [wcYear, setWcYear] = useState(2025);
+  const [wcStartDate, setWcStartDate] = useState("2025-01-01");
+  const [wcEndDate, setWcEndDate] = useState("2025-12-31");
+  
+  // 엑셀/뉴스레터 년월 선택
+  const [excelYear, setExcelYear] = useState(2025);
+  const [excelMonth, setExcelMonth] = useState(9);
+  const [newsletterYear, setNewsletterYear] = useState(2025);
+  const [newsletterMonth, setNewsletterMonth] = useState(9);
 
-  // 9월 데이터 정규화
   const articles = useMemo(() => {
     return (Array.isArray(septemberData) ? septemberData : [septemberData]).map((a) => ({
       ...a,
@@ -186,7 +216,6 @@ const UnifiedNewsPage = ({ setCurrentPage, setSelectedNews, setPrevPage }) => {
     }));
   }, []);
 
-  // 태그 카운트
   const tagCount = useMemo(() => {
     const m = new Map();
     for (const a of articles) {
@@ -199,23 +228,71 @@ const UnifiedNewsPage = ({ setCurrentPage, setSelectedNews, setPrevPage }) => {
     return m;
   }, [articles]);
 
-  // 현재 섹션의 태그만 필터링
   const currentSectionTags = useMemo(() => {
     if (activeSection === "all") return [];
     const tags = TAG_SECTIONS[activeSection] || [];
     return tags.filter((name) => tagCount.get(name) > 0);
   }, [activeSection, tagCount]);
 
-  // 섹션 변경 시 태그 초기화
   useEffect(() => {
     setActiveTag("all");
   }, [activeSection]);
 
-  // 필터링된 기사
-  const filtered = useMemo(() => {
-    let result = articles;
+  // localStorage에 필터 상태 저장 (옵션 유지 활성화 시에만)
+  useEffect(() => {
+    if (keepOptions) {
+      localStorage.setItem("newsFilter_sort", sortOrder);
+      localStorage.setItem("newsFilter_period", periodFilter);
+      localStorage.setItem("newsFilter_press", pressFilter);
+    }
+  }, [sortOrder, periodFilter, pressFilter, keepOptions]);
+
+  const pressList = useMemo(() => {
+    const sources = new Set(articles.map(a => a.source).filter(Boolean));
+    const sortedSources = Array.from(sources).sort();
     
-    // 섹션 필터
+    // 카테고리 자동 분류 시도 (키워드 기반)
+    const categories = {
+      "일간지": [],
+      "경제/IT": [],
+      "인터넷신문": [],
+      "전문지": [],
+      "기타": []
+    };
+    
+    sortedSources.forEach(source => {
+      const lower = source.toLowerCase();
+      if (lower.includes("경제") || lower.includes("비즈") || lower.includes("it") || lower.includes("tech")) {
+        categories["경제/IT"].push(source);
+      } else if (lower.includes("데일리") || lower.includes("online") || lower.includes("닷컴")) {
+        categories["인터넷신문"].push(source);
+      } else if (lower.includes("전문") || lower.includes("매거진") || lower.includes("리뷰")) {
+        categories["전문지"].push(source);
+      } else if (lower.includes("신문") || lower.includes("일보")) {
+        categories["일간지"].push(source);
+      } else {
+        categories["기타"].push(source);
+      }
+    });
+    
+    // 빈 카테고리 제거
+    Object.keys(categories).forEach(key => {
+      if (categories[key].length === 0) {
+        delete categories[key];
+      }
+    });
+    
+    // 카테고리가 2개 이상이면 카테고리별로 반환, 아니면 단순 리스트
+    if (Object.keys(categories).length >= 2) {
+      return { type: "categorized", data: categories };
+    } else {
+      return { type: "simple", data: ["전체", ...sortedSources] };
+    }
+  }, [articles]);
+
+  const filtered = useMemo(() => {
+    let result = [...articles];
+    
     if (activeSection !== "all") {
       const sectionTags = TAG_SECTIONS[activeSection] || [];
       result = result.filter((a) => 
@@ -223,20 +300,67 @@ const UnifiedNewsPage = ({ setCurrentPage, setSelectedNews, setPrevPage }) => {
       );
     }
     
-    // 태그 필터
     if (activeTag !== "all") {
       result = result.filter((a) => 
         a.tags.some((t) => t.name === activeTag)
       );
     }
+
+    if (pressFilter !== "전체") {
+      result = result.filter((a) => a.source === pressFilter);
+    }
+
+    // 기간 필터
+    if (periodFilter === "직접입력" && customStartDate && customEndDate) {
+      const start = new Date(customStartDate);
+      const end = new Date(customEndDate);
+      result = result.filter((a) => {
+        if (!a.date) return false;
+        const articleDate = new Date(a.date);
+        return articleDate >= start && articleDate <= end;
+      });
+    } else if (periodFilter !== "전체" && periodFilter !== "직접입력") {
+      const now = new Date();
+      result = result.filter((a) => {
+        if (!a.date) return false;
+        const articleDate = new Date(a.date);
+        const diffMs = now - articleDate;
+        const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+        
+        switch(periodFilter) {
+          case "1시간": return diffMs <= 60 * 60 * 1000;
+          case "1일": return diffDays <= 1;
+          case "1주": return diffDays <= 7;
+          case "1개월": return diffDays <= 30;
+          case "3개월": return diffDays <= 90;
+          case "6개월": return diffDays <= 180;
+          case "1년": return diffDays <= 365;
+          default: return true;
+        }
+      });
+    }
+    
+    if (sortOrder === "최신순") {
+      result.sort((a, b) => new Date(b.date) - new Date(a.date));
+    } else if (sortOrder === "오래된순") {
+      result.sort((a, b) => new Date(a.date) - new Date(b.date));
+    }
     
     return result;
-  }, [activeSection, activeTag, articles]);
+  }, [activeSection, activeTag, sortOrder, periodFilter, pressFilter, articles, customStartDate, customEndDate]);
 
-  // 엑셀 다운로드
+  const resetFilters = () => {
+    setSortOrder("최신순");
+    setPeriodFilter("전체");
+    setPressFilter("전체");
+    setCustomStartDate("");
+    setCustomEndDate("");
+    setShowCustomDate(false);
+  };
+
   const downloadExcel = useCallback(() => {
     if (articles.length === 0) {
-      alert("9월 뉴스 데이터가 없습니다.");
+      alert("뉴스 데이터가 없습니다.");
       return;
     }
     const sheetData = articles.map((a) => ({
@@ -257,13 +381,18 @@ const UnifiedNewsPage = ({ setCurrentPage, setSelectedNews, setPrevPage }) => {
     }));
     const ws = XLSX.utils.json_to_sheet(sheetData);
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "9월뉴스");
-    XLSX.writeFile(wb, "9월_뉴스.xlsx");
-  }, [articles]);
+    XLSX.utils.book_append_sheet(wb, ws, `${excelYear}-${excelMonth}월뉴스`);
+    XLSX.writeFile(wb, `${excelYear}년_${excelMonth}월_뉴스.xlsx`);
+  }, [articles, excelYear, excelMonth]);
+
+  const generateWordCloud = () => {
+    alert(`워드클라우드 생성: ${wcStartDate} ~ ${wcEndDate}`);
+    // TODO: 실제 워드클라우드 생성 로직
+  };
 
   return (
-    <div style={{ minHeight: "100vh", display: "flex" }}>
-      {/* 왼쪽 사이드바 - 분야 선택 */}
+    <div style={{ minHeight: "100vh", display: "flex", background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)" }}>
+      {/* 왼쪽 사이드바 */}
       <div
         style={{
           width: "240px",
@@ -282,7 +411,6 @@ const UnifiedNewsPage = ({ setCurrentPage, setSelectedNews, setPrevPage }) => {
         </h2>
         
         <div style={{ display: "flex", flexDirection: "column", gap: "0.7rem" }}>
-          {/* 전체 버튼 */}
           <div
             onClick={() => setActiveSection("all")}
             style={{
@@ -300,7 +428,6 @@ const UnifiedNewsPage = ({ setCurrentPage, setSelectedNews, setPrevPage }) => {
             전체
           </div>
           
-          {/* 각 분야 버튼 */}
           {SECTION_ORDER.map((section) => (
             <div
               key={section}
@@ -323,70 +450,369 @@ const UnifiedNewsPage = ({ setCurrentPage, setSelectedNews, setPrevPage }) => {
         </div>
       </div>
 
-      {/* 메인 콘텐츠 영역 */}
+      {/* 메인 콘텐츠 */}
       <div style={{ flex: 1, padding: "2rem" }}>
         <h1 style={{ fontSize: "2.3rem", color: "#ff8c42", textAlign: "center", marginBottom: "1.6rem" }}>
           News
         </h1>
 
         {/* 상단 액션 버튼 */}
-        <div style={{ display: "flex", justifyContent: "center", gap: "0.8rem", marginBottom: "2rem", flexWrap: "wrap" }}>
-          <button
-            onClick={() => setShowWordCloud(true)}
-            style={{
-              background: "rgba(100, 181, 246, 0.1)",
-              border: "1px solid rgba(100, 181, 246, 0.3)",
-              borderRadius: "50px",
-              padding: "0.65rem 1.1rem",
-              color: "white",
-              cursor: "pointer",
-              fontSize: "0.95rem",
-              fontWeight: "bold",
-            }}
-          >
-            워드클라우드 생성
-          </button>
-
-          <button
-            onClick={downloadExcel}
-            style={{
-              background: "rgba(76, 175, 80, 0.1)",
-              border: "1px solid rgba(76, 175, 80, 0.3)",
-              borderRadius: "50px",
-              padding: "0.65rem 1.1rem",
-              color: "white",
-              cursor: "pointer",
-              fontSize: "0.95rem",
-              fontWeight: "bold",
-            }}
-          >
-            9월 기사 Excel 다운로드
-          </button>
-
-          <a
-            href="/Newsletter_2025-09.html"
-            target="_blank"
-            rel="noreferrer"
-            style={{ textDecoration: "none" }}
-          >
-            <button
+        <div style={{ display: "flex", justifyContent: "center", gap: "1rem", marginBottom: "2rem", flexWrap: "wrap", alignItems: "center" }}>
+          {/* 워드클라우드 */}
+          <div style={{ display: "flex", gap: "0.5rem", alignItems: "center", background: "rgba(100, 181, 246, 0.1)", padding: "0.5rem 1rem", borderRadius: "50px", border: "1px solid rgba(100, 181, 246, 0.3)" }}>
+            <input
+              type="date"
+              value={wcStartDate}
+              onChange={(e) => setWcStartDate(e.target.value)}
               style={{
-                background: "rgba(255, 140, 66, 0.1)",
-                border: "1px solid rgba(255, 140, 66, 0.35)",
-                borderRadius: "50px",
-                padding: "0.65rem 1.1rem",
+                background: "rgba(255,255,255,0.1)",
+                border: "1px solid rgba(255,255,255,0.2)",
+                borderRadius: "8px",
+                padding: "0.4rem",
+                color: "white",
+                fontSize: "0.85rem",
+              }}
+            />
+            <span style={{ color: "white" }}>~</span>
+            <input
+              type="date"
+              value={wcEndDate}
+              onChange={(e) => setWcEndDate(e.target.value)}
+              style={{
+                background: "rgba(255,255,255,0.1)",
+                border: "1px solid rgba(255,255,255,0.2)",
+                borderRadius: "8px",
+                padding: "0.4rem",
+                color: "white",
+                fontSize: "0.85rem",
+              }}
+            />
+            <button
+              onClick={generateWordCloud}
+              style={{
+                background: "transparent",
+                border: "none",
                 color: "white",
                 cursor: "pointer",
-                fontSize: "0.95rem",
+                fontSize: "0.9rem",
                 fontWeight: "bold",
               }}
             >
-              9월 Newsletter 보러가기
+              워드클라우드 생성
             </button>
-          </a>
+          </div>
+
+          {/* Excel 다운로드 */}
+          <div style={{ display: "flex", gap: "0.5rem", alignItems: "center", background: "rgba(76, 175, 80, 0.1)", padding: "0.5rem 1rem", borderRadius: "50px", border: "1px solid rgba(76, 175, 80, 0.3)" }}>
+            <select
+              value={excelYear}
+              onChange={(e) => setExcelYear(Number(e.target.value))}
+              style={{
+                background: "rgba(255,255,255,0.1)",
+                border: "1px solid rgba(255,255,255,0.2)",
+                borderRadius: "8px",
+                padding: "0.4rem",
+                color: "white",
+                fontSize: "0.85rem",
+              }}
+            >
+              {[2024, 2025, 2026].map(year => (
+                <option key={year} value={year} style={{ background: "#1a1a2e" }}>{year}년</option>
+              ))}
+            </select>
+            <select
+              value={excelMonth}
+              onChange={(e) => setExcelMonth(Number(e.target.value))}
+              style={{
+                background: "rgba(255,255,255,0.1)",
+                border: "1px solid rgba(255,255,255,0.2)",
+                borderRadius: "8px",
+                padding: "0.4rem",
+                color: "white",
+                fontSize: "0.85rem",
+              }}
+            >
+              {Array.from({length: 12}, (_, i) => i + 1).map(month => (
+                <option key={month} value={month} style={{ background: "#1a1a2e" }}>{month}월</option>
+              ))}
+            </select>
+            <button
+              onClick={downloadExcel}
+              style={{
+                background: "transparent",
+                border: "none",
+                color: "white",
+                cursor: "pointer",
+                fontSize: "0.9rem",
+                fontWeight: "bold",
+              }}
+            >
+              Excel 다운로드
+            </button>
+          </div>
+
+          {/* Newsletter */}
+          <div style={{ display: "flex", gap: "0.5rem", alignItems: "center", background: "rgba(255, 140, 66, 0.1)", padding: "0.5rem 1rem", borderRadius: "50px", border: "1px solid rgba(255, 140, 66, 0.35)" }}>
+            <select
+              value={newsletterYear}
+              onChange={(e) => setNewsletterYear(Number(e.target.value))}
+              style={{
+                background: "rgba(255,255,255,0.1)",
+                border: "1px solid rgba(255,255,255,0.2)",
+                borderRadius: "8px",
+                padding: "0.4rem",
+                color: "white",
+                fontSize: "0.85rem",
+              }}
+            >
+              {[2024, 2025, 2026].map(year => (
+                <option key={year} value={year} style={{ background: "#1a1a2e" }}>{year}년</option>
+              ))}
+            </select>
+            <select
+              value={newsletterMonth}
+              onChange={(e) => setNewsletterMonth(Number(e.target.value))}
+              style={{
+                background: "rgba(255,255,255,0.1)",
+                border: "1px solid rgba(255,255,255,0.2)",
+                borderRadius: "8px",
+                padding: "0.4rem",
+                color: "white",
+                fontSize: "0.85rem",
+              }}
+            >
+              {Array.from({length: 12}, (_, i) => i + 1).map(month => (
+                <option key={month} value={month} style={{ background: "#1a1a2e" }}>{month}월</option>
+              ))}
+            </select>
+            <a
+              href={`/Newsletter_${newsletterYear}-${String(newsletterMonth).padStart(2, '0')}.html`}
+              target="_blank"
+              rel="noreferrer"
+              style={{ textDecoration: "none" }}
+            >
+              <button
+                style={{
+                  background: "transparent",
+                  border: "none",
+                  color: "white",
+                  cursor: "pointer",
+                  fontSize: "0.9rem",
+                  fontWeight: "bold",
+                }}
+              >
+                Newsletter 보러가기
+              </button>
+            </a>
+          </div>
         </div>
 
-        {/* 세부 태그 필터 (분야가 선택되었을 때만 표시) */}
+        {/* 필터 토글 버튼 */}
+        <div style={{ maxWidth: 1200, margin: "0 auto 1rem" }}>
+          <button
+            onClick={() => setIsFilterOpen(!isFilterOpen)}
+            style={{
+              background: "rgba(255, 140, 66, 0.15)",
+              border: "1px solid rgba(255, 140, 66, 0.4)",
+              borderRadius: "12px",
+              padding: "0.8rem 1.5rem",
+              color: "#ff8c42",
+              cursor: "pointer",
+              fontSize: "1rem",
+              fontWeight: "bold",
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem",
+              transition: "all 0.3s ease",
+            }}
+          >
+            옵션 {isFilterOpen ? "▲" : "▼"}
+          </button>
+        </div>
+
+        {/* 필터 영역 */}
+        {isFilterOpen && (
+          <div
+            style={{
+              maxWidth: 1200,
+              margin: "0 auto 2rem",
+              padding: "1.5rem",
+              background: "rgba(255, 255, 255, 0.05)",
+              backdropFilter: "blur(10px)",
+              borderRadius: "16px",
+              border: "1px solid rgba(255, 255, 255, 0.1)",
+            }}
+          >
+            {/* 정렬 필터 */}
+            <div style={{ marginBottom: "1.5rem" }}>
+              <div style={{ color: "#ff8c42", fontWeight: 700, marginBottom: "0.8rem", fontSize: "1rem" }}>
+                정렬
+              </div>
+              <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+                {["최신순", "오래된순", "정확도순", "관련도순"].map((sort) => (
+                  <button
+                    key={sort}
+                    onClick={() => setSortOrder(sort)}
+                    style={{
+                      padding: "0.5rem 1rem",
+                      background: periodFilter === period ? "#ff8c42" : "rgba(255, 255, 255, 0.1)",
+                      border: "1px solid",
+                      borderColor: periodFilter === period ? "#ff8c42" : "rgba(255, 255, 255, 0.2)",
+                      borderRadius: "20px",
+                      color: "white",
+                      cursor: "pointer",
+                      fontSize: "0.85rem",
+                      transition: "all 0.2s ease",
+                    }}
+                  >
+                    {period}
+                  </button>
+                ))}
+              </div>
+              
+              {/* 직접입력 달력 */}
+              {showCustomDate && (
+                <div style={{ display: "flex", gap: "0.5rem", alignItems: "center", marginTop: "0.5rem" }}>
+                  <input
+                    type="date"
+                    value={customStartDate}
+                    onChange={(e) => setCustomStartDate(e.target.value)}
+                    style={{
+                      background: "rgba(255,255,255,0.1)",
+                      border: "1px solid rgba(255,255,255,0.2)",
+                      borderRadius: "8px",
+                      padding: "0.5rem",
+                      color: "white",
+                      fontSize: "0.9rem",
+                    }}
+                  />
+                  <span style={{ color: "white" }}>~</span>
+                  <input
+                    type="date"
+                    value={customEndDate}
+                    onChange={(e) => setCustomEndDate(e.target.value)}
+                    style={{
+                      background: "rgba(255,255,255,0.1)",
+                      border: "1px solid rgba(255,255,255,0.2)",
+                      borderRadius: "8px",
+                      padding: "0.5rem",
+                      color: "white",
+                      fontSize: "0.9rem",
+                    }}
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* 언론사 필터 (드롭다운) */}
+            <div style={{ marginBottom: "1.5rem" }}>
+              <div style={{ color: "#ff8c42", fontWeight: 700, marginBottom: "0.8rem", fontSize: "1rem" }}>
+                언론사
+              </div>
+              
+              {pressList.type === "categorized" ? (
+                <select
+                  value={pressFilter}
+                  onChange={(e) => setPressFilter(e.target.value)}
+                  style={{
+                    background: "rgba(255, 255, 255, 0.1)",
+                    border: "1px solid rgba(255, 255, 255, 0.2)",
+                    borderRadius: "12px",
+                    padding: "0.6rem 1rem",
+                    color: "white",
+                    fontSize: "0.9rem",
+                    cursor: "pointer",
+                    minWidth: "200px",
+                  }}
+                >
+                  <option value="전체" style={{ background: "#1a1a2e" }}>전체</option>
+                  {Object.entries(pressList.data).map(([category, sources]) => (
+                    <optgroup key={category} label={category} style={{ background: "#1a1a2e", color: "#ff8c42" }}>
+                      {sources.map((source) => (
+                        <option key={source} value={source} style={{ background: "#1a1a2e", paddingLeft: "1rem" }}>
+                          {source}
+                        </option>
+                      ))}
+                    </optgroup>
+                  ))}
+                </select>
+              ) : (
+                <select
+                  value={pressFilter}
+                  onChange={(e) => setPressFilter(e.target.value)}
+                  style={{
+                    background: "rgba(255, 255, 255, 0.1)",
+                    border: "1px solid rgba(255, 255, 255, 0.2)",
+                    borderRadius: "12px",
+                    padding: "0.6rem 1rem",
+                    color: "white",
+                    fontSize: "0.9rem",
+                    cursor: "pointer",
+                    minWidth: "200px",
+                  }}
+                >
+                  {pressList.data.map((press) => (
+                    <option key={press} value={press} style={{ background: "#1a1a2e" }}>
+                      {press}
+                    </option>
+                  ))}
+                </select>
+              )}
+            </div>
+
+            {/* 옵션 버튼 */}
+            <div style={{ display: "flex", gap: "1rem", alignItems: "center", paddingTop: "0.5rem" }}>
+              <button
+                onClick={resetFilters}
+                style={{
+                  padding: "0.6rem 1.5rem",
+                  background: "rgba(244, 67, 54, 0.1)",
+                  border: "1px solid rgba(244, 67, 54, 0.3)",
+                  borderRadius: "20px",
+                  color: "#f44336",
+                  cursor: "pointer",
+                  fontSize: "0.9rem",
+                  fontWeight: "bold",
+                  transition: "all 0.2s ease",
+                }}
+              >
+                옵션 초기화
+              </button>
+              
+              {/* 토글 스위치 형태의 옵션 유지 */}
+              <label style={{ display: "flex", alignItems: "center", gap: "0.5rem", cursor: "pointer" }}>
+                <span style={{ color: "#aaa", fontSize: "0.9rem" }}>옵션 유지</span>
+                <div
+                  onClick={() => setKeepOptions(!keepOptions)}
+                  style={{
+                    position: "relative",
+                    width: "44px",
+                    height: "24px",
+                    background: keepOptions ? "#4caf50" : "rgba(255, 255, 255, 0.2)",
+                    borderRadius: "12px",
+                    transition: "background 0.3s ease",
+                    cursor: "pointer",
+                  }}
+                >
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: "2px",
+                      left: keepOptions ? "22px" : "2px",
+                      width: "20px",
+                      height: "20px",
+                      background: "white",
+                      borderRadius: "50%",
+                      transition: "left 0.3s ease",
+                    }}
+                  />
+                </div>
+              </label>
+            </div>
+          </div>
+        )}
+
+        {/* 세부 태그 필터 */}
         {activeSection !== "all" && currentSectionTags.length > 0 && (
           <div
             style={{
@@ -474,7 +900,7 @@ const UnifiedNewsPage = ({ setCurrentPage, setSelectedNews, setPrevPage }) => {
               padding: "3rem",
               fontSize: "1.1rem" 
             }}>
-              해당 분야의 뉴스가 없습니다.
+              해당 조건의 뉴스가 없습니다.
             </div>
           )}
         </div>
@@ -541,3 +967,38 @@ const UnifiedNewsPage = ({ setCurrentPage, setSelectedNews, setPrevPage }) => {
 };
 
 export default UnifiedNewsPage;
+                      background: sortOrder === sort ? "#ff8c42" : "rgba(255, 255, 255, 0.1)",
+                      border: "1px solid",
+                      borderColor: sortOrder === sort ? "#ff8c42" : "rgba(255, 255, 255, 0.2)",
+                      borderRadius: "20px",
+                      color: "white",
+                      cursor: "pointer",
+                      fontSize: "0.85rem",
+                      transition: "all 0.2s ease",
+                    }}
+                  >
+                    {sort}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* 기간 필터 */}
+            <div style={{ marginBottom: "1.5rem" }}>
+              <div style={{ color: "#ff8c42", fontWeight: 700, marginBottom: "0.8rem", fontSize: "1rem" }}>
+                기간
+              </div>
+              <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap", marginBottom: "0.8rem" }}>
+                {["전체", "1시간", "1일", "1주", "1개월", "3개월", "6개월", "1년", "직접입력"].map((period) => (
+                  <button
+                    key={period}
+                    onClick={() => {
+                      setPeriodFilter(period);
+                      if (period === "직접입력") {
+                        setShowCustomDate(!showCustomDate);
+                      } else {
+                        setShowCustomDate(false);
+                      }
+                    }}
+                    style={{
+                      padding: "0.5rem 1rem",
