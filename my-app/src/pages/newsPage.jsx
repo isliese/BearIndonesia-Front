@@ -193,6 +193,7 @@ const UnifiedNewsPage = ({ setCurrentPage, setSelectedNews, setPrevPage }) => {
   const [customStartDate, setCustomStartDate] = useState("");
   const [customEndDate, setCustomEndDate] = useState("");
   const [showCustomDate, setShowCustomDate] = useState(false);
+  const [showHourOptions, setShowHourOptions] = useState(false); 
   
   // 워드클라우드 기간 선택
   const [wcYear, setWcYear] = useState(2025);
@@ -311,34 +312,40 @@ const UnifiedNewsPage = ({ setCurrentPage, setSelectedNews, setPrevPage }) => {
     }
 
     // 기간 필터
-    if (periodFilter === "직접입력" && customStartDate && customEndDate) {
-      const start = new Date(customStartDate);
-      const end = new Date(customEndDate);
-      result = result.filter((a) => {
-        if (!a.date) return false;
-        const articleDate = new Date(a.date);
-        return articleDate >= start && articleDate <= end;
-      });
-    } else if (periodFilter !== "전체" && periodFilter !== "직접입력") {
-      const now = new Date();
-      result = result.filter((a) => {
-        if (!a.date) return false;
-        const articleDate = new Date(a.date);
-        const diffMs = now - articleDate;
-        const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-        
-        switch(periodFilter) {
-          case "1시간": return diffMs <= 60 * 60 * 1000;
-          case "1일": return diffDays <= 1;
-          case "1주": return diffDays <= 7;
-          case "1개월": return diffDays <= 30;
-          case "3개월": return diffDays <= 90;
-          case "6개월": return diffDays <= 180;
-          case "1년": return diffDays <= 365;
-          default: return true;
-        }
-      });
+if (periodFilter === "직접입력" && customStartDate && customEndDate) {
+  const start = new Date(customStartDate);
+  const end = new Date(customEndDate);
+  result = result.filter((a) => {
+    if (!a.date) return false;
+    const articleDate = new Date(a.date);
+    return articleDate >= start && articleDate <= end;
+  });
+} else if (periodFilter !== "전체" && periodFilter !== "직접입력") {
+  const now = new Date();
+  result = result.filter((a) => {
+    if (!a.date) return false;
+    const articleDate = new Date(a.date);
+    const diffMs = now - articleDate;
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+    
+    switch(periodFilter) {
+      case "1시간": return diffHours <= 1;
+      case "2시간": return diffHours <= 2;
+      case "3시간": return diffHours <= 3;
+      case "4시간": return diffHours <= 4;
+      case "5시간": return diffHours <= 5;
+      case "6시간": return diffHours <= 6;
+      case "1일": return diffDays <= 1;
+      case "1주": return diffDays <= 7;
+      case "1개월": return diffDays <= 30;
+      case "3개월": return diffDays <= 90;
+      case "6개월": return diffDays <= 180;
+      case "1년": return diffDays <= 365;
+      default: return true;
     }
+  });
+}
     
     if (sortOrder === "최신순") {
       result.sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -644,65 +651,200 @@ const UnifiedNewsPage = ({ setCurrentPage, setSelectedNews, setPrevPage }) => {
             }}
           >
             {/* 정렬 필터 */}
-            <div style={{ marginBottom: "1.5rem" }}>
-              <div style={{ color: "#ff8c42", fontWeight: 700, marginBottom: "0.8rem", fontSize: "1rem" }}>
-                정렬
-              </div>
-              <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
-                {["최신순", "오래된순", "정확도순", "관련도순"].map((sort) => (
-                  <button
-                    key={sort}
-                    onClick={() => setSortOrder(sort)}
-                    style={{
-                      padding: "0.5rem 1rem",
-                      background: sortOrder === sort ? "#ff8c42" : "rgba(255, 255, 255, 0.1)",
-                      border: "1px solid",
-                      borderColor: sortOrder === sort ? "#ff8c42" : "rgba(255, 255, 255, 0.2)",
-                      borderRadius: "20px",
-                      color: "white",
-                      cursor: "pointer",
-                      fontSize: "0.85rem",
-                      transition: "all 0.2s ease",
-                    }}
-                  >
-                    {sort}
-                  </button>
-                ))}
-              </div>
-              
-              {/* 직접입력 달력 */}
-              {showCustomDate && (
-                <div style={{ display: "flex", gap: "0.5rem", alignItems: "center", marginTop: "0.5rem" }}>
-                  <input
-                    type="date"
-                    value={customStartDate}
-                    onChange={(e) => setCustomStartDate(e.target.value)}
-                    style={{
-                      background: "rgba(255,255,255,0.1)",
-                      border: "1px solid rgba(255,255,255,0.2)",
-                      borderRadius: "8px",
-                      padding: "0.5rem",
-                      color: "white",
-                      fontSize: "0.9rem",
-                    }}
-                  />
-                  <span style={{ color: "white" }}>~</span>
-                  <input
-                    type="date"
-                    value={customEndDate}
-                    onChange={(e) => setCustomEndDate(e.target.value)}
-                    style={{
-                      background: "rgba(255,255,255,0.1)",
-                      border: "1px solid rgba(255,255,255,0.2)",
-                      borderRadius: "8px",
-                      padding: "0.5rem",
-                      color: "white",
-                      fontSize: "0.9rem",
-                    }}
-                  />
-                </div>
-              )}
-            </div>
+<div style={{ marginBottom: "1.5rem" }}>
+  <div style={{ color: "#ff8c42", fontWeight: 700, marginBottom: "0.8rem", fontSize: "1rem" }}>
+    정렬
+  </div>
+  <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+    {["최신순", "오래된순", "정확도순", "관련도순"].map((sort) => (
+      <button
+        key={sort}
+        onClick={() => setSortOrder(sort)}
+        style={{
+          padding: "0.5rem 1rem",
+          background: sortOrder === sort ? "#ff8c42" : "rgba(255, 255, 255, 0.1)",
+          border: "1px solid",
+          borderColor: sortOrder === sort ? "#ff8c42" : "rgba(255, 255, 255, 0.2)",
+          borderRadius: "20px",
+          color: "white",
+          cursor: "pointer",
+          fontSize: "0.85rem",
+          transition: "all 0.2s ease",
+        }}
+      >
+        {sort}
+      </button>
+    ))}
+  </div>
+</div>
+
+              {/* 기간 필터 */}
+<div style={{ marginBottom: "1.5rem" }}>
+  <div style={{ color: "#ff8c42", fontWeight: 700, marginBottom: "0.8rem", fontSize: "1rem" }}>
+    기간
+  </div>
+  <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+    <button
+      onClick={() => {
+        setPeriodFilter("전체");
+        setShowCustomDate(false);
+        setShowHourOptions(false);
+      }}
+      style={{
+        padding: "0.5rem 1rem",
+        background: periodFilter === "전체" ? "#ff8c42" : "rgba(255, 255, 255, 0.1)",
+        border: "1px solid",
+        borderColor: periodFilter === "전체" ? "#ff8c42" : "rgba(255, 255, 255, 0.2)",
+        borderRadius: "20px",
+        color: "white",
+        cursor: "pointer",
+        fontSize: "0.85rem",
+        transition: "all 0.2s ease",
+      }}
+    >
+      전체
+    </button>
+    
+    {/* 1시간 토글 버튼 */}
+    <button
+      onClick={() => {
+        setShowHourOptions(!showHourOptions);
+        setShowCustomDate(false);
+        if (!showHourOptions) {
+          setPeriodFilter("1시간");
+        }
+      }}
+      style={{
+        padding: "0.5rem 1rem",
+        background: periodFilter.includes("시간") ? "#ff8c42" : "rgba(255, 255, 255, 0.1)",
+        border: "1px solid",
+        borderColor: periodFilter.includes("시간") ? "#ff8c42" : "rgba(255, 255, 255, 0.2)",
+        borderRadius: "20px",
+        color: "white",
+        cursor: "pointer",
+        fontSize: "0.85rem",
+        transition: "all 0.2s ease",
+        display: "flex",
+        alignItems: "center",
+        gap: "0.3rem",
+      }}
+    >
+      1시간
+      <span style={{ fontSize: "0.7rem" }}>{showHourOptions ? "▲" : "▼"}</span>
+    </button>
+    
+    {["1일", "1주", "1개월", "3개월", "6개월", "1년"].map((period) => (
+      <button
+        key={period}
+        onClick={() => {
+          setPeriodFilter(period);
+          setShowCustomDate(false);
+          setShowHourOptions(false);
+        }}
+        style={{
+          padding: "0.5rem 1rem",
+          background: periodFilter === period ? "#ff8c42" : "rgba(255, 255, 255, 0.1)",
+          border: "1px solid",
+          borderColor: periodFilter === period ? "#ff8c42" : "rgba(255, 255, 255, 0.2)",
+          borderRadius: "20px",
+          color: "white",
+          cursor: "pointer",
+          fontSize: "0.85rem",
+          transition: "all 0.2s ease",
+        }}
+      >
+        {period}
+      </button>
+    ))}
+    
+    {/* 직접입력 토글 버튼 */}
+    <button
+      onClick={() => {
+        setShowCustomDate(!showCustomDate);
+        setShowHourOptions(false);
+        if (!showCustomDate) {
+          setPeriodFilter("직접입력");
+        }
+      }}
+      style={{
+        padding: "0.5rem 1rem",
+        background: showCustomDate ? "#ff8c42" : "rgba(255, 255, 255, 0.1)",
+        border: "1px solid",
+        borderColor: showCustomDate ? "#ff8c42" : "rgba(255, 255, 255, 0.2)",
+        borderRadius: "20px",
+        color: "white",
+        cursor: "pointer",
+        fontSize: "0.85rem",
+        transition: "all 0.2s ease",
+        display: "flex",
+        alignItems: "center",
+        gap: "0.3rem",
+      }}
+    >
+      직접입력
+      <span style={{ fontSize: "0.7rem" }}>{showCustomDate ? "▲" : "▼"}</span>
+    </button>
+  </div>
+  
+  {/* 1시간 세부 옵션 */}
+  {showHourOptions && (
+    <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap", marginTop: "0.8rem", paddingLeft: "0.5rem" }}>
+      {["1시간", "2시간", "3시간", "4시간", "5시간", "6시간"].map((hour) => (
+        <button
+          key={hour}
+          onClick={() => setPeriodFilter(hour)}
+          style={{
+            padding: "0.4rem 0.8rem",
+            background: periodFilter === hour ? "#ff8c42" : "rgba(255, 255, 255, 0.08)",
+            border: "1px solid",
+            borderColor: periodFilter === hour ? "#ff8c42" : "rgba(255, 255, 255, 0.15)",
+            borderRadius: "16px",
+            color: "white",
+            cursor: "pointer",
+            fontSize: "0.8rem",
+            transition: "all 0.2s ease",
+          }}
+        >
+          {hour}
+        </button>
+      ))}
+    </div>
+  )}
+  
+  {/* 직접입력 달력 */}
+  {showCustomDate && (
+    <div style={{ display: "flex", gap: "0.5rem", alignItems: "center", marginTop: "0.8rem", padding: "1rem", background: "rgba(255, 255, 255, 0.05)", borderRadius: "12px" }}>
+      <input
+        type="date"
+        value={customStartDate}
+        onChange={(e) => setCustomStartDate(e.target.value)}
+        style={{
+          background: "rgba(255,255,255,0.1)",
+          border: "1px solid rgba(255,255,255,0.2)",
+          borderRadius: "8px",
+          padding: "0.5rem",
+          color: "white",
+          fontSize: "0.9rem",
+        }}
+      />
+      <span style={{ color: "white" }}>~</span>
+      <input
+        type="date"
+        value={customEndDate}
+        onChange={(e) => setCustomEndDate(e.target.value)}
+        style={{
+          background: "rgba(255,255,255,0.1)",
+          border: "1px solid rgba(255,255,255,0.2)",
+          borderRadius: "8px",
+          padding: "0.5rem",
+          color: "white",
+          fontSize: "0.9rem",
+        }}
+      />
+    </div>
+  )}
+</div>
+
 
             {/* 언론사 필터 (드롭다운) */}
             <div style={{ marginBottom: "1.5rem" }}>
