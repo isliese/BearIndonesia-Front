@@ -406,7 +406,7 @@ if (periodFilter === "직접입력" && customStartDate && customEndDate) {
           width: "240px",
           background: "rgba(255, 255, 255, 0.05)",
           backdropFilter: "blur(10px)",
-          padding: "2rem 1rem",
+          padding: "3.5rem 1rem",
           borderRight: "1px solid rgba(255, 255, 255, 0.1)",
           position: "sticky",
           top: 0,
@@ -414,7 +414,7 @@ if (periodFilter === "직접입력" && customStartDate && customEndDate) {
           overflowY: "auto",
         }}
       >
-        <h2 style={{ color: "#ff8c42", marginBottom: "1.5rem", fontSize: "1.3rem", textAlign: "center" }}>
+        <h2 style={{ color: "#ff8c42", marginTop: "1.5rem", marginBottom: "1.5rem", fontSize: "1.3rem", textAlign: "center" }}>
           분야별 뉴스
         </h2>
         
