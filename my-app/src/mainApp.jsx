@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Navigation from './components/navigation.jsx';
 import HomePage from './pages/homePage.jsx';
 import NewsPage from './pages/newsPage.jsx';
@@ -13,6 +13,10 @@ const MainApp = () => {
   const [prevPage, setPrevPage] = useState('home');
   const [selectedNews, setSelectedNews] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  }, [currentPage]);
 
   // 검색 처리 함수
   const handleSearch = (term) => {
