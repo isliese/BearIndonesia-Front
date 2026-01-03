@@ -218,7 +218,7 @@ const NewsDetailPage = ({ news, setCurrentPage, prevPage }) => {
 
           {/* 탭 + 본문 */}
           <div style={{ padding: '0' }}>
-            {/* 크롬 스타일 탭 */}
+            {/* 탭 */}
             <div style={{ 
               display: 'flex', 
               background: 'rgba(0, 0, 0, 0.2)',

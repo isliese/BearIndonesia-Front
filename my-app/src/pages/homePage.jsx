@@ -1,6 +1,12 @@
 // 홈 페이지
 import React, { useState, useMemo } from 'react';
 import septemberData from "../data/september.json";
+import BpomLogo from "../assets/images/BPOM.jpg";
+import CnbcLogo from "../assets/images/CNBC.png";
+import CnnLogo from "../assets/images/CNN.png";
+import DetikLogo from "../assets/images/detik.png";
+import FarmasetikaLogo from "../assets/images/farmasetika.webp";
+import MohLogo from "../assets/images/MOH.png";
 
 const HomePage = ({ onSearch, setCurrentPage = () => {}, setSelectedNews = () => {}, setPrevPage = () => {} }) => {
   const topHeadlines = useMemo(() => {
@@ -25,6 +31,15 @@ const HomePage = ({ onSearch, setCurrentPage = () => {}, setSelectedNews = () =>
     setCurrentPage("newsDetail");
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  const newsStandItems = [
+    { name: "BPOM", image: BpomLogo, filterValue: "BPOM" },
+    { name: "CNBC", image: CnbcLogo, filterValue: "CNBC" },
+    { name: "CNN", image: CnnLogo, filterValue: "CNN Indonesia" },
+    { name: "Detik", image: DetikLogo, filterValue: "detik" },
+    { name: "Farmasetika", image: FarmasetikaLogo, filterValue: "Farmasetika" },
+    { name: "MOH", image: MohLogo, filterValue: "MOH" },
+  ];
   
   return (
     <div style={{
@@ -84,7 +99,7 @@ const HomePage = ({ onSearch, setCurrentPage = () => {}, setSelectedNews = () =>
           style={{
             position: 'absolute',
             right: '-20px',
-            top: '4.0%',
+            top: '2.85%',
             transform: 'translateY(-50%)',
             background: '#ff8c42',
             border: 'none',
@@ -97,13 +112,108 @@ const HomePage = ({ onSearch, setCurrentPage = () => {}, setSelectedNews = () =>
         >
           검색
         </button>
+
+        {/* News Stand Section */}
+        <div style={{
+          width: '100%',
+          maxWidth: '1200px',
+          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(15, 52, 96, 0.15))',
+          marginTop: '2.5rem',
+          backdropFilter: 'blur(15px)',
+          border: '1px solid rgba(255, 255, 255, 0.12)',
+          borderRadius: '20px',
+          padding: '1.8rem',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.18)'
+        }}>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginBottom: '1.4rem'
+          }}>
+            <div style={{
+              width: '4px',
+              height: '24px',
+              background: 'linear-gradient(135deg, #80cbc4, #64b5f6)',
+              borderRadius: '2px',
+              marginRight: '12px'
+            }}></div>
+            <h2 style={{
+              fontSize: '1.7rem',
+              color: '#d5f5f2',
+              margin: '0',
+              fontWeight: '600'
+            }}>
+              News Stand
+            </h2>
+          </div>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
+            gap: '1rem'
+          }}>
+            {newsStandItems.map((item) => (
+              <button
+                key={item.name}
+                type="button"
+                onClick={() => {
+                  try {
+                    localStorage.setItem("newsFilter_press", item.filterValue);
+                    localStorage.setItem("newsFilter_period", "전체");
+                    localStorage.setItem("newsFilter_sort", "최신순");
+                  } catch {
+                    // Ignore storage issues and still navigate.
+                  }
+                  setPrevPage("home");
+                  setCurrentPage("news");
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                style={{
+                  background: 'rgba(255,255,255,0.08)',
+                  border: '1px solid rgba(255,255,255,0.16)',
+                  borderRadius: '16px',
+                  padding: '0.9rem',
+                  cursor: 'pointer',
+                  transition: 'all 0.25s ease',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  minHeight: '110px'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-4px)';
+                  e.currentTarget.style.background = 'rgba(255,255,255,0.14)';
+                  e.currentTarget.style.borderColor = 'rgba(128,203,196,0.6)';
+                  e.currentTarget.style.boxShadow = '0 10px 24px rgba(0,0,0,0.2)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'none';
+                  e.currentTarget.style.background = 'rgba(255,255,255,0.08)';
+                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.16)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+              >
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  style={{
+                    maxWidth: '120px',
+                    maxHeight: '48px',
+                    objectFit: 'contain',
+                    filter: 'drop-shadow(0 4px 10px rgba(0,0,0,0.25))'
+                  }}
+                />
+              </button>
+            ))}
+          </div>
+        </div>
         
         {/* Top Headlines Section */}
         <div style={{
           width: '100%',
           maxWidth: '1200px',
           background: 'linear-gradient(135deg, rgba(255, 140, 66, 0.1), rgba(255, 167, 38, 0.05))',
-          marginTop: '100px',
+          marginTop: '2.5rem',
           backdropFilter: 'blur(15px)',
           border: '1px solid rgba(255, 140, 66, 0.2)',
           borderRadius: '20px',

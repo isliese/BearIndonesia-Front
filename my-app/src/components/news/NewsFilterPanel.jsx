@@ -60,8 +60,8 @@ const NewsFilterPanel = ({
             border: "1px solid rgba(255, 255, 255, 0.1)",
           }}
         >
-          <div style={{ marginBottom: "1.5rem" }}>
-            <div style={{ color: "#ff8c42", fontWeight: 700, marginBottom: "0.8rem", fontSize: "1rem" }}>
+          <div style={{ marginBottom: "1.5rem", display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+            <div style={{ color: "#ff8c42", fontWeight: 700, fontSize: "1rem", paddingTop: "0.4rem" }}>
               정렬
             </div>
             <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
@@ -87,8 +87,8 @@ const NewsFilterPanel = ({
             </div>
           </div>
 
-          <div style={{ marginBottom: "1.5rem" }}>
-            <div style={{ color: "#ff8c42", fontWeight: 700, marginBottom: "0.8rem", fontSize: "1rem" }}>
+          <div style={{ marginBottom: "1.5rem", display: "flex", gap: "1rem", flexWrap: "wrap"  }}>
+            <div style={{ color: "#ff8c42", fontWeight: 700, paddingTop: "0.4rem", fontSize: "1rem" }}>
               기간
             </div>
             <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
@@ -259,8 +259,8 @@ const NewsFilterPanel = ({
             )}
           </div>
 
-          <div style={{ marginBottom: "1.5rem" }}>
-            <div style={{ color: "#ff8c42", fontWeight: 700, marginBottom: "0.8rem", fontSize: "1rem" }}>
+          <div style={{ marginBottom: "1.5rem", display: "flex", gap: "1rem", flexWrap: "wrap"  }}>
+            <div style={{ color: "#ff8c42", fontWeight: 700, paddingTop: "0.4rem", fontSize: "1rem" }}>
               언론사
             </div>
 
