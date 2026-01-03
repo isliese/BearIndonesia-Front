@@ -65,7 +65,7 @@ const HomePage = ({ onSearch, setCurrentPage = () => {}, setSelectedNews = () =>
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-          placeholder="제약 회사명, 의약품명, 임상단계를 검색해보세요!"
+          placeholder="제약 회사명, 의약품명 등을 검색해보세요!"
           style={{
             width: '100%',
             padding: '1em 0.9rem 1em 1rem',
