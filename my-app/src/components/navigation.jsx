@@ -16,7 +16,7 @@ const Navigation = ({ currentPage, setCurrentPage }) => {
     <nav style={{
       background: 'rgba(255, 255, 255, 0.1)',
       backdropFilter: 'blur(10px)',
-      padding: '1rem 2rem',
+      padding: '1rem 2.5rem 1rem 2rem',
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
@@ -34,8 +34,8 @@ const Navigation = ({ currentPage, setCurrentPage }) => {
       </div>
 
       {/* 네비게이션 */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
-        <ul style={{ display: 'flex', gap: '2rem', listStyle: 'none', margin: 0, padding: 0 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '1.6rem' }}>
+        <ul style={{ display: 'flex', gap: '1rem', listStyle: 'none', margin: 0, padding: 0 }}>
           {navItems.map(item => (
             <li key={item.id}>
               <a
@@ -76,7 +76,7 @@ const Navigation = ({ currentPage, setCurrentPage }) => {
             <img 
               src={AReumiUser} 
               alt="User Avatar" 
-              style={{ width: '50px', height: '50px', borderRadius: '50%' }} 
+              style={{ width: '40px', height: '40px', borderRadius: '50%' }} 
             />
           </button>
 
