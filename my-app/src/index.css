@@ -19,8 +19,5 @@ body {
 
 /* 캘린더 드래그 시 텍스트 선택 방지  */
 .calendar-container {
-  -webkit-user-select: none; /* Safari */
-  -moz-user-select: none;    /* Firefox */
-  -ms-user-select: none;     /* IE10+/Edge */
-  user-select: none;         /* Standard */
+  -webkit-user-select: none; /* Safari */      
 }
