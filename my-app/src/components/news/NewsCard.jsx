@@ -66,6 +66,7 @@ const NewsCard = ({ article, onOpen }) => {
             color: "white",
             fontWeight: "bold",
             marginRight: "0.75rem",
+            
           }}
         >
           {avatar}

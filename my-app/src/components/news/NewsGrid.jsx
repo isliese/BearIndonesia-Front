@@ -10,6 +10,7 @@ const NewsGrid = ({ articles, onOpen }) => {
         gap: "1.2rem",
         maxWidth: "1200px",
         margin: "0 auto",
+        marginBottom: "2.5rem",
       }}
     >
       {articles.length > 0 ? (

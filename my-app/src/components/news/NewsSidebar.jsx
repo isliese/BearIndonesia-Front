@@ -9,10 +9,12 @@ const NewsSidebar = ({ activeSection, onChangeSection, sectionOrder }) => {
         backdropFilter: "blur(10px)",
         padding: "3.5rem 1rem",
         borderRight: "1px solid rgba(255, 255, 255, 0.1)",
-        position: "sticky",
-        top: 0,
-        height: "100vh",
+        position: "fixed",
+        top: "80px",
+        left: 0,
+        height: "calc(100vh - 80px)",
         overflowY: "auto",
+        zIndex: 10,
       }}
     >
       <h2

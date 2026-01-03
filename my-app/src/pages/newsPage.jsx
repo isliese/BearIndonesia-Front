@@ -251,7 +251,7 @@ const UnifiedNewsPage = ({ setCurrentPage, setSelectedNews, setPrevPage }) => {
       />
 
       {/* 메인 콘텐츠 */}
-      <div style={{ flex: 1, padding: "0.1rem" }}>
+      <div style={{ flex: 1, padding: "0.1rem", marginLeft: "240px" }}>
         <h1 style={{ fontSize: "2.3rem", color: "#ff8c42", textAlign: "center", marginBottom: "1.6rem" }}>
           News
         </h1>
