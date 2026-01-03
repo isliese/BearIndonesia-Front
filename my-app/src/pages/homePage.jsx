@@ -193,16 +193,21 @@ const HomePage = ({ onSearch, setCurrentPage = () => {}, setSelectedNews = () =>
                   e.currentTarget.style.boxShadow = 'none';
                 }}
               >
-                <img
-                  src={item.image}
-                  alt={item.name}
-                  style={{
-                    maxWidth: '120px',
-                    maxHeight: '48px',
-                    objectFit: 'contain',
-                    filter: 'drop-shadow(0 4px 10px rgba(0,0,0,0.25))'
-                  }}
-                />
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', alignItems: 'center' }}>
+                  <img
+                    src={item.image}
+                    alt={item.name}
+                    style={{
+                      maxWidth: '120px',
+                      maxHeight: '48px',
+                      objectFit: 'contain',
+                      filter: 'drop-shadow(0 4px 10px rgba(0,0,0,0.25))'
+                    }}
+                  />
+                  <span style={{ fontSize: '0.85rem', color: '#d9e7ef', letterSpacing: '0.02em' }}>
+                    {item.name}
+                  </span>
+                </div>
               </button>
             ))}
           </div>
