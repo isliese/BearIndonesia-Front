@@ -1,6 +1,7 @@
 import React, { useMemo, useState, useCallback, useEffect } from "react";
 import * as XLSX from "xlsx";
 import septemberData from "../data/september.json";
+// 컴포넌트 imports
 import NewsFilterPanel from "../components/news/NewsFilterPanel";
 import NewsGrid from "../components/news/NewsGrid";
 import NewsSidebar from "../components/news/NewsSidebar";
@@ -23,7 +24,7 @@ const UnifiedNewsPage = ({ setCurrentPage, setSelectedNews, setPrevPage }) => {
   const [activeSection, setActiveSection] = useState("all");
   const [activeTag, setActiveTag] = useState("all");
   const [showWordCloud, setShowWordCloud] = useState(false);
-  const [isFilterOpen, setIsFilterOpen] = useState(true);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
   
   // 옵션 유지 체크박스
   const [keepOptions, setKeepOptions] = useState(true);
@@ -82,7 +83,7 @@ const UnifiedNewsPage = ({ setCurrentPage, setSelectedNews, setPrevPage }) => {
     setActiveTag("all");
   }, [activeSection]);
 
-  // localStorage에 필터 상태 저장 (옵션 유지 활성화 시에만)
+  // localStorage에 필터 상태 저장 (옵션 유지 활성화 시)
   useEffect(() => {
     if (keepOptions) {
       localStorage.setItem("newsFilter_sort", sortOrder);
@@ -155,40 +156,40 @@ const UnifiedNewsPage = ({ setCurrentPage, setSelectedNews, setPrevPage }) => {
     }
 
     // 기간 필터
-if (periodFilter === "직접입력" && customStartDate && customEndDate) {
-  const start = new Date(customStartDate);
-  const end = new Date(customEndDate);
-  result = result.filter((a) => {
-    if (!a.date) return false;
-    const articleDate = new Date(a.date);
-    return articleDate >= start && articleDate <= end;
-  });
-} else if (periodFilter !== "전체" && periodFilter !== "직접입력") {
-  const now = new Date();
-  result = result.filter((a) => {
-    if (!a.date) return false;
-    const articleDate = new Date(a.date);
-    const diffMs = now - articleDate;
-    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-    
-    switch(periodFilter) {
-      case "1시간": return diffHours <= 1;
-      case "2시간": return diffHours <= 2;
-      case "3시간": return diffHours <= 3;
-      case "4시간": return diffHours <= 4;
-      case "5시간": return diffHours <= 5;
-      case "6시간": return diffHours <= 6;
-      case "1일": return diffDays <= 1;
-      case "1주": return diffDays <= 7;
-      case "1개월": return diffDays <= 30;
-      case "3개월": return diffDays <= 90;
-      case "6개월": return diffDays <= 180;
-      case "1년": return diffDays <= 365;
-      default: return true;
-    }
-  });
-}
+  if (periodFilter === "직접입력" && customStartDate && customEndDate) {
+    const start = new Date(customStartDate);
+    const end = new Date(customEndDate);
+    result = result.filter((a) => {
+      if (!a.date) return false;
+      const articleDate = new Date(a.date);
+      return articleDate >= start && articleDate <= end;
+    });
+  } else if (periodFilter !== "전체" && periodFilter !== "직접입력") {
+    const now = new Date();
+    result = result.filter((a) => {
+      if (!a.date) return false;
+      const articleDate = new Date(a.date);
+      const diffMs = now - articleDate;
+      const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+      const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+      
+      switch(periodFilter) {
+        case "1시간": return diffHours <= 1;
+        case "2시간": return diffHours <= 2;
+        case "3시간": return diffHours <= 3;
+        case "4시간": return diffHours <= 4;
+        case "5시간": return diffHours <= 5;
+        case "6시간": return diffHours <= 6;
+        case "1일": return diffDays <= 1;
+        case "1주": return diffDays <= 7;
+        case "1개월": return diffDays <= 30;
+        case "3개월": return diffDays <= 90;
+        case "6개월": return diffDays <= 180;
+        case "1년": return diffDays <= 365;
+        default: return true;
+      }
+    });
+  }
     
     if (sortOrder === "최신순") {
       result.sort((a, b) => new Date(b.date) - new Date(a.date));
