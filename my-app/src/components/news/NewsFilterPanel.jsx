@@ -1,3 +1,5 @@
+// 뉴스 필터 패널 컴포넌트
+
 import React from "react";
 
 const NewsFilterPanel = ({

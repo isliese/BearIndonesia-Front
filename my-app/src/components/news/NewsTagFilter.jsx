@@ -1,3 +1,5 @@
+// 뉴스 분야별 태그 필터 컴포넌트
+
 import React from "react";
 
 const NewsTagFilter = ({ activeSection, currentSectionTags, activeTag, setActiveTag }) => {

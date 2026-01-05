@@ -1,4 +1,4 @@
-// 분야별 뉴스 페이지
+// 분야별 뉴스 페이지 - 레거시 버전
 import React, { useState, useMemo } from "react";
 import {
   getAllArticles

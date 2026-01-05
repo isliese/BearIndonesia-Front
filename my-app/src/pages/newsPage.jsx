@@ -1,3 +1,5 @@
+// News 페이지 (통합 버전)
+
 import React, { useMemo, useState, useCallback, useEffect } from "react";
 import * as XLSX from "xlsx";
 import septemberData from "../data/september.json";

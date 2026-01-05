@@ -1,3 +1,5 @@
+// 뉴스 카드 컴포넌트 그리드
+
 import React from "react";
 import NewsCard from "./NewsCard";
 

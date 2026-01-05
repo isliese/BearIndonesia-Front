@@ -1,3 +1,5 @@
+// 공통 nav바 컴포넌트
+
 import React, { useState } from 'react';
 import AReumiUser from '../assets/images/AReumi_User.png';
 

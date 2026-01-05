@@ -1,3 +1,5 @@
+// 뉴스 사이드바 컴포넌트
+
 import React from "react";
 
 const NewsSidebar = ({ activeSection, onChangeSection, sectionOrder }) => {

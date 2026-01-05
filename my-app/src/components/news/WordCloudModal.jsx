@@ -1,3 +1,5 @@
+// 워드클라우드 모달 컴포넌트
+
 import React from "react";
 
 const WordCloudModal = ({ isOpen, onClose }) => {

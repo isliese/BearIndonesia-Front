@@ -1,3 +1,5 @@
+// 뉴스 카드 컴포넌트
+
 import React from "react";
 
 function getInitials(text = "") {

@@ -1,3 +1,5 @@
+// 뉴스 태그 및 섹션 상수 정의
+// 태그별로 뉴스를 분류하기 위한 상수들
 export const TAG_SECTIONS = {
   일반: [
     "제약", "치료", "백신", "건강", "건강기능식품", "건강보조식품",
@@ -30,6 +32,8 @@ export const TAG_SECTIONS = {
   ]
 };
 
+
+// 분야별 뉴스 섹션 순서
 export const SECTION_ORDER = [
   "일반",
   "대웅제약",

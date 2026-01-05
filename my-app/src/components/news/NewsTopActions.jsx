@@ -1,3 +1,5 @@
+// 상단 액션 컴포넌트
+
 import React from "react";
 
 const NewsTopActions = ({
