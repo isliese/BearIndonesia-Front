@@ -235,10 +235,15 @@ const UnifiedNewsPage = ({ setCurrentPage, setSelectedNews, setPrevPage }) => {
 
   const ws = XLSX.utils.json_to_sheet(sheetData);
 
+  ws["!autofilter"] = {
+  ref: `A1:${XLSX.utils.encode_col(Object.keys(sheetData[0]).length - 1)}1`,
+};
+
+
   //  열 너비 고정 (가독성 핵심)
   ws["!cols"] = [
     { wch: 12 }, // 날짜
-    { wch: 8 },  // 중요도
+    { wch: 5 },  // 중요도
     { wch: 14 }, // 언론사
     { wch: 16 }, // 카테고리
     { wch: 30 }, // 키워드
