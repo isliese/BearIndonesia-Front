@@ -212,31 +212,54 @@ const UnifiedNewsPage = ({ setCurrentPage, setSelectedNews, setPrevPage }) => {
   };
 
   const downloadExcel = useCallback(() => {
-    if (articles.length === 0) {
-      alert("뉴스 데이터가 없습니다.");
-      return;
-    }
-    const sheetData = articles.map((a) => ({
-      Date: a.date || null,
-      "Category (한국어)": a.category || null,
-      "Category (영어)": a.engCategory || null,
-      언론사: a.source || null,
-      "키워드(tags)": a.tags.map((t) => t.name).join(", "),
-      "헤드라인 (한국어)": a.korTitle || null,
-      "헤드라인 (영어)": a.engTitle || null,
-      "헤드라인 (인도네시아어)": a.title || null,
-      "요약 (한국어)": a.korSummary || null,
-      "요약 (영어)": a.engSummary || null,
-      "본문 (한국어 번역)": a.translated || null,
-      "본문 (인도네시아어)": a.content || null,
-      링크: a.link || null,
-      "중요도(점수)": a.importance ?? null,
-    }));
-    const ws = XLSX.utils.json_to_sheet(sheetData);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, `${excelYear}-${excelMonth}월뉴스`);
-    XLSX.writeFile(wb, `${excelYear}년_${excelMonth}월_뉴스.xlsx`);
-  }, [articles, excelYear, excelMonth]);
+  if (articles.length === 0) {
+    alert("뉴스 데이터가 없습니다.");
+    return;
+  }
+
+  //  컬럼 순서 정리 
+  const sheetData = articles.map(a => ({
+    날짜: a.date || "",
+    언론사: a.source || "",
+    카테고리: a.category || "",
+    키워드: a.tags.map(t => t.name).join(", "),
+    헤드라인_한국어: a.korTitle || "",
+    요약_한국어: a.korSummary || "",
+    헤드라인_영어: a.engTitle || "",
+    요약_영어: a.engSummary || "",
+    본문_한국어: a.translated || "",
+    본문_인도네시아어: a.content || "",
+    링크: a.link || "",
+    중요도: a.importance ?? "",
+  }));
+
+  const ws = XLSX.utils.json_to_sheet(sheetData);
+
+  //  열 너비 고정 (가독성 핵심)
+  ws["!cols"] = [
+    { wch: 12 }, // 날짜
+    { wch: 8 },  // 중요도
+    { wch: 14 }, // 언론사
+    { wch: 16 }, // 카테고리
+    { wch: 30 }, // 키워드
+    { wch: 40 }, // 헤드라인 KR
+    { wch: 50 }, // 요약 KR
+    { wch: 40 }, // 헤드라인 EN
+    { wch: 50 }, // 요약 EN
+    { wch: 60 }, // 본문 KR
+    { wch: 60 }, // 본문 ID
+    { wch: 30 }, // 링크
+  ];
+
+  // 헤더 고정
+  ws["!freeze"] = { ySplit: 1 };
+
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, `${excelYear}-${excelMonth}월뉴스`);
+
+  XLSX.writeFile(wb, `${excelYear}년_${excelMonth}월_뉴스.xlsx`);
+}, [articles, excelYear, excelMonth]);
+
 
   const generateWordCloud = () => {
     alert(`워드클라우드 생성: ${wcStartDate} ~ ${wcEndDate}`);
