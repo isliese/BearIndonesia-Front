@@ -244,7 +244,7 @@ const UnifiedNewsPage = ({ setCurrentPage, setSelectedNews, setPrevPage }) => {
   };
 
   return (
-    <div style={{ minHeight: "100vh", display: "flex", background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)" }}>
+    <div style={{ minHeight: "100vh", display: "flex", }}>
       {/* 왼쪽 사이드바 */}
       <NewsSidebar
         activeSection={activeSection}
