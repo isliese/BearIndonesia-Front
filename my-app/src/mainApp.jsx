@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Navigation from './components/navigation.jsx';
 import HomePage from './pages/homePage.jsx';
 import NewsPage from './pages/newsPage.jsx';
@@ -13,9 +13,13 @@ const MainApp = () => {
   const [prevPage, setPrevPage] = useState('home');
   const [selectedNews, setSelectedNews] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const contentRef = useRef(null);
 
   useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    // 페이지 변경 시 컨텐츠 영역 스크롤을 맨 위로
+    if (contentRef.current) {
+      contentRef.current.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    }
   }, [currentPage]);
 
   // 검색 처리 함수
@@ -84,11 +88,26 @@ const MainApp = () => {
     <div style={{
       fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
       background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
-      minHeight: '100vh',
-      color: 'white'
+      height: '100vh',
+      color: 'white',
+      display: 'flex',
+      flexDirection: 'column',
+      overflow: 'hidden'
     }}>
+      {/* 고정된 네비게이션 */}
       <Navigation currentPage={currentPage} setCurrentPage={setCurrentPage} />
-      {renderPage()}
+      
+      {/* 스크롤 가능한 컨텐츠 영역 */}
+      <div 
+        ref={contentRef}
+        style={{
+          flex: 1,
+          overflowY: 'auto',
+          overflowX: 'hidden'
+        }}
+      >
+        {renderPage()}
+      </div>
     </div>
   );
 };
