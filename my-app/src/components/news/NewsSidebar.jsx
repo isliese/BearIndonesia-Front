@@ -33,7 +33,7 @@ const NewsSidebar = ({ activeSection, onChangeSection, sectionOrder }) => {
         width: "240px",
         background: "rgba(255, 255, 255, 0.05)",
         backdropFilter: "blur(10px)",
-        padding: "3.5rem 1rem",
+        padding: "4.5rem 1rem",
         borderRight: "1px solid rgba(255, 255, 255, 0.1)",
         position: "fixed",
         top: "80px",
