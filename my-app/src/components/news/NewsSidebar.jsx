@@ -3,6 +3,30 @@
 import React from "react";
 
 const NewsSidebar = ({ activeSection, onChangeSection, sectionOrder }) => {
+  // 스크롤을 맨 위로 초기화하는 함수
+  const scrollToTop = () => {
+    setTimeout(() => {
+      // 메인 앱의 스크롤 컨테이너 찾기
+      const scrollContainers = document.querySelectorAll('div[style*="overflowY"]');
+      scrollContainers.forEach(container => {
+        const style = window.getComputedStyle(container);
+        if (style.overflowY === 'auto' || style.overflowY === 'scroll') {
+          container.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      });
+      // window 스크롤도 함께
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      document.documentElement.scrollTo({ top: 0, behavior: 'smooth' });
+      document.body.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 0);
+  };
+
+  // 카테고리 변경 핸들러
+  const handleSectionChange = (section) => {
+    onChangeSection(section);
+    scrollToTop();
+  };
+
   return (
     <div
       style={{
@@ -33,7 +57,7 @@ const NewsSidebar = ({ activeSection, onChangeSection, sectionOrder }) => {
 
       <div style={{ display: "flex", flexDirection: "column", gap: "0.7rem" }}>
         <div
-          onClick={() => onChangeSection("all")}
+          onClick={() => handleSectionChange("all")}
           style={{
             padding: "1rem",
             borderRadius: "12px",
@@ -52,7 +76,7 @@ const NewsSidebar = ({ activeSection, onChangeSection, sectionOrder }) => {
         {sectionOrder.map((section) => (
           <div
             key={section}
-            onClick={() => onChangeSection(section)}
+            onClick={() => handleSectionChange(section)}
             style={{
               padding: "1rem",
               borderRadius: "12px",

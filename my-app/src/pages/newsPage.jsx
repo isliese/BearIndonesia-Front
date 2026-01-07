@@ -1,6 +1,6 @@
-// News 페이지 (통합 버전)
+// News 페이지 (통합 버전) 
 
-import React, { useMemo, useState, useCallback, useEffect } from "react";
+import React, { useMemo, useState, useCallback, useEffect, useRef } from "react";
 import * as XLSX from "xlsx";
 import septemberData from "../data/september.json";
 // 컴포넌트 imports
@@ -27,6 +27,7 @@ const UnifiedNewsPage = ({ setCurrentPage, setSelectedNews, setPrevPage }) => {
   const [activeTag, setActiveTag] = useState("all");
   const [showWordCloud, setShowWordCloud] = useState(false);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const mainContentRef = useRef(null);
   
   // 옵션 유지 체크박스
   const [keepOptions, setKeepOptions] = useState(true);
@@ -83,6 +84,25 @@ const UnifiedNewsPage = ({ setCurrentPage, setSelectedNews, setPrevPage }) => {
 
   useEffect(() => {
     setActiveTag("all");
+    // 카테고리 변경 시 스크롤을 맨 위로 초기화
+    // DOM 업데이트 후 스크롤하기 위해 setTimeout 사용
+    setTimeout(() => {
+      // 메인 앱의 스크롤 컨테이너 찾기 (mainApp의 contentRef)
+      // 부모 요소를 따라 올라가면서 overflowY: auto인 요소 찾기
+      let element = mainContentRef.current;
+      while (element && element.parentElement) {
+        const style = window.getComputedStyle(element.parentElement);
+        if (style.overflowY === 'auto' || style.overflowY === 'scroll') {
+          element.parentElement.scrollTo({ top: 0, behavior: 'smooth' });
+          break;
+        }
+        element = element.parentElement;
+      }
+      // window 스크롤도 함께
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      document.documentElement.scrollTo({ top: 0, behavior: 'smooth' });
+      document.body.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 100);
   }, [activeSection]);
 
   // localStorage에 필터 상태 저장 (옵션 유지 활성화 시)
@@ -281,7 +301,7 @@ const UnifiedNewsPage = ({ setCurrentPage, setSelectedNews, setPrevPage }) => {
       />
 
       {/* 메인 콘텐츠 */}
-      <div style={{ flex: 1, padding: "0.1rem", marginLeft: "240px" }}>
+      <div ref={mainContentRef} style={{ flex: 1, padding: "0.1rem", marginLeft: "240px" }}>
         <h1 style={{ fontSize: "2.3rem", color: "#ff8c42", textAlign: "center", marginBottom: "1.6rem" }}>
           News
         </h1>
