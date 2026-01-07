@@ -20,7 +20,7 @@ const NewsTagFilter = ({ activeSection, currentSectionTags, activeTag, setActive
       }}
     >
       <div style={{ color: "#ff8c42", fontWeight: 700, marginBottom: "1rem", fontSize: "1.1rem" }}>
-        {activeSection} 세부 필터:
+        {activeSection} :
       </div>
 
       <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
