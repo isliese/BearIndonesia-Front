@@ -89,72 +89,23 @@ const NewsFilterPanel = ({
             </div>
           </div>
 
-          <div style={{ marginBottom: "1.5rem", display: "flex", gap: "1rem", flexWrap: "wrap"  }}>
-            <div style={{ color: "#ff8c42", fontWeight: 700, paddingTop: "0.4rem", fontSize: "1rem" }}>
-              기간
-            </div>
-            <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
-              <button
-                onClick={() => {
-                  setPeriodFilter("전체");
-                  setShowCustomDate(false);
-                  setShowHourOptions(false);
-                }}
-                style={{
-                  padding: "0.5rem 1rem",
-                  background: periodFilter === "전체" ? "#ff8c42" : "rgba(255, 255, 255, 0.1)",
-                  border: "1px solid",
-                  borderColor: periodFilter === "전체" ? "#ff8c42" : "rgba(255, 255, 255, 0.2)",
-                  borderRadius: "20px",
-                  color: "white",
-                  cursor: "pointer",
-                  fontSize: "0.85rem",
-                  transition: "all 0.2s ease",
-                }}
-              >
-                전체
-              </button>
-
-              <button
-                onClick={() => {
-                  setShowHourOptions(!showHourOptions);
-                  setShowCustomDate(false);
-                  if (!showHourOptions) {
-                    setPeriodFilter("1시간");
-                  }
-                }}
-                style={{
-                  padding: "0.5rem 1rem",
-                  background: periodFilter.includes("시간") ? "#ff8c42" : "rgba(255, 255, 255, 0.1)",
-                  border: "1px solid",
-                  borderColor: periodFilter.includes("시간") ? "#ff8c42" : "rgba(255, 255, 255, 0.2)",
-                  borderRadius: "20px",
-                  color: "white",
-                  cursor: "pointer",
-                  fontSize: "0.85rem",
-                  transition: "all 0.2s ease",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "0.3rem",
-                }}
-              >
-                1시간
-                <span style={{ fontSize: "0.7rem" }}>{showHourOptions ? "▲" : "▼"}</span>
-              </button>
-
-              {["1일", "1주", "1개월", "3개월", "6개월", "1년"].map((period) => (
+          <div style={{ marginBottom: "1.5rem" }}>
+            <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap", marginBottom: showHourOptions || showCustomDate ? "0.8rem" : "0" }}>
+              <div style={{ color: "#ff8c42", fontWeight: 700, paddingTop: "0.4rem", fontSize: "1rem" }}>
+                기간
+              </div>
+              <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
                 <button
-                  key={period}
                   onClick={() => {
-                    setPeriodFilter(period);
+                    setPeriodFilter("전체");
                     setShowCustomDate(false);
                     setShowHourOptions(false);
                   }}
                   style={{
                     padding: "0.5rem 1rem",
-                    background: periodFilter === period ? "#ff8c42" : "rgba(255, 255, 255, 0.1)",
+                    background: periodFilter === "전체" ? "#ff8c42" : "rgba(255, 255, 255, 0.1)",
                     border: "1px solid",
-                    borderColor: periodFilter === period ? "#ff8c42" : "rgba(255, 255, 255, 0.2)",
+                    borderColor: periodFilter === "전체" ? "#ff8c42" : "rgba(255, 255, 255, 0.2)",
                     borderRadius: "20px",
                     color: "white",
                     cursor: "pointer",
@@ -162,53 +113,115 @@ const NewsFilterPanel = ({
                     transition: "all 0.2s ease",
                   }}
                 >
-                  {period}
+                  전체
                 </button>
-              ))}
 
-              <button
-                onClick={() => {
-                  setShowCustomDate(!showCustomDate);
-                  setShowHourOptions(false);
-                  if (!showCustomDate) {
-                    setPeriodFilter("직접입력");
-                  }
-                }}
-                style={{
-                  padding: "0.5rem 1rem",
-                  background: showCustomDate ? "#ff8c42" : "rgba(255, 255, 255, 0.1)",
-                  border: "1px solid",
-                  borderColor: showCustomDate ? "#ff8c42" : "rgba(255, 255, 255, 0.2)",
-                  borderRadius: "20px",
-                  color: "white",
-                  cursor: "pointer",
-                  fontSize: "0.85rem",
-                  transition: "all 0.2s ease",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "0.3rem",
-                }}
-              >
-                직접입력
-                <span style={{ fontSize: "0.7rem" }}>{showCustomDate ? "▲" : "▼"}</span>
-              </button>
+                <button
+                  onClick={() => {
+                    setShowHourOptions(!showHourOptions);
+                    setShowCustomDate(false);
+                    if (!showHourOptions) {
+                      setPeriodFilter("1시간");
+                    }
+                  }}
+                  style={{
+                    padding: "0.5rem 1rem",
+                    background: periodFilter.includes("시간") ? "#ff8c42" : "rgba(255, 255, 255, 0.1)",
+                    border: "1px solid",
+                    borderColor: periodFilter.includes("시간") ? "#ff8c42" : "rgba(255, 255, 255, 0.2)",
+                    borderRadius: "20px",
+                    color: "white",
+                    cursor: "pointer",
+                    fontSize: "0.85rem",
+                    transition: "all 0.2s ease",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.3rem",
+                  }}
+                >
+                  1시간
+                  <span style={{ fontSize: "0.7rem" }}>{showHourOptions ? "▲" : "▼"}</span>
+                </button>
+
+                {["1일", "1주", "1개월", "3개월", "6개월", "1년"].map((period) => (
+                  <button
+                    key={period}
+                    onClick={() => {
+                      setPeriodFilter(period);
+                      setShowCustomDate(false);
+                      setShowHourOptions(false);
+                    }}
+                    style={{
+                      padding: "0.5rem 1rem",
+                      background: periodFilter === period ? "#ff8c42" : "rgba(255, 255, 255, 0.1)",
+                      border: "1px solid",
+                      borderColor: periodFilter === period ? "#ff8c42" : "rgba(255, 255, 255, 0.2)",
+                      borderRadius: "20px",
+                      color: "white",
+                      cursor: "pointer",
+                      fontSize: "0.85rem",
+                      transition: "all 0.2s ease",
+                    }}
+                  >
+                    {period}
+                  </button>
+                ))}
+
+                <button
+                  onClick={() => {
+                    setShowCustomDate(!showCustomDate);
+                    setShowHourOptions(false);
+                    if (!showCustomDate) {
+                      setPeriodFilter("직접입력");
+                    }
+                  }}
+                  style={{
+                    padding: "0.5rem 1rem",
+                    background: showCustomDate ? "#ff8c42" : "rgba(255, 255, 255, 0.1)",
+                    border: "1px solid",
+                    borderColor: showCustomDate ? "#ff8c42" : "rgba(255, 255, 255, 0.2)",
+                    borderRadius: "20px",
+                    color: "white",
+                    cursor: "pointer",
+                    fontSize: "0.85rem",
+                    transition: "all 0.2s ease",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.3rem",
+                  }}
+                >
+                  직접입력
+                  <span style={{ fontSize: "0.7rem" }}>{showCustomDate ? "▲" : "▼"}</span>
+                </button>
+              </div>
             </div>
 
             {showHourOptions && (
-              <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap", marginTop: "0.8rem", paddingLeft: "0.5rem" }}>
+              <div
+                style={{
+                  display: "flex",
+                  gap: "0.5rem",
+                  flexWrap: "wrap",
+                  alignItems: "center",
+                  paddingLeft: "4.5rem",
+                  padding: "1rem",
+                  background: "rgba(255, 255, 255, 0.05)",
+                  borderRadius: "12px",
+                }}
+              >
                 {["1시간", "2시간", "3시간", "4시간", "5시간", "6시간"].map((hour) => (
                   <button
                     key={hour}
                     onClick={() => setPeriodFilter(hour)}
                     style={{
-                      padding: "0.4rem 0.8rem",
-                      background: periodFilter === hour ? "#ff8c42" : "rgba(255, 255, 255, 0.08)",
+                      padding: "0.5rem 1rem",
+                      background: periodFilter === hour ? "#ff8c42" : "rgba(255, 255, 255, 0.1)",
                       border: "1px solid",
-                      borderColor: periodFilter === hour ? "#ff8c42" : "rgba(255, 255, 255, 0.15)",
-                      borderRadius: "16px",
+                      borderColor: periodFilter === hour ? "#ff8c42" : "rgba(255, 255, 255, 0.2)",
+                      borderRadius: "20px",
                       color: "white",
                       cursor: "pointer",
-                      fontSize: "0.8rem",
+                      fontSize: "0.85rem",
                       transition: "all 0.2s ease",
                     }}
                   >
@@ -224,7 +237,7 @@ const NewsFilterPanel = ({
                   display: "flex",
                   gap: "0.5rem",
                   alignItems: "center",
-                  marginTop: "0.8rem",
+                  paddingLeft: "4.5rem",
                   padding: "1rem",
                   background: "rgba(255, 255, 255, 0.05)",
                   borderRadius: "12px",
