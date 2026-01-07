@@ -10,7 +10,7 @@ import NewsSidebar from "../components/news/NewsSidebar";
 import NewsTagFilter from "../components/news/NewsTagFilter";
 import NewsTopActions from "../components/news/NewsTopActions";
 import WordCloudModal from "../components/news/WordCloudModal";
-import { SECTION_ORDER, TAG_SECTIONS } from "../components/news/newsConstants";
+import { SECTION_ORDER, TAG_SECTIONS, CRAWLED_NEWS_SITES } from "../components/news/newsConstants";
 
 
 const UnifiedNewsPage = ({ setCurrentPage, setSelectedNews, setPrevPage }) => {
@@ -115,30 +115,46 @@ const UnifiedNewsPage = ({ setCurrentPage, setSelectedNews, setPrevPage }) => {
   }, [sortOrder, periodFilter, pressFilter, keepOptions]);
 
   const pressList = useMemo(() => {
-    const sources = new Set(articles.map(a => a.source).filter(Boolean));
-    const sortedSources = Array.from(sources).sort();
+    // 23개 크롤링 뉴스 사이트 목록을 모두 필터 옵션으로 표시
+    // 중복 제거 (예: "Detik"과 "detik")
+    const uniqueSites = [];
+    const seen = new Set();
+    CRAWLED_NEWS_SITES.forEach(site => {
+      const siteLower = site.toLowerCase().trim();
+      if (!seen.has(siteLower)) {
+        seen.add(siteLower);
+        // 대문자로 시작하는 버전 우선 (예: "Detik" 우선)
+        const existing = uniqueSites.find(s => s.toLowerCase().trim() === siteLower);
+        if (existing) {
+          // 이미 있으면 더 적절한 버전 유지 (대문자로 시작하는 것)
+          if (site[0] === site[0].toUpperCase() && existing[0] !== existing[0].toUpperCase()) {
+            const index = uniqueSites.indexOf(existing);
+            uniqueSites[index] = site;
+          }
+        } else {
+          uniqueSites.push(site);
+        }
+      }
+    });
     
     // 카테고리 자동 분류 시도 (키워드 기반)
     const categories = {
-      "일간지": [],
+      "종합 뉴스": [],
       "경제/IT": [],
-      "인터넷신문": [],
-      "전문지": [],
+      "정부 기관": [],
       "기타": []
     };
     
-    sortedSources.forEach(source => {
-      const lower = source.toLowerCase();
-      if (lower.includes("경제") || lower.includes("비즈") || lower.includes("it") || lower.includes("tech")) {
-        categories["경제/IT"].push(source);
-      } else if (lower.includes("데일리") || lower.includes("online") || lower.includes("닷컴")) {
-        categories["인터넷신문"].push(source);
-      } else if (lower.includes("전문") || lower.includes("매거진") || lower.includes("리뷰")) {
-        categories["전문지"].push(source);
-      } else if (lower.includes("신문") || lower.includes("일보")) {
-        categories["일간지"].push(source);
+    uniqueSites.forEach(site => {
+      const lower = site.toLowerCase();
+      if (lower.includes("bpom") || lower.includes("moh") || lower.includes("bpjs") || lower.includes("정부") || lower.includes("대통령")) {
+        categories["정부 기관"].push(site);
+      } else if (lower.includes("경제") || lower.includes("비즈") || lower.includes("it") || lower.includes("tech") || lower.includes("cnbc") || lower.includes("kontan") || lower.includes("bisnis") || lower.includes("idx")) {
+        categories["경제/IT"].push(site);
+      } else if (lower.includes("cnn") || lower.includes("detik") || lower.includes("kompas") || lower.includes("tempo") || lower.includes("liputan") || lower.includes("sindo") || lower.includes("suara") || lower.includes("antara") || lower.includes("viva") || lower.includes("jawa")) {
+        categories["종합 뉴스"].push(site);
       } else {
-        categories["기타"].push(source);
+        categories["기타"].push(site);
       }
     });
     
@@ -153,9 +169,9 @@ const UnifiedNewsPage = ({ setCurrentPage, setSelectedNews, setPrevPage }) => {
     if (Object.keys(categories).length >= 2) {
       return { type: "categorized", data: categories };
     } else {
-      return { type: "simple", data: ["전체", ...sortedSources] };
+      return { type: "simple", data: ["전체", ...uniqueSites.sort()] };
     }
-  }, [articles]);
+  }, []);
 
   const filtered = useMemo(() => {
     let result = [...articles];
@@ -174,7 +190,15 @@ const UnifiedNewsPage = ({ setCurrentPage, setSelectedNews, setPrevPage }) => {
     }
 
     if (pressFilter !== "전체") {
-      result = result.filter((a) => a.source === pressFilter);
+      // 뉴스 사이트 필터링 (대소문자 무시, 부분 일치 허용)
+      result = result.filter((a) => {
+        if (!a.source) return false;
+        const sourceLower = a.source.toLowerCase().trim();
+        const filterLower = pressFilter.toLowerCase().trim();
+        return sourceLower === filterLower || 
+               sourceLower.includes(filterLower) || 
+               filterLower.includes(sourceLower);
+      });
     }
 
     // 기간 필터

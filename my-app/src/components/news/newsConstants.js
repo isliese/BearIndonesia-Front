@@ -32,6 +32,33 @@ export const TAG_SECTIONS = {
   ]
 };
 
+// 크롤링하는 뉴스 사이트 목록 (23개)
+export const CRAWLED_NEWS_SITES = [
+  "Farmasetika News",
+  "CNN Indonesia",
+  "CNBC Indonesia",
+  "Liputan 6",
+  "Detik",
+  "detik",
+  "Kompas",
+  "Sindo News",
+  "Tempo",
+  "Kontan",
+  "Korean Tempo",
+  "Bisnis",
+  "Market Bisnis",
+  "Jawa Pos",
+  "Nasional Kontan",
+  "IDX",
+  "Suara",
+  "Antara News",
+  "Viva",
+  "BPOM",
+  "MOH",
+  "BPJS",
+  "인니 정부",
+  "인니 대통령"
+];
 
 // 분야별 뉴스 섹션 순서
 export const SECTION_ORDER = [

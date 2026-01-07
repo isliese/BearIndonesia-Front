@@ -276,7 +276,7 @@ const NewsFilterPanel = ({
 
           <div style={{ marginBottom: "1.5rem", display: "flex", gap: "1rem", flexWrap: "wrap"  }}>
             <div style={{ color: "#ff8c42", fontWeight: 700, paddingTop: "0.4rem", fontSize: "1rem" }}>
-              언론사
+              뉴스 사이트
             </div>
 
             {pressList.type === "categorized" ? (
