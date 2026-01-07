@@ -24,7 +24,7 @@ const UnifiedNewsPage = ({ setCurrentPage, setSelectedNews, setPrevPage }) => {
   };
 
   const [activeSection, setActiveSection] = useState("all");
-  const [activeTag, setActiveTag] = useState("all");
+  const [activeTags, setActiveTags] = useState([]);
   const [showWordCloud, setShowWordCloud] = useState(false);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const mainContentRef = useRef(null);
@@ -83,7 +83,7 @@ const UnifiedNewsPage = ({ setCurrentPage, setSelectedNews, setPrevPage }) => {
   }, [activeSection, tagCount]);
 
   useEffect(() => {
-    setActiveTag("all");
+    setActiveTags([]);
     // 카테고리 변경 시 스크롤을 맨 위로 초기화
     // DOM 업데이트 후 스크롤하기 위해 setTimeout 사용
     setTimeout(() => {
@@ -183,9 +183,9 @@ const UnifiedNewsPage = ({ setCurrentPage, setSelectedNews, setPrevPage }) => {
       );
     }
     
-    if (activeTag !== "all") {
+    if (activeTags.length > 0) {
       result = result.filter((a) => 
-        a.tags.some((t) => t.name === activeTag)
+        a.tags.some((t) => activeTags.includes(t.name))
       );
     }
 
@@ -244,7 +244,7 @@ const UnifiedNewsPage = ({ setCurrentPage, setSelectedNews, setPrevPage }) => {
     }
     
     return result;
-  }, [activeSection, activeTag, sortOrder, periodFilter, pressFilter, articles, customStartDate, customEndDate]);
+  }, [activeSection, activeTags, sortOrder, periodFilter, pressFilter, articles, customStartDate, customEndDate]);
 
   const resetFilters = () => {
     setSortOrder("최신순");
@@ -376,8 +376,8 @@ const UnifiedNewsPage = ({ setCurrentPage, setSelectedNews, setPrevPage }) => {
         <NewsTagFilter
           activeSection={activeSection}
           currentSectionTags={currentSectionTags}
-          activeTag={activeTag}
-          setActiveTag={setActiveTag}
+          activeTags={activeTags}
+          setActiveTags={setActiveTags}
         />
 
         <NewsGrid

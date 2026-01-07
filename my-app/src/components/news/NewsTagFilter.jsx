@@ -2,10 +2,21 @@
 
 import React from "react";
 
-const NewsTagFilter = ({ activeSection, currentSectionTags, activeTag, setActiveTag }) => {
+const NewsTagFilter = ({ activeSection, currentSectionTags, activeTags, setActiveTags }) => {
   if (activeSection === "all" || currentSectionTags.length === 0) {
     return null;
   }
+
+  const isAllActive = activeTags.length === 0;
+
+  const toggleTag = (tag) => {
+    setActiveTags((prev) => {
+      if (prev.includes(tag)) {
+        return prev.filter((t) => t !== tag);
+      }
+      return [...prev, tag];
+    });
+  };
 
   return (
     <div
@@ -25,12 +36,12 @@ const NewsTagFilter = ({ activeSection, currentSectionTags, activeTag, setActive
 
       <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
         <button
-          onClick={() => setActiveTag("all")}
+          onClick={() => setActiveTags([])}
           style={{
             padding: "0.5rem 1rem",
-            background: activeTag === "all" ? "#ff8c42" : "rgba(255, 255, 255, 0.1)",
+            background: isAllActive ? "#ff8c42" : "rgba(255, 255, 255, 0.1)",
             border: "1px solid",
-            borderColor: activeTag === "all" ? "#ff8c42" : "rgba(255, 255, 255, 0.2)",
+            borderColor: isAllActive ? "#ff8c42" : "rgba(255, 255, 255, 0.2)",
             borderRadius: "20px",
             color: "white",
             cursor: "pointer",
@@ -44,12 +55,12 @@ const NewsTagFilter = ({ activeSection, currentSectionTags, activeTag, setActive
         {currentSectionTags.map((tag) => (
           <button
             key={tag}
-            onClick={() => setActiveTag(tag)}
+            onClick={() => toggleTag(tag)}
             style={{
               padding: "0.5rem 1rem",
-              background: activeTag === tag ? "#ff8c42" : "rgba(255, 255, 255, 0.1)",
+              background: activeTags.includes(tag) ? "#ff8c42" : "rgba(255, 255, 255, 0.1)",
               border: "1px solid",
-              borderColor: activeTag === tag ? "#ff8c42" : "rgba(255, 255, 255, 0.2)",
+              borderColor: activeTags.includes(tag) ? "#ff8c42" : "rgba(255, 255, 255, 0.2)",
               borderRadius: "20px",
               color: "white",
               cursor: "pointer",
