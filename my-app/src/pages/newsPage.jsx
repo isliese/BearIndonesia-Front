@@ -1,6 +1,7 @@
 // News 페이지 (통합 버전) 
 
 import React, { useMemo, useState, useCallback, useEffect, useRef } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import * as XLSX from "xlsx";
 import septemberData from "../data/september.json";
 // 컴포넌트 imports
@@ -13,7 +14,7 @@ import WordCloudModal from "../components/news/WordCloudModal";
 import { SECTION_ORDER, TAG_SECTIONS, CRAWLED_NEWS_SITES } from "../components/news/newsConstants";
 
 
-const UnifiedNewsPage = ({ setCurrentPage, setSelectedNews, setPrevPage }) => {
+const UnifiedNewsPage = ({ setSelectedNews }) => {
   const getStoredValue = (key, defaultValue) => {
     try {
       const stored = localStorage.getItem(key);
@@ -28,6 +29,8 @@ const UnifiedNewsPage = ({ setCurrentPage, setSelectedNews, setPrevPage }) => {
   const [showWordCloud, setShowWordCloud] = useState(false);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const mainContentRef = useRef(null);
+  const navigate = useNavigate();
+  const location = useLocation();
   
   // 옵션 유지 체크박스
   const [keepOptions, setKeepOptions] = useState(true);
@@ -384,8 +387,7 @@ const UnifiedNewsPage = ({ setCurrentPage, setSelectedNews, setPrevPage }) => {
           articles={filtered}
           onOpen={(article) => {
             setSelectedNews(article);
-            setPrevPage("news");
-            setCurrentPage("newsDetail");
+            navigate("/news/detail", { state: { from: location.pathname } });
           }}
         />
       </div>

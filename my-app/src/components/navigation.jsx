@@ -1,15 +1,17 @@
 // 공통 nav바 컴포넌트
 
 import React, { useState } from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
 import AReumiUser from '../assets/images/AReumi_User.png';
 
-const Navigation = ({ currentPage, setCurrentPage }) => {
+const Navigation = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  
+  const navigate = useNavigate();
+
   const navItems = [
-    { id: 'about', label: '서비스 소개' },
-    { id: 'news', label: 'News' },
-    { id: 'calendar', label: '인터렉티브 캘린더' }
+    { id: 'about', label: '서비스 소개', to: '/about' },
+    { id: 'news', label: 'News', to: '/news' },
+    { id: 'calendar', label: '인터렉티브 캘린더', to: '/calendar' }
   ];
 
   const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
@@ -28,25 +30,21 @@ const Navigation = ({ currentPage, setCurrentPage }) => {
       zIndex: 100
     }}>
       {/* 로고 */}
-      <div 
+      <div
         style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#ff8c42', cursor: 'pointer' }}
-        onClick={() => setCurrentPage('home')}
+        onClick={() => navigate('/')}
       >
         BearIndonesia
       </div>
 
-      {/* 네비게이션 */}
+      {/* Navigation */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '1.6rem' }}>
         <ul style={{ display: 'flex', gap: '1rem', listStyle: 'none', margin: 0, padding: 0 }}>
-          {navItems.map(item => (
+          {navItems.map((item) => (
             <li key={item.id}>
-              <a
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setCurrentPage(item.id);
-                }}
-                style={{
+              <NavLink
+                to={item.to}
+                style={({ isActive }) => ({
                   whiteSpace: 'nowrap',
                   color: 'white',
                   textDecoration: 'none',
@@ -54,31 +52,31 @@ const Navigation = ({ currentPage, setCurrentPage }) => {
                   fontSize: '1.1rem',
                   borderRadius: '8px',
                   transition: 'all 0.3s ease',
-                  background: currentPage === item.id ? '#ff8c42' : 'transparent'
-                }}
+                  background: isActive ? '#ff8c42' : 'transparent'
+                })}
               >
                 {item.label}
-              </a>
+              </NavLink>
             </li>
           ))}
         </ul>
 
         {/* 프로필 드롭다운 */}
         <div style={{ position: 'relative' }}>
-          <button 
-            onClick={toggleDropdown} 
-            style={{ 
-              background: 'none', 
-              border: 'none', 
-              cursor: 'pointer', 
-              padding: 0, 
-              borderRadius: '50%' 
+          <button
+            onClick={toggleDropdown}
+            style={{
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              padding: 0,
+              borderRadius: '50%'
             }}
           >
-            <img 
-              src={AReumiUser} 
-              alt="User Avatar" 
-              style={{ width: '40px', height: '40px', borderRadius: '50%' }} 
+            <img
+              src={AReumiUser}
+              alt="User Avatar"
+              style={{ width: '40px', height: '40px', borderRadius: '50%' }}
             />
           </button>
 
@@ -117,7 +115,7 @@ const Navigation = ({ currentPage, setCurrentPage }) => {
                 </div>
                 <div>
                   <div style={{ color: 'white', fontWeight: 'bold', fontSize: '14px' }}>
-                    아르미
+                    User
                   </div>
                   <div style={{ color: '#888', fontSize: '12px' }}>
                     AReumi_User_ID
@@ -129,26 +127,26 @@ const Navigation = ({ currentPage, setCurrentPage }) => {
               <div style={{ padding: '8px 0' }}>
                 <button
                   onClick={() => {
-                    setCurrentPage('account');
+                    navigate('/');
                     setDropdownOpen(false);
                   }}
                   style={menuButtonStyle}
                   onMouseEnter={(e) => e.target.style.background = 'rgba(255, 255, 255, 0.1)'}
                   onMouseLeave={(e) => e.target.style.background = 'none'}
                 >
-                  <span>🍀</span> 회원 정보
+                   <span>🍀</span> 회원 정보
                 </button>
 
                 <button
                   onClick={() => {
-                    setCurrentPage('scrapped');
+                    navigate('/');
                     setDropdownOpen(false);
                   }}
                   style={menuButtonStyle}
                   onMouseEnter={(e) => e.target.style.background = 'rgba(255, 255, 255, 0.1)'}
                   onMouseLeave={(e) => e.target.style.background = 'none'}
                 >
-                  <span>📰</span> 내가 스크랩한 기사
+                   <span>📰</span> 스크랩한 기사
                 </button>
               </div>
             </div>

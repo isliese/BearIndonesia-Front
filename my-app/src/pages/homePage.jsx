@@ -1,5 +1,6 @@
 // 홈 페이지
 import React, { useState, useMemo } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import septemberData from "../data/september.json";
 import BpomLogo from "../assets/images/BPOM.jpg";
 import CnbcLogo from "../assets/images/CNBC.png";
@@ -8,7 +9,9 @@ import DetikLogo from "../assets/images/detik.png";
 import FarmasetikaLogo from "../assets/images/farmasetika.webp";
 import MohLogo from "../assets/images/MOH.png";
 
-const HomePage = ({ onSearch, setCurrentPage = () => {}, setSelectedNews = () => {}, setPrevPage = () => {} }) => {
+const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const topHeadlines = useMemo(() => {
     const arr = Array.isArray(septemberData) ? septemberData : [septemberData];
     return arr
@@ -48,8 +51,7 @@ const HomePage = ({ onSearch, setCurrentPage = () => {}, setSelectedNews = () =>
       } catch {
         // Ignore storage issues and still navigate.
       }
-      setPrevPage("home");
-      setCurrentPage("news");
+      navigate('/news', { state: { from: location.pathname } });
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
     setModalOpen(false);
@@ -57,8 +59,7 @@ const HomePage = ({ onSearch, setCurrentPage = () => {}, setSelectedNews = () =>
 
   const handleHeadlineClick = (article) => {
     setSelectedNews(article);
-    setPrevPage("home");
-    setCurrentPage("newsDetail");
+    navigate('/news/detail', { state: { from: location.pathname } });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 

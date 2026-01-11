@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import Navigation from './components/navigation.jsx';
 import HomePage from './pages/homePage.jsx';
 import NewsPage from './pages/newsPage.jsx';
@@ -9,78 +10,25 @@ import NewsDetailPage from './pages/newsDetailPage.jsx';
 import SearchResultsPage from './pages/SearchResultsPage.jsx';
 
 const MainApp = () => {
-  const [currentPage, setCurrentPage] = useState('home');
-  const [prevPage, setPrevPage] = useState('home');
   const [selectedNews, setSelectedNews] = useState(null);
-  const [searchTerm, setSearchTerm] = useState('');
   const contentRef = useRef(null);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // 페이지 변경 시 컨텐츠 영역 스크롤을 맨 위로
+    // ?˜ì´ì§€ ë³€ê²???ì»¨í…ì¸??ì—­ ?¤í¬ë¡¤ì„ ë§??„ë¡œ
     if (contentRef.current) {
       contentRef.current.scrollTo({ top: 0, left: 0, behavior: 'auto' });
     }
-  }, [currentPage]);
+  }, [location.pathname]);
 
-  // 검색 처리 함수
+  // ê²€??ì²˜ë¦¬ ?¨ìˆ˜
   const handleSearch = (term) => {
     if (term && term.trim()) {
-      setSearchTerm(term.trim());
-      setCurrentPage('search');
-    }
-  };
-
-  const renderPage = () => {
-    switch (currentPage) {
-      case 'home':
-        return <HomePage 
-          onSearch={handleSearch}
-          setCurrentPage={setCurrentPage}
-          setSelectedNews={setSelectedNews}
-          setPrevPage={setPrevPage}
-        />;
-              
-      case 'news':
-        return <NewsPage 
-          setCurrentPage={setCurrentPage} 
-          setSelectedNews={setSelectedNews}
-          setPrevPage={setPrevPage}
-        />;
-      
-      case 'section-news': 
-        return <SectionNewsPage 
-          setCurrentPage={setCurrentPage} 
-          setSelectedNews={setSelectedNews}
-          setPrevPage={setPrevPage}
-        />;
-      
-      case 'calendar':
-        return <CalendarPage 
-          setCurrentPage={setCurrentPage} 
-          setSelectedNews={setSelectedNews} 
-          setPrevPage={setPrevPage}
-        />;
-      
-      case 'about':
-        return <AboutPage />;
-      
-      case 'newsDetail':
-        return <NewsDetailPage 
-          news={selectedNews}
-          setCurrentPage={setCurrentPage}
-          prevPage={prevPage}
-        />;
-      
-      case 'search':
-        return <SearchResultsPage 
-          searchTerm={searchTerm}
-          setCurrentPage={setCurrentPage}
-          setSelectedNews={setSelectedNews}
-          setPrevPage={setPrevPage}
-        />;
-      
-      default:
-        return <HomePage onSearch={handleSearch} />;
+      const trimmed = term.trim();
+      navigate(`/search?query=${encodeURIComponent(trimmed)}`, {
+        state: { from: location.pathname }
+      });
     }
   };
 
@@ -94,10 +42,10 @@ const MainApp = () => {
       flexDirection: 'column',
       overflow: 'hidden'
     }}>
-      {/* 고정된 네비게이션 */}
-      <Navigation currentPage={currentPage} setCurrentPage={setCurrentPage} />
+      {/* ê³ ì •???¤ë¹„ê²Œì´??*/}
+      <Navigation />
       
-      {/* 스크롤 가능한 컨텐츠 영역 */}
+      {/* ?¤í¬ë¡?ê°€?¥í•œ ì»¨í…ì¸??ì—­ */}
       <div 
         ref={contentRef}
         style={{
@@ -106,7 +54,37 @@ const MainApp = () => {
           overflowX: 'hidden'
         }}
       >
-        {renderPage()}
+        <Routes>
+          <Route
+            path="/"
+            element={<HomePage onSearch={handleSearch} setSelectedNews={setSelectedNews} />}
+          />
+          <Route
+            path="/news"
+            element={<NewsPage setSelectedNews={setSelectedNews} />}
+          />
+          <Route
+            path="/section-news"
+            element={<SectionNewsPage setSelectedNews={setSelectedNews} />}
+          />
+          <Route
+            path="/calendar"
+            element={<CalendarPage setSelectedNews={setSelectedNews} />}
+          />
+          <Route path="/about" element={<AboutPage />} />
+          <Route
+            path="/news/detail"
+            element={<NewsDetailPage news={selectedNews} />}
+          />
+          <Route
+            path="/search"
+            element={<SearchResultsPage setSelectedNews={setSelectedNews} />}
+          />
+          <Route
+            path="*"
+            element={<HomePage onSearch={handleSearch} setSelectedNews={setSelectedNews} />}
+          />
+        </Routes>
       </div>
     </div>
   );

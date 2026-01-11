@@ -1,5 +1,6 @@
 // 분야별 뉴스 페이지 - 레거시 버전
 import React, { useState, useMemo } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   getAllArticles
 } from "../data/totalData";
@@ -32,8 +33,10 @@ const renderHighlighted = (text = "") => {
 };
 
 /* -------------------- 컴포넌트 -------------------- */
-const SectionNewsPage = ({ setCurrentPage, setSelectedNews, setPrevPage }) => {
+const SectionNewsPage = ({ setSelectedNews }) => {
   const [activeTag, setActiveTag] = useState("all");
+  const navigate = useNavigate();
+  const location = useLocation();
 
   // 6개 파일에서 합쳐진 전체 기사 로드
   const allNews = useMemo(() => getAllArticles(), []);
@@ -257,8 +260,7 @@ const SectionNewsPage = ({ setCurrentPage, setSelectedNews, setPrevPage }) => {
                   }}
                   onOpen={() => {
                     setSelectedNews?.(news);
-                    setPrevPage?.("section");
-                    setCurrentPage?.("newsDetail");
+                    navigate("/news/detail", { state: { from: location.pathname } });
                   }}
                 />
               ))}

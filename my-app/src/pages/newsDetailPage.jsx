@@ -1,9 +1,12 @@
 // 뉴스 상세 페이지
 import React, { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-const NewsDetailPage = ({ news, setCurrentPage, prevPage }) => {
+const NewsDetailPage = ({ news }) => {
   const [titleLang, setTitleLang] = useState("ko"); 
   const [contentTab, setContentTab] = useState("ko"); 
+  const navigate = useNavigate();
+  const location = useLocation();
   if (!news) {
     return (
       <div style={{
@@ -56,7 +59,7 @@ const NewsDetailPage = ({ news, setCurrentPage, prevPage }) => {
     <div style={{ position: 'relative', padding: '2rem 1rem', minHeight: 'calc(100vh - 80px)' }}>
       {/* 뒤로가기 */}
       <button
-        onClick={() => setCurrentPage(prevPage || 'news')}
+        onClick={() => navigate(location.state?.from || '/news')}
         style={{
           position: 'absolute',
           top: '3.5rem',

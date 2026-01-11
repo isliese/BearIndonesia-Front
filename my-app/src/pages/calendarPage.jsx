@@ -1,15 +1,18 @@
 // 인터렉티브 캘린더 페이지
 import React, { useState, useEffect, useMemo } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { 
   getNewsForDate, 
   getNewsCount
 } from '../data/totalData';
 
-const CalendarPage = ({ setCurrentPage, setSelectedNews, setPrevPage }) => {
+const CalendarPage = ({ setSelectedNews }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedRange, setSelectedRange] = useState({ start: null, end: null });
   const [isDragging, setIsDragging] = useState(false);
   const [calendarKey, setCalendarKey] = useState(0);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const formatDate = (date) => date.toLocaleDateString('sv-SE');
 
@@ -257,8 +260,7 @@ const CalendarPage = ({ setCurrentPage, setSelectedNews, setPrevPage }) => {
                   key={`${news.id || index}-${news.displayDate}`}
                   onClick={() => {
                     setSelectedNews(news);
-                    setPrevPage('calendar');
-                    setCurrentPage('newsDetail');
+                    navigate('/news/detail', { state: { from: location.pathname } });
                   }}
                   style={{
                     background: 'rgba(255,255,255,0.05)',

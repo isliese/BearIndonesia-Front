@@ -1,6 +1,7 @@
 // 검색 결과 페이지
 
 import React, { useState, useMemo, useEffect } from 'react';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 
 // API 호출 함수
 const searchAPI = async (searchTerm, sortBy = 'relevance', filterType = 'all') => {
@@ -349,13 +350,11 @@ const SearchCard = ({ article, onOpen, searchTerm, onTagClick }) => {
   );
 };
 
-const SearchResultsPage = ({ 
-  searchTerm = "", 
-  setCurrentPage, 
-  setSelectedNews, 
-  setPrevPage,
-  prevPage = 'news'
-}) => {
+const SearchResultsPage = ({ setSelectedNews }) => {
+  const [searchParams] = useSearchParams();
+  const searchTerm = searchParams.get("query") || "";
+  const navigate = useNavigate();
+  const location = useLocation();
   const [sortBy, setSortBy] = useState("relevance");
   const [filterType, setFilterType] = useState("all");
   const [searchResults, setSearchResults] = useState([]);
@@ -454,7 +453,7 @@ const SearchResultsPage = ({
     <div style={{ position: 'relative', padding: '2rem 1rem', minHeight: 'calc(100vh - 80px)' }}>
       {/* 뒤로가기 버튼 */}
       <button
-        onClick={() => setCurrentPage(prevPage || 'news')}
+        onClick={() => navigate(location.state?.from || '/news')}
         style={{
           position: 'absolute',
           top: '1rem',
@@ -654,9 +653,8 @@ const SearchResultsPage = ({
                 searchTerm={searchTerm}
                 onTagClick={toggleTag}
                 onOpen={() => {
-                  setSelectedNews && setSelectedNews(article);
-                  setPrevPage && setPrevPage("search");
-                  setCurrentPage && setCurrentPage("newsDetail");
+                  if (setSelectedNews) setSelectedNews(article);
+                  navigate('/news/detail', { state: { from: location.pathname } });
                 }}
               />
             ))}
