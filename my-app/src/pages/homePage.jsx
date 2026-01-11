@@ -18,11 +18,41 @@ const HomePage = ({ onSearch, setCurrentPage = () => {}, setSelectedNews = () =>
   }, []);
 
   const [searchTerm, setSearchTerm] = useState('');
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedNewsStand, setSelectedNewsStand] = useState(null);
 
   const handleSearch = () => {
     if (searchTerm.trim()) {
       onSearch(searchTerm);
     }
+  };
+
+  const handleNewsStandClick = (item) => {
+    setSelectedNewsStand(item);
+    setModalOpen(true);
+  };
+
+  const handleGoToWebsite = () => {
+    if (selectedNewsStand?.website) {
+      window.open(selectedNewsStand.website, '_blank');
+    }
+    setModalOpen(false);
+  };
+
+  const handleGoToFiltered = () => {
+    if (selectedNewsStand) {
+      try {
+        localStorage.setItem("newsFilter_press", selectedNewsStand.filterValue);
+        localStorage.setItem("newsFilter_period", "전체");
+        localStorage.setItem("newsFilter_sort", "최신순");
+      } catch {
+        // Ignore storage issues and still navigate.
+      }
+      setPrevPage("home");
+      setCurrentPage("news");
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    setModalOpen(false);
   };
 
   const handleHeadlineClick = (article) => {
@@ -33,12 +63,12 @@ const HomePage = ({ onSearch, setCurrentPage = () => {}, setSelectedNews = () =>
   };
 
   const newsStandItems = [
-    { name: "BPOM", image: BpomLogo, filterValue: "BPOM" },
-    { name: "CNBC", image: CnbcLogo, filterValue: "CNBC" },
-    { name: "CNN", image: CnnLogo, filterValue: "CNN Indonesia" },
-    { name: "Detik", image: DetikLogo, filterValue: "detik" },
-    { name: "Farmasetika", image: FarmasetikaLogo, filterValue: "Farmasetika" },
-    { name: "MOH", image: MohLogo, filterValue: "MOH" },
+    { name: "BPOM", image: BpomLogo, filterValue: "BPOM", website: "https://www.pom.go.id/" },
+    { name: "CNBC", image: CnbcLogo, filterValue: "CNBC", website: "https://www.cnbcindonesia.com/" },
+    { name: "CNN", image: CnnLogo, filterValue: "CNN Indonesia", website: "https://www.cnnindonesia.com/" },
+    { name: "Detik", image: DetikLogo, filterValue: "detik", website: "https://www.detik.com/" },
+    { name: "Farmasetika", image: FarmasetikaLogo, filterValue: "Farmasetika", website: "https://farmasetika.com/" },
+    { name: "MOH", image: MohLogo, filterValue: "MOH", website: "https://www.kemkes.go.id/" },
   ];
   
   return (
@@ -156,18 +186,7 @@ const HomePage = ({ onSearch, setCurrentPage = () => {}, setSelectedNews = () =>
               <button
                 key={item.name}
                 type="button"
-                onClick={() => {
-                  try {
-                    localStorage.setItem("newsFilter_press", item.filterValue);
-                    localStorage.setItem("newsFilter_period", "전체");
-                    localStorage.setItem("newsFilter_sort", "최신순");
-                  } catch {
-                    // Ignore storage issues and still navigate.
-                  }
-                  setPrevPage("home");
-                  setCurrentPage("news");
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                }}
+                onClick={() => handleNewsStandClick(item)}
                 style={{
                   background: 'rgba(255,255,255,0.08)',
                   border: '1px solid rgba(255,255,255,0.16)',
@@ -315,6 +334,137 @@ const HomePage = ({ onSearch, setCurrentPage = () => {}, setSelectedNews = () =>
           </ul>
         </div>
       </div>
+
+      {/* Modal */}
+      {modalOpen && selectedNewsStand && (
+        <div 
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(0, 0, 0, 0.7)',
+            backdropFilter: 'blur(4px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 1000
+          }}
+          onClick={() => setModalOpen(false)}
+        >
+          <div 
+            style={{
+              background: 'linear-gradient(135deg, rgba(30, 30, 40, 0.95), rgba(20, 20, 30, 0.95))',
+              border: '1px solid rgba(255, 140, 66, 0.3)',
+              borderRadius: '24px',
+              padding: '2.5rem',
+              maxWidth: '450px',
+              width: '90%',
+              boxShadow: '0 20px 60px rgba(0, 0, 0, 0.5)'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+              <img
+                src={selectedNewsStand.image}
+                alt={selectedNewsStand.name}
+                style={{
+                  maxWidth: '140px',
+                  maxHeight: '60px',
+                  objectFit: 'contain',
+                  marginBottom: '1rem',
+                  filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.3))'
+                }}
+              />
+              <h3 style={{
+                fontSize: '1.6rem',
+                color: '#fff',
+                margin: '0.5rem 0 0.3rem 0',
+                fontWeight: '600'
+              }}>
+                {selectedNewsStand.name}
+              </h3>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <button
+                onClick={handleGoToWebsite}
+                style={{
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  border: 'none',
+                  borderRadius: '14px',
+                  padding: '1rem 1.5rem',
+                  color: '#ff8c42',
+                  fontSize: '1.1rem',
+                  fontWeight: '600',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  boxShadow: '0 2px 5px rgba(255, 140, 66, 0.3)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = 'linear-gradient(135deg, #ff8c42, #ffa726)'
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.boxShadow = '0 6px 10px rgba(255, 140, 66, 0.4)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'none';
+                  e.currentTarget.style.boxShadow = '0 2px 5px rgba(255, 140, 66, 0.3)';
+                }}
+              >
+                공식 웹사이트로 이동
+              </button>
+
+              <button
+                onClick={handleGoToFiltered}
+                style={{
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  border: 'none',
+                  borderRadius: '14px',
+                  padding: '1rem 1.5rem',
+                  color: '#ff8c42',
+                  fontSize: '1.1rem',
+                  fontWeight: '600',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  boxShadow: '0 2px 5px rgba(255, 140, 66, 0.3)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.boxShadow = '0 6px 10px rgba(255, 140, 66, 0.4)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'none';
+                  e.currentTarget.style.boxShadow = '0 2px 5px rgba(255, 140, 66, 0.3)';
+                }}
+              >
+                뉴스 보기
+              </button>
+
+              <button
+                onClick={() => setModalOpen(false)}
+                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  color: '#888',
+                  fontSize: '0.95rem',
+                  cursor: 'pointer',
+                  padding: '0.5rem',
+                  transition: 'color 0.2s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = '#fff';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = '#888';
+                }}
+              >
+                취소
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
