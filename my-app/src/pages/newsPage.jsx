@@ -28,6 +28,7 @@ const UnifiedNewsPage = ({ setSelectedNews }) => {
   const [activeTags, setActiveTags] = useState([]);
   const [showWordCloud, setShowWordCloud] = useState(false);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const mainContentRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
@@ -318,6 +319,8 @@ const UnifiedNewsPage = ({ setSelectedNews }) => {
     // TODO: 실제 워드클라우드 생성 로직
   };
 
+  const sidebarWidth = isSidebarCollapsed ? 80 : 240;
+
   return (
     <div style={{ minHeight: "100vh", display: "flex", }}>
       {/* 왼쪽 사이드바 */}
@@ -325,10 +328,21 @@ const UnifiedNewsPage = ({ setSelectedNews }) => {
         activeSection={activeSection}
         onChangeSection={setActiveSection}
         sectionOrder={SECTION_ORDER}
+        isCollapsed={isSidebarCollapsed}
+        onToggleCollapse={() => setIsSidebarCollapsed((prev) => !prev)}
       />
 
       {/* 메인 콘텐츠 */}
-      <div ref={mainContentRef} style={{ flex: 1, padding: "0.1rem", marginLeft: "240px" }}>
+      <div
+        ref={mainContentRef}
+        style={{
+          flex: 1,
+          padding: "0.1rem",
+          marginLeft: `${sidebarWidth}px`,
+          marginRight: isSidebarCollapsed ? `${sidebarWidth}px` : "0",
+          transition: "margin 0.3s ease",
+        }}
+      >
         <h1 style={{ fontSize: "2.3rem", color: "#ff8c42", textAlign: "center", marginBottom: "1.6rem" }}>
           News
         </h1>

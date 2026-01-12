@@ -1,8 +1,16 @@
 // 뉴스 사이드바 컴포넌트
 
 import React from "react";
+import menuIcon from "../../assets/images/menu.png";
 
-const NewsSidebar = ({ activeSection, onChangeSection, sectionOrder }) => {
+const NewsSidebar = ({
+  activeSection,
+  onChangeSection,
+  sectionOrder,
+  isCollapsed,
+  onToggleCollapse,
+}) => {
+
   // 스크롤을 맨 위로 초기화하는 함수
   const scrollToTop = () => {
     setTimeout(() => {
@@ -26,24 +34,88 @@ const NewsSidebar = ({ activeSection, onChangeSection, sectionOrder }) => {
     onChangeSection(section);
     scrollToTop();
   };
-
   return (
-    <div
-      style={{
-        width: "240px",
+    <>
+      {isCollapsed && (
+        <button
+          onClick={onToggleCollapse}
+          type="button"
+          style={{
+            position: "fixed",
+            top: "92px",
+            left: "12px",
+            width: "36px",
+            height: "36px",
+            borderRadius: "10px",
+            border: "none",
+            background: "rgba(255, 255, 255, 0.08)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            cursor: "pointer",
+            transition: "all 0.3s ease",
+            padding: 0,
+            zIndex: 20,
+          }}
+          aria-label="Open sidebar"
+        >
+          <img
+            src={menuIcon}
+            alt=""
+            style={{ width: "30px", height: "30px", display: "block" }}
+          />
+        </button>
+      )}
+      <div
+        style={{
+        width: isCollapsed ? "0px" : "260px",
         background: "rgba(255, 255, 255, 0.05)",
         backdropFilter: "blur(10px)",
-        padding: "4.5rem 1rem",
-        borderRight: "1px solid rgba(255, 255, 255, 0.1)",
+        padding: 0,
+        borderRight: isCollapsed ? "none" : "1px solid rgba(255, 255, 255, 0.1)",
         position: "fixed",
         top: "80px",
         left: 0,
         height: "calc(100vh - 80px)",
         overflowY: "auto",
+        overflowX: "hidden",
         zIndex: 10,
+        opacity: isCollapsed ? 0 : 1,
+        pointerEvents: isCollapsed ? "none" : "auto",
+        transition: "width 0.3s ease, opacity 0.3s ease",
       }}
-    >
-      <h2
+      >
+      <button
+        onClick={onToggleCollapse}
+        type="button"
+        style={{
+          position: "absolute",
+          top: "12px",
+          right: "12px",
+          width: "36px",
+          height: "36px",
+          borderRadius: "10px",
+          border: "none",
+          background: "rgba(255, 255, 255, 0.08)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          cursor: "pointer",
+          transition: "all 0.3s ease",
+          padding: 0,
+        }}
+        aria-label="Toggle sidebar"
+      >
+        <img
+          src={menuIcon}
+          alt=""
+          style={{ width: "30px", height: "30px", display: "block" }}
+        />
+      </button>
+
+      {!isCollapsed && (
+        <div style={{ padding: "4.5rem 1rem 1rem" }}>
+        <h2
         style={{
           color: "#ff8c42",
           marginTop: "1.5rem",
@@ -53,9 +125,9 @@ const NewsSidebar = ({ activeSection, onChangeSection, sectionOrder }) => {
         }}
       >
         분야별 뉴스
-      </h2>
+        </h2>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: "0.7rem" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "0.7rem" }}>
         <div
           onClick={() => handleSectionChange("all")}
           style={{
@@ -92,8 +164,11 @@ const NewsSidebar = ({ activeSection, onChangeSection, sectionOrder }) => {
             {section}
           </div>
         ))}
+        </div>
+        </div>
+      )}
       </div>
-    </div>
+    </>
   );
 };
 
