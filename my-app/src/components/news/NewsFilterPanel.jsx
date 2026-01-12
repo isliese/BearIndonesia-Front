@@ -53,7 +53,7 @@ const NewsFilterPanel = ({
       {isOpen && (
         <div
           style={{
-            maxWidth: 1200,
+            maxWidth: 1150,
             margin: "0 auto 2rem",
             padding: "1.5rem",
             background: "rgba(255, 255, 255, 0.05)",
@@ -425,7 +425,6 @@ const NewsFilterPanel = ({
                 e.currentTarget.style.background = "transparent";
               }}
             >
-              <span style={{ fontSize: "1rem" }}>?</span>
               <span>옵션 초기화</span>
             </button>
             
