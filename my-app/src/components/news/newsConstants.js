@@ -1,5 +1,6 @@
 // 뉴스 태그 및 섹션 상수 정의
-// 태그별로 뉴스를 분류하기 위한 상수들
+
+// 태그별로 뉴스를 분류하기 위한 상수들 -> 업데이트 필요
 export const TAG_SECTIONS = {
   일반: [
     "제약", "치료", "백신", "건강", "건강기능식품", "건강보조식품",
@@ -22,7 +23,7 @@ export const TAG_SECTIONS = {
   ],
   "경쟁사·주주": [
     "칼베 파르마", "키미아 파르마", "바이오 파르마", "덱사 메디카", "산베 파르마", "템포스캔", "파프로스", "피리당 파르마",
-    "화이자", "노바티스", "로슈", "사노피", "GSK", "바이엘", "아스트라제네카", "신약 동향", "동향"
+    "화이자", "노바티스", "로슈", "사노피", "GSK", "바이엘", "아스트라제네카", "신약 동향", "동향", "Novo Nordisk", "Pfizer", "AstraZeneca", "Bayer", "GlaxoSmithKline (GSK)", "Merck Sharp & Dohme (MSD)", "Sanofi", "Takeda", "Boehringer Ingelheim", "Eisai", "Daewoong Pharmaceutical", "Chong Kun Dang (CKD)", "HK inno.N", "GC Green Cross", "SK Plasma", "Dong-A ST", "Ildong Pharmaceutical", "Daewon Pharmaceutical", "Kalbe Farma", "Kimia Farma", "Dexa Medica", "Sanbe Farma", "Tempo Scan Pacific", "Darya-Varia Laboratoria", "Phapros", "Pyridam Farma", "Novell Pharmaceutical", "Bio Farma"
   ],
   "트렌드·혁신": [
     "디지털 헬스", "원격의료", "보건 빅데이터", "제약 4.0", "헬스 스타트업", "의약품 연구", "의약품 개발", "인도네시아 임상시험", "디지털 헬스", "AI", "첨단 의료", "헬스케어 시스템"
@@ -32,7 +33,7 @@ export const TAG_SECTIONS = {
   ]
 };
 
-// 크롤링하는 뉴스 사이트 목록 (23개)
+// 크롤링하는 뉴스 사이트 목록 (23개) -> 업데이트 필요
 export const CRAWLED_NEWS_SITES = [
   "Farmasetika News",
   "CNN Indonesia",
