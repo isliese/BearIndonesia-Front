@@ -1,13 +1,13 @@
 // 홈 페이지
 import React, { useState, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import septemberData from "../data/september.json";
-import BpomLogo from "../assets/images/BPOM.jpg";
-import CnbcLogo from "../assets/images/CNBC.png";
-import CnnLogo from "../assets/images/CNN.png";
-import DetikLogo from "../assets/images/detik.png";
-import FarmasetikaLogo from "../assets/images/farmasetika.webp";
-import MohLogo from "../assets/images/MOH.png";
+import septemberData from "../../../data/september.json";
+import BpomLogo from "../../../assets/images/BPOM.jpg";
+import CnbcLogo from "../../../assets/images/CNBC.png";
+import CnnLogo from "../../../assets/images/CNN.png";
+import DetikLogo from "../../../assets/images/detik.png";
+import FarmasetikaLogo from "../../../assets/images/farmasetika.webp";
+import MohLogo from "../../../assets/images/MOH.png";
 
 const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
   const navigate = useNavigate();

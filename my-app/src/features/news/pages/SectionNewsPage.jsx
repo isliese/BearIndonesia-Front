@@ -3,7 +3,7 @@ import React, { useState, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   getAllArticles
-} from "../data/totalData";
+} from "../../../data/totalData";
 
 /* -------------------- 유틸 함수 -------------------- */
 const getInitials = (name = "") => {

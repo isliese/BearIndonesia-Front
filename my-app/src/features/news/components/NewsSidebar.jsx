@@ -1,7 +1,7 @@
 // 뉴스 사이드바 컴포넌트
 
 import React from "react";
-import menuIcon from "../../assets/images/menu.png";
+import menuIcon from "../../../assets/images/menu.png";
 
 const NewsSidebar = ({
   activeSection,

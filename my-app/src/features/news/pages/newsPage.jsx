@@ -3,15 +3,15 @@
 import React, { useMemo, useState, useCallback, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import * as XLSX from "xlsx";
-import septemberData from "../data/september.json";
+import septemberData from "../../../data/september.json";
 // 컴포넌트 imports
-import NewsFilterPanel from "../components/news/NewsFilterPanel";
-import NewsGrid from "../components/news/NewsGrid";
-import NewsSidebar from "../components/news/NewsSidebar";
-import NewsTagFilter from "../components/news/NewsTagFilter";
-import NewsTopActions from "../components/news/NewsTopActions";
-import WordCloudModal from "../components/news/WordCloudModal";
-import { SECTION_ORDER, TAG_SECTIONS, CRAWLED_NEWS_SITES } from "../components/news/newsConstants";
+import NewsFilterPanel from "../components/NewsFilterPanel";
+import NewsGrid from "../components/NewsGrid";
+import NewsSidebar from "../components/NewsSidebar";
+import NewsTagFilter from "../components/NewsTagFilter";
+import NewsTopActions from "../components/NewsTopActions";
+import WordCloudModal from "../components/WordCloudModal";
+import { SECTION_ORDER, TAG_SECTIONS, CRAWLED_NEWS_SITES } from "../newsConstants";
 
 
 const UnifiedNewsPage = ({ setSelectedNews }) => {

@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { 
   getNewsForDate, 
   getNewsCount
-} from '../data/totalData';
+} from '../../../data/totalData';
 
 const CalendarPage = ({ setSelectedNews }) => {
   const [currentDate, setCurrentDate] = useState(new Date());

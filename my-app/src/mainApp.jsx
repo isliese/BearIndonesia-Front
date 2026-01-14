@@ -1,13 +1,13 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import Navigation from './components/navigation.jsx';
-import HomePage from './pages/homePage.jsx';
-import NewsPage from './pages/newsPage.jsx';
-import CalendarPage from './pages/calendarPage.jsx';
-import AboutPage from './pages/aboutPage.jsx';
-import SectionNewsPage from './pages/SectionNewsPage.jsx';
-import NewsDetailPage from './pages/newsDetailPage.jsx';
-import SearchResultsPage from './pages/SearchResultsPage.jsx';
+import HomePage from './features/home/pages/homePage.jsx';
+import NewsPage from './features/news/pages/newsPage.jsx';
+import CalendarPage from './features/calendar/pages/calendarPage.jsx';
+import AboutPage from './features/about/pages/aboutPage.jsx';
+import SectionNewsPage from './features/news/pages/SectionNewsPage.jsx';
+import NewsDetailPage from './features/news/pages/newsDetailPage.jsx';
+import SearchResultsPage from './features/news/pages/SearchResultsPage.jsx';
 
 const MainApp = () => {
   const [selectedNews, setSelectedNews] = useState(null);
