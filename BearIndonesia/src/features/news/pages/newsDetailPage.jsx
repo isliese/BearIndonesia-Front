@@ -63,7 +63,7 @@ const NewsDetailPage = ({ news }) => {
         style={{
           position: 'absolute',
           top: '3.5rem',
-          left: '15rem',
+          left: '25rem',
           background: 'rgba(255, 255, 255, 0.1)',
           border: '1px solid rgba(255, 140, 66, 0.5)', 
           borderRadius: '50%',

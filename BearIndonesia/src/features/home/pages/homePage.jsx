@@ -113,8 +113,8 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
           onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
           placeholder="제약 회사명, 의약품명 등을 검색해보세요!"
           style={{
-            width: '100%',
-            padding: '1em 0.9rem 1em 1rem',
+            width: '98%',
+            padding: '1em 0.2rem 1em 1rem',
             fontSize: '1.2rem',
             border: '2px solid rgba(255, 140, 66, 0.3)',
             borderRadius: '50px',
@@ -129,8 +129,8 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
           onClick={handleSearch}
           style={{
             position: 'absolute',
-            right: '-20px',
-            top: '2.85%',
+            right: '10px',
+            top: '50%',
             transform: 'translateY(-50%)',
             background: '#ff8c42',
             border: 'none',
@@ -144,12 +144,23 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
           검색
         </button>
 
+      </div>
+
+      <div style={{
+        width: '100%',
+        maxWidth: '1200px',
+        marginTop: '2.5rem',
+        display: 'flex',
+        gap: '2rem',
+        justifyContent: 'center',
+        alignItems: 'stretch',
+        flexWrap: 'wrap'
+      }}>
         {/* News Stand Section */}
         <div style={{
           width: '100%',
-          maxWidth: '1200px',
+          flex: '1 1 480px',
           background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(15, 52, 96, 0.15))',
-          marginTop: '2.5rem',
           backdropFilter: 'blur(15px)',
           border: '1px solid rgba(255, 255, 255, 0.12)',
           borderRadius: '20px',
@@ -236,9 +247,8 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
         {/* Top Headlines Section */}
         <div style={{
           width: '100%',
-          maxWidth: '1200px',
+          flex: '1 1 480px',
           background: 'linear-gradient(135deg, rgba(255, 140, 66, 0.1), rgba(255, 167, 38, 0.05))',
-          marginTop: '2.5rem',
           backdropFilter: 'blur(15px)',
           border: '1px solid rgba(255, 140, 66, 0.2)',
           borderRadius: '20px',
