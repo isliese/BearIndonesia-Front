@@ -113,8 +113,8 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
           onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
           placeholder="제약 회사명, 의약품명 등을 검색해보세요!"
           style={{
-            width: '100%',
-            padding: '1em 0.9rem 1em 1rem',
+            width: '98%',
+            padding: '1em 0.2rem 1em 1rem',
             fontSize: '1.2rem',
             border: '2px solid rgba(255, 140, 66, 0.3)',
             borderRadius: '50px',
@@ -129,7 +129,7 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
           onClick={handleSearch}
           style={{
             position: 'absolute',
-            right: '12px',
+            right: '10px',
             top: '50%',
             transform: 'translateY(-50%)',
             background: '#ff8c42',
