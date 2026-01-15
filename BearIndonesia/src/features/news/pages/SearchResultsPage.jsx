@@ -456,8 +456,8 @@ const SearchResultsPage = ({ setSelectedNews }) => {
         onClick={() => navigate(location.state?.from || '/news')}
         style={{
           position: 'absolute',
-          top: '1rem',
-          left: '2rem',
+          top: '5rem',
+          left: '6rem',
           background: 'rgba(255, 255, 255, 0.1)',
           border: '1px solid rgba(255, 140, 66, 0.5)',
           borderRadius: '50%',
