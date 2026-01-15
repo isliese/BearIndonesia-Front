@@ -129,8 +129,8 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
           onClick={handleSearch}
           style={{
             position: 'absolute',
-            right: '-20px',
-            top: '2.85%',
+            right: '12px',
+            top: '50%',
             transform: 'translateY(-50%)',
             background: '#ff8c42',
             border: 'none',
@@ -144,12 +144,23 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
           검색
         </button>
 
+      </div>
+
+      <div style={{
+        width: '100%',
+        maxWidth: '1200px',
+        marginTop: '2.5rem',
+        display: 'flex',
+        gap: '2rem',
+        justifyContent: 'center',
+        alignItems: 'stretch',
+        flexWrap: 'wrap'
+      }}>
         {/* News Stand Section */}
         <div style={{
           width: '100%',
-          maxWidth: '1200px',
+          flex: '1 1 480px',
           background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(15, 52, 96, 0.15))',
-          marginTop: '2.5rem',
           backdropFilter: 'blur(15px)',
           border: '1px solid rgba(255, 255, 255, 0.12)',
           borderRadius: '20px',
@@ -236,9 +247,8 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
         {/* Top Headlines Section */}
         <div style={{
           width: '100%',
-          maxWidth: '1200px',
+          flex: '1 1 480px',
           background: 'linear-gradient(135deg, rgba(255, 140, 66, 0.1), rgba(255, 167, 38, 0.05))',
-          marginTop: '2.5rem',
           backdropFilter: 'blur(15px)',
           border: '1px solid rgba(255, 140, 66, 0.2)',
           borderRadius: '20px',
