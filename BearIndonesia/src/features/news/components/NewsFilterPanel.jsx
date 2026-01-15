@@ -67,7 +67,7 @@ const NewsFilterPanel = ({
               정렬
             </div>
             <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
-              {["최신순", "오래된순", "정확도순", "관련도순"].map((sort) => (
+              {["최신순", "오래된순", "정확도순"].map((sort) => (
                 <button
                   key={sort}
                   onClick={() => setSortOrder(sort)}

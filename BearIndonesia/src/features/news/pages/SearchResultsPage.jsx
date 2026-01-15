@@ -94,7 +94,7 @@ const getMatchTypeLabel = (matchType) => {
   }
 };
 
-/** tagsJson 혹은 article.tags를 안전하게 배열 문자열로 변환 */
+/* tagsJson 혹은 article.tags를 안전하게 배열 문자열로 변환 */
 const parseTags = (article) => {
   if (Array.isArray(article?.tags)) {
     return article.tags
