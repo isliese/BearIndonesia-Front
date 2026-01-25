@@ -1,9 +1,7 @@
 // 분야별 뉴스 페이지 - 레거시 버전
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import {
-  getAllArticles
-} from "../../../data/totalData";
+import { fetchAllArticles } from "../../../api/articleApi";
 
 /* -------------------- 유틸 함수 -------------------- */
 const getInitials = (name = "") => {
@@ -35,11 +33,30 @@ const renderHighlighted = (text = "") => {
 /* -------------------- 컴포넌트 -------------------- */
 const SectionNewsPage = ({ setSelectedNews }) => {
   const [activeTag, setActiveTag] = useState("all");
+  const [allNews, setAllNews] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
 
   // 6개 파일에서 합쳐진 전체 기사 로드
-  const allNews = useMemo(() => getAllArticles(), []);
+  useEffect(() => {
+    let active = true;
+    setLoading(true);
+    fetchAllArticles()
+      .then((data) => {
+        if (active) setAllNews(Array.isArray(data) ? data : []);
+      })
+      .catch((err) => {
+        console.error("Failed to load articles", err);
+        if (active) setAllNews([]);
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const tags = [
     { id: "all", label: "전체" },
@@ -242,7 +259,9 @@ const SectionNewsPage = ({ setSelectedNews }) => {
             분야별 뉴스
           </h1>
 
-          {filteredNews.length > 0 ? (
+          {loading ? (
+            <p style={{ color: "#bbb" }}>Loading...</p>
+          ) : filteredNews.length > 0 ? (
             <div
               style={{
                 display: "grid",

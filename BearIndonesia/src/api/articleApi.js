@@ -6,3 +6,7 @@ export const searchArticles = ({ query, sortBy = "relevance", filterType = "all"
     body: { query, sortBy, filterType },
   });
 };
+
+export const fetchAllArticles = () => {
+  return request("/api/articles");
+};
