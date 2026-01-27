@@ -25,7 +25,7 @@ const NewsDetailPage = ({ news }) => {
   const semanticConfidence = news.semanticConfidence ?? null;
   const tagMismatch = news.tagMismatch ?? false;
   const categoryMismatch = news.categoryMismatch ?? false;
-  const showMismatch = import.meta.env.MODE !== "production";
+  const showDev = import.meta.env.MODE !== "production";
   const imageURL = news.img || '';
   const contentKO = news.korContent || '';
   const contentID = news.content || '';
@@ -122,10 +122,9 @@ const NewsDetailPage = ({ news }) => {
               }}>
                 {titleLang === "ko" ? titleKO : titleID}
               </h1>
-        {showMismatch && (
+        {showDev && (tagMismatch || categoryMismatch) && (
           <div style={{ marginTop: '0.6rem', fontSize: '0.9rem', color: '#c8c8c8' }}>
-            Semantic: {semanticConfidence !== null ? semanticConfidence.toFixed(3) : 'N/A'}
-            {tagMismatch ? ' · tag_mismatch' : ''}{categoryMismatch ? ' · category_mismatch' : ''}
+            Review needed{tagMismatch ? ' (tag_mismatch)' : ''}{categoryMismatch ? ' (category_mismatch)' : ''}
           </div>
         )}
 
