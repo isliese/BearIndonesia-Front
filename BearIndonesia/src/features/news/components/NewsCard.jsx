@@ -31,20 +31,25 @@ const NewsCard = ({ article, onOpen }) => {
   const koSummary = article.korSummary || "";
   const author = article.source || "";
   const avatar = getInitials(author);
+  const isMismatch = Boolean(article.tagMismatch || article.categoryMismatch);
+  const showMismatch = import.meta.env.MODE !== "production";
+  const dimmed = showMismatch && isMismatch;
 
   return (
     <div
       onClick={onOpen}
       style={{
         position: "relative",
-        background: "rgba(255, 255, 255, 0.1)",
+        background: dimmed ? "rgba(255, 255, 255, 0.06)" : "rgba(255, 255, 255, 0.1)",
         backdropFilter: "blur(10px)",
         borderRadius: "16px",
         padding: "1.2rem",
         transition: "all 0.25s ease",
         cursor: "pointer",
         overflow: "hidden",
-        border: "1px solid rgba(255,255,255,0.12)",
+        border: dimmed ? "1px solid rgba(255,255,255,0.08)" : "1px solid rgba(255,255,255,0.12)",
+        opacity: dimmed ? 0.6 : 1,
+        filter: dimmed ? "grayscale(0.6)" : "none",
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.transform = "translateY(-2px)";
@@ -55,6 +60,24 @@ const NewsCard = ({ article, onOpen }) => {
         e.currentTarget.style.boxShadow = "none";
       }}
     >
+      {dimmed && (
+        <div
+          style={{
+            position: "absolute",
+            top: "12px",
+            right: "12px",
+            background: "rgba(255, 140, 66, 0.15)",
+            color: "#ffb36b",
+            border: "1px solid rgba(255, 140, 66, 0.35)",
+            borderRadius: "12px",
+            padding: "0.2rem 0.5rem",
+            fontSize: "0.75rem",
+            fontWeight: 600,
+          }}
+        >
+          검증 필요
+        </div>
+      )}
       <div style={{ display: "flex", alignItems: "center", marginBottom: "0.8rem" }}>
         <div
           style={{
