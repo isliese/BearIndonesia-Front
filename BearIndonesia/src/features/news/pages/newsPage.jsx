@@ -109,6 +109,7 @@ const UnifiedNewsPage = ({ setSelectedNews }) => {
           ...item,
           date: item?.publishedDate ?? item?.date ?? "",
           translated: item?.translated ?? item?.korContent ?? "",
+          idSummary: item?.idSummary ?? item?.id_summary ?? "",
           tags: normalizeTags(item?.tags),
         }));
         if (isMounted) {

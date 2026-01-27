@@ -21,7 +21,7 @@ const NewsDetailPage = ({ news }) => {
   const titleKO   = news.korTitle || '';
   const titleID   = news.title || '';
   const summaryKO = news.korSummary || '';
-  const summaryID = news.summary || '';
+  const summaryID = news.idSummary || news.summary || '';
   const imageURL = news.img || '';
   const contentKO = news.korContent || '';
   const contentID = news.content || '';

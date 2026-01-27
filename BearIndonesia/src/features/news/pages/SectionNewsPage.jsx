@@ -276,6 +276,7 @@ const SectionNewsPage = ({ setSelectedNews }) => {
                     ...news,
                     korTitle: news.korTitle || news.title,
                     korSummary: news.korSummary || news.summary || "",
+                    idSummary: news.idSummary || news.summary || "",
                   }}
                   onOpen={() => {
                     setSelectedNews?.(news);
