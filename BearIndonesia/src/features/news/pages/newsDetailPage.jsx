@@ -25,7 +25,7 @@ const NewsDetailPage = ({ news }) => {
   const imageURL = news.img || '';
   const contentKO = news.korContent || '';
   const contentID = news.content || '';
-  const insight   = news.importanceRationale || news.importance_rationale || '';
+  const insight   = news.insight || news.insight || '';
   const author    = news.source || '';
   const date      = news.date || '';
   const link      = news.link || '';
