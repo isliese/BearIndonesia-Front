@@ -23,13 +23,13 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
       setNewsLoading(true);
       setNewsError("");
       try {
-        const response = await fetch("/api/news?sortBy=importance", { signal: controller.signal });
+        const response = await fetch("/api/articles", { signal: controller.signal });
         if (!response.ok) {
           const errorText = await response.text();
           throw new Error(`HTTP ${response.status}: ${errorText || response.statusText}`);
         }
         const data = await response.json();
-        const results = Array.isArray(data?.results) ? data.results : [];
+        const results = Array.isArray(data) ? data : Array.isArray(data?.results) ? data.results : [];
         const normalized = results.map((item) => ({
           ...item,
           date: item?.publishedDate ?? item?.date ?? "",

@@ -32,6 +32,7 @@ const UnifiedNewsPage = ({ setSelectedNews }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [loadError, setLoadError] = useState("");
   const mainContentRef = useRef(null);
+  const hasRestoredRef = useRef(false);
   const navigate = useNavigate();
   const location = useLocation();
   
@@ -86,6 +87,8 @@ const UnifiedNewsPage = ({ setSelectedNews }) => {
     }
     return [];
   };
+
+
 
   useEffect(() => {
     let isMounted = true;
@@ -152,25 +155,6 @@ const UnifiedNewsPage = ({ setSelectedNews }) => {
 
   useEffect(() => {
     setActiveTags([]);
-    // 카테고리 변경 시 스크롤을 맨 위로 초기화
-    // DOM 업데이트 후 스크롤하기 위해 setTimeout 사용
-    setTimeout(() => {
-      // 메인 앱의 스크롤 컨테이너 찾기 (mainApp의 contentRef)
-      // 부모 요소를 따라 올라가면서 overflowY: auto인 요소 찾기
-      let element = mainContentRef.current;
-      while (element && element.parentElement) {
-        const style = window.getComputedStyle(element.parentElement);
-        if (style.overflowY === 'auto' || style.overflowY === 'scroll') {
-          element.parentElement.scrollTo({ top: 0, behavior: 'smooth' });
-          break;
-        }
-        element = element.parentElement;
-      }
-      // window 스크롤도 함께
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      document.documentElement.scrollTo({ top: 0, behavior: 'smooth' });
-      document.body.scrollTo({ top: 0, behavior: 'smooth' });
-    }, 100);
   }, [activeSection]);
 
   // localStorage에 필터 상태 저장 (옵션 유지 활성화 시)
@@ -351,7 +335,6 @@ const UnifiedNewsPage = ({ setSelectedNews }) => {
   ref: `A1:${XLSX.utils.encode_col(Object.keys(sheetData[0]).length - 1)}1`,
 };
 
-
   //  열 너비 고정 (가독성 핵심)
   ws["!cols"] = [
     { wch: 12 }, // 날짜
@@ -475,8 +458,8 @@ const UnifiedNewsPage = ({ setSelectedNews }) => {
         <NewsGrid
           articles={filtered}
           onOpen={(article) => {
-            setSelectedNews(article);
-            navigate("/news/detail", { state: { from: location.pathname } });
+            setSelectedNews?.(article);
+            navigate("/news/detail", { state: { from: `${location.pathname}${location.search}` } });
           }}
         />
       </div>

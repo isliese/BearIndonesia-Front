@@ -279,7 +279,7 @@ const SectionNewsPage = ({ setSelectedNews }) => {
                   }}
                   onOpen={() => {
                     setSelectedNews?.(news);
-                    navigate("/news/detail", { state: { from: location.pathname } });
+                    navigate("/news/detail", { state: { from: `${location.pathname}${location.search}` } });
                   }}
                 />
               ))}

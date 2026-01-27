@@ -11,18 +11,11 @@ import SearchResultsPage from './features/news/pages/SearchResultsPage.jsx';
 
 const MainApp = () => {
   const [selectedNews, setSelectedNews] = useState(null);
-  const contentRef = useRef(null);
   const location = useLocation();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    // ?˜ì´ì§€ ë³€ê²???ì»¨í…ì¸??ì—­ ?¤í¬ë¡¤ì„ ë§??„ë¡œ
-    if (contentRef.current) {
-      contentRef.current.scrollTo({ top: 0, left: 0, behavior: 'auto' });
-    }
-  }, [location.pathname]);
 
-  // ê²€??ì²˜ë¦¬ ?¨ìˆ˜
+  // 검색 처리 함수
   const handleSearch = (term) => {
     if (term && term.trim()) {
       const trimmed = term.trim();
@@ -42,12 +35,13 @@ const MainApp = () => {
       flexDirection: 'column',
       overflow: 'hidden'
     }}>
-      {/* ê³ ì •???¤ë¹„ê²Œì´??*/}
+      {/* 고정 네비게이션 */}
       <Navigation />
       
-      {/* ?¤í¬ë¡?ê°€?¥í•œ ì»¨í…ì¸??ì—­ */}
+      {/* 스크롤 가능한 콘텐츠 영역 */}
       <div 
-        ref={contentRef}
+    
+    
         style={{
           flex: 1,
           overflowY: 'auto',

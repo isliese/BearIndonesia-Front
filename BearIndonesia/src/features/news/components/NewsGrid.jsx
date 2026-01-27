@@ -16,9 +16,9 @@ const NewsGrid = ({ articles, onOpen }) => {
       }}
     >
       {articles.length > 0 ? (
-        articles.map((article) => (
+        articles.map((article, index) => (
           <NewsCard
-            key={article.id}
+            key={article.id ?? article.link ?? `${article.title ?? "news"}-${article.date ?? "na"}-${index}`}
             article={article}
             onOpen={() => onOpen(article)}
           />
