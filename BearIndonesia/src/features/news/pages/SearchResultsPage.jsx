@@ -653,7 +653,12 @@ const SearchResultsPage = ({ setSelectedNews }) => {
                 searchTerm={searchTerm}
                 onTagClick={toggleTag}
                 onOpen={() => {
-                  if (setSelectedNews) setSelectedNews(article);
+                  if (setSelectedNews) setSelectedNews({
+                    ...article,
+                    semanticConfidence: article?.semanticConfidence ?? article?.semantic_confidence ?? null,
+                    tagMismatch: article?.tagMismatch ?? article?.tag_mismatch ?? null,
+                    categoryMismatch: article?.categoryMismatch ?? article?.category_mismatch ?? null,
+                  });
                   navigate('/news/detail', { state: { from: `${location.pathname}${location.search}` } });
                 }}
               />

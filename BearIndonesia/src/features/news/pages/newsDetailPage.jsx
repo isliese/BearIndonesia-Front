@@ -22,6 +22,9 @@ const NewsDetailPage = ({ news }) => {
   const titleID   = news.title || '';
   const summaryKO = news.korSummary || '';
   const summaryID = news.idSummary || news.summary || '';
+  const semanticConfidence = news.semanticConfidence ?? null;
+  const tagMismatch = news.tagMismatch ?? false;
+  const categoryMismatch = news.categoryMismatch ?? false;
   const imageURL = news.img || '';
   const contentKO = news.korContent || '';
   const contentID = news.content || '';
@@ -118,6 +121,10 @@ const NewsDetailPage = ({ news }) => {
               }}>
                 {titleLang === "ko" ? titleKO : titleID}
               </h1>
+        <div style={{ marginTop: '0.6rem', fontSize: '0.9rem', color: '#c8c8c8' }}>
+          Semantic: {semanticConfidence !== null ? semanticConfidence.toFixed(3) : 'N/A'}
+          {tagMismatch ? ' ? tag_mismatch' : ''}{categoryMismatch ? ' ? category_mismatch' : ''}
+        </div>
 
               <select
                 value={titleLang}

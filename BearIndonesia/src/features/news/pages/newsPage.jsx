@@ -110,6 +110,9 @@ const UnifiedNewsPage = ({ setSelectedNews }) => {
           date: item?.publishedDate ?? item?.date ?? "",
           translated: item?.translated ?? item?.korContent ?? "",
           idSummary: item?.idSummary ?? item?.id_summary ?? "",
+          semanticConfidence: item?.semanticConfidence ?? item?.semantic_confidence ?? null,
+          tagMismatch: item?.tagMismatch ?? item?.tag_mismatch ?? null,
+          categoryMismatch: item?.categoryMismatch ?? item?.category_mismatch ?? null,
           tags: normalizeTags(item?.tags),
         }));
         if (isMounted) {
