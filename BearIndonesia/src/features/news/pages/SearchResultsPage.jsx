@@ -654,7 +654,7 @@ const SearchResultsPage = ({ setSelectedNews }) => {
                 onTagClick={toggleTag}
                 onOpen={() => {
                   if (setSelectedNews) setSelectedNews(article);
-                  navigate('/news/detail', { state: { from: location.pathname } });
+                  navigate('/news/detail', { state: { from: `${location.pathname}${location.search}` } });
                 }}
               />
             ))}
