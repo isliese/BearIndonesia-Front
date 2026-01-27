@@ -197,6 +197,7 @@ const SearchCard = ({ article, onOpen, searchTerm, onTagClick }) => {
         overflow: "hidden",
         border: "1px solid rgba(255, 140, 66, 0.2)",
       }}
+      onClick={onOpen}
       onMouseEnter={(e) => {
         e.currentTarget.style.transform = "translateY(-5px)";
         e.currentTarget.style.boxShadow = "0 8px 25px rgba(255, 140, 66, 0.15)";
@@ -241,7 +242,6 @@ const SearchCard = ({ article, onOpen, searchTerm, onTagClick }) => {
       </div>
 
       <div 
-        onClick={onOpen}
         style={{ 
           fontSize: "1.25rem", 
           fontWeight: "bold", 
