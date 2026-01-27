@@ -1,7 +1,6 @@
 // 홈 페이지
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import septemberData from "../../../data/september.json";
 import BpomLogo from "../../../assets/images/BPOM.jpg";
 import CnbcLogo from "../../../assets/images/CNBC.png";
 import CnnLogo from "../../../assets/images/CNN.png";
@@ -12,13 +11,59 @@ import MohLogo from "../../../assets/images/MOH.png";
 const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [newsItems, setNewsItems] = useState([]);
+  const [newsError, setNewsError] = useState("");
+  const [newsLoading, setNewsLoading] = useState(false);
+
+  useEffect(() => {
+    let isMounted = true;
+    const controller = new AbortController();
+
+    const load = async () => {
+      setNewsLoading(true);
+      setNewsError("");
+      try {
+        const response = await fetch("/api/news?sortBy=importance", { signal: controller.signal });
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`HTTP ${response.status}: ${errorText || response.statusText}`);
+        }
+        const data = await response.json();
+        const results = Array.isArray(data?.results) ? data.results : [];
+        const normalized = results.map((item) => ({
+          ...item,
+          date: item?.publishedDate ?? item?.date ?? "",
+        }));
+        if (isMounted) {
+          setNewsItems(normalized);
+        }
+      } catch (err) {
+        if (err.name === "AbortError") return;
+        if (isMounted) {
+          setNewsError(err.message || "뉴스 데이터를 불러오지 못했습니다.");
+          setNewsItems([]);
+        }
+      } finally {
+        if (isMounted) {
+          setNewsLoading(false);
+        }
+      }
+    };
+
+    load();
+
+    return () => {
+      isMounted = false;
+      controller.abort();
+    };
+  }, []);
+
   const topHeadlines = useMemo(() => {
-    const arr = Array.isArray(septemberData) ? septemberData : [septemberData];
-    return arr
-      .filter(a => typeof a?.importance === "number")
+    return newsItems
+      .filter((a) => typeof a?.importance === "number")
       .sort((a, b) => (b.importance ?? 0) - (a.importance ?? 0))
       .slice(0, 6);
-  }, []);
+  }, [newsItems]);
 
   const [searchTerm, setSearchTerm] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
@@ -285,6 +330,16 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
             display: 'grid', 
             gap: '0.8rem' 
           }}>
+            {newsLoading && (
+              <li style={{ color: '#b0b0b0', textAlign: 'center', padding: '0.5rem 0' }}>
+                뉴스 데이터를 불러오는 중...
+              </li>
+            )}
+            {!newsLoading && newsError && (
+              <li style={{ color: '#ff8c42', textAlign: 'center', padding: '0.5rem 0' }}>
+                {newsError}
+              </li>
+            )}
             {topHeadlines.map(item => (
               <li 
                 key={item.id} 

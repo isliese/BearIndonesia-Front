@@ -3,7 +3,6 @@
 import React, { useMemo, useState, useCallback, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import * as XLSX from "xlsx";
-import septemberData from "../../../data/september.json";
 // 컴포넌트 imports
 import NewsFilterPanel from "../components/NewsFilterPanel";
 import NewsGrid from "../components/NewsGrid";
@@ -29,6 +28,9 @@ const UnifiedNewsPage = ({ setSelectedNews }) => {
   const [showWordCloud, setShowWordCloud] = useState(false);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [articles, setArticles] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [loadError, setLoadError] = useState("");
   const mainContentRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
@@ -57,15 +59,77 @@ const UnifiedNewsPage = ({ setSelectedNews }) => {
   const [newsletterYear, setNewsletterYear] = useState(2025);
   const [newsletterMonth, setNewsletterMonth] = useState(9);
 
-  const articles = useMemo(() => {
-    return (Array.isArray(septemberData) ? septemberData : [septemberData]).map((a) => ({
-      ...a,
-      tags: Array.isArray(a.tags)
-        ? a.tags.map((t) =>
-            typeof t === "string" ? { name: t } : { ...t, name: String(t?.name ?? "").trim() }
-          )
-        : [],
-    }));
+  const normalizeTags = (value) => {
+    if (Array.isArray(value)) {
+      return value
+        .map((t) => (typeof t === "string" ? { name: t } : { ...t, name: String(t?.name ?? "").trim() }))
+        .filter((t) => t.name);
+    }
+    if (typeof value === "string") {
+      try {
+        const parsed = JSON.parse(value);
+        if (Array.isArray(parsed)) {
+          return parsed
+            .map((t) => (typeof t === "string" ? { name: t } : { ...t, name: String(t?.name ?? "").trim() }))
+            .filter((t) => t.name);
+        }
+      } catch {
+        return value
+          .split(",")
+          .map((t) => ({ name: t.trim() }))
+          .filter((t) => t.name);
+      }
+    }
+    if (value && typeof value === "object") {
+      const name = String(value?.name ?? "").trim();
+      return name ? [{ name }] : [];
+    }
+    return [];
+  };
+
+  useEffect(() => {
+    let isMounted = true;
+    const controller = new AbortController();
+
+    const load = async () => {
+      setIsLoading(true);
+      setLoadError("");
+      try {
+        const response = await fetch("/api/news?sortBy=date", { signal: controller.signal });
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`HTTP ${response.status}: ${errorText || response.statusText}`);
+        }
+        const data = await response.json();
+        const results = Array.isArray(data?.results) ? data.results : [];
+        const normalized = results.map((item) => ({
+          ...item,
+          date: item?.publishedDate ?? item?.date ?? "",
+          translated: item?.translated ?? item?.korContent ?? "",
+          tags: normalizeTags(item?.tags),
+        }));
+        if (isMounted) {
+          setArticles(normalized);
+        }
+      } catch (err) {
+        if (err.name === "AbortError") return;
+        if (isMounted) {
+          setLoadError(err.message || "뉴스 데이터를 불러오지 못했습니다.");
+          setArticles([]);
+        }
+      } finally {
+        if (isMounted) {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    load();
+
+    return () => {
+      isMounted = false;
+      controller.abort();
+    };
   }, []);
 
   const tagCount = useMemo(() => {
@@ -396,6 +460,17 @@ const UnifiedNewsPage = ({ setSelectedNews }) => {
           activeTags={activeTags}
           setActiveTags={setActiveTags}
         />
+
+        {isLoading && (
+          <div style={{ textAlign: "center", color: "#999", padding: "1rem 0" }}>
+            뉴스 데이터를 불러오는 중...
+          </div>
+        )}
+        {!isLoading && loadError && (
+          <div style={{ textAlign: "center", color: "#ff8c42", padding: "1rem 0" }}>
+            {loadError}
+          </div>
+        )}
 
         <NewsGrid
           articles={filtered}

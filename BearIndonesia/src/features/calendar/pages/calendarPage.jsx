@@ -1,10 +1,6 @@
 // 인터렉티브 캘린더 페이지
 import React, { useState, useEffect, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { 
-  getNewsForDate, 
-  getNewsCount
-} from '../../../data/totalData';
 
 const CalendarPage = ({ setSelectedNews }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
