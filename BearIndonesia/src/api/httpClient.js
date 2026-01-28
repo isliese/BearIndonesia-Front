@@ -30,7 +30,9 @@ const request = async (path, options = {}) => {
   if (responseType === "blob") return response.blob();
   if (responseType === "text") return response.text();
   if (response.status === 204) return null;
-  return response.json();
+  const text = await response.text();
+  if (!text) return null;
+  return JSON.parse(text);
 };
 
 export { request };
