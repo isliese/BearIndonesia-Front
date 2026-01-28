@@ -89,6 +89,7 @@ const ScrappedNewsPage = ({ setSelectedNews }) => {
                   key={item.key}
                   onClick={() => {
                     setSelectedNews?.(item);
+                    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
                     navigate("/news/detail", { state: { from: location.pathname } });
                   }}
                   style={{
