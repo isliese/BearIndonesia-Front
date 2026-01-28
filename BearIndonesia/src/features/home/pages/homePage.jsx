@@ -7,6 +7,7 @@ import CnnLogo from "../../../assets/images/CNN.png";
 import DetikLogo from "../../../assets/images/detik.png";
 import FarmasetikaLogo from "../../../assets/images/farmasetika.webp";
 import MohLogo from "../../../assets/images/MOH.png";
+import ScrapStarButton from "../../../components/ScrapStarButton";
 
 const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
   const navigate = useNavigate();
@@ -32,6 +33,7 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
         const results = Array.isArray(data) ? data : Array.isArray(data?.results) ? data.results : [];
         const normalized = results.map((item) => ({
           ...item,
+          id: item?.id ?? item?.rawNewsId ?? item?.raw_news_id ?? null,
           date: item?.publishedDate ?? item?.date ?? "",
         }));
         if (isMounted) {
@@ -384,17 +386,20 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
                     {item.date} · {item.source}
                   </div>
                 </div>
-                <span style={{
-                  fontSize: '0.8rem',
-                  color: '#ff8c42',
-                  border: '1px solid rgba(255,140,66,0.35)',
-                  background: 'rgba(255,140,66,0.10)',
-                  padding: '0.25rem 0.5rem',
-                  borderRadius: '10px',
-                  whiteSpace: 'nowrap'
-                }}>
-                  중요도 {item.importance ?? 0}
-                </span>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
+                  <ScrapStarButton article={item} size={16} />
+                  <span style={{
+                    fontSize: '0.8rem',
+                    color: '#ff8c42',
+                    border: '1px solid rgba(255,140,66,0.35)',
+                    background: 'rgba(255,140,66,0.10)',
+                    padding: '0.25rem 0.5rem',
+                    borderRadius: '10px',
+                    whiteSpace: 'nowrap'
+                  }}>
+                    중요도 {item.importance ?? 0}
+                  </span>
+                </div>
               </li>
             ))}
           </ul>

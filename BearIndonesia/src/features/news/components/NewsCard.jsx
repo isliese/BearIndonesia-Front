@@ -1,6 +1,7 @@
 // 뉴스 카드 컴포넌트
 
 import React from "react";
+import ScrapStarButton from "../../../components/ScrapStarButton";
 
 function getInitials(text = "") {
   const s = String(text).trim();
@@ -35,6 +36,10 @@ const NewsCard = ({ article, onOpen }) => {
   const showMismatch = import.meta.env.MODE !== "production";
   const dimmed = showMismatch && isMismatch;
 
+  const starStyle = dimmed
+    ? { position: "absolute", top: "12px", left: "12px" }
+    : { position: "absolute", top: "12px", right: "12px" };
+
   return (
     <div
       onClick={onOpen}
@@ -60,6 +65,7 @@ const NewsCard = ({ article, onOpen }) => {
         e.currentTarget.style.boxShadow = "none";
       }}
     >
+      <ScrapStarButton article={article} style={starStyle} />
       {dimmed && (
         <div
           style={{

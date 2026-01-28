@@ -8,6 +8,12 @@ import AboutPage from './features/about/pages/aboutPage.jsx';
 import SectionNewsPage from './features/news/pages/SectionNewsPage.jsx';
 import NewsDetailPage from './features/news/pages/newsDetailPage.jsx';
 import SearchResultsPage from './features/news/pages/SearchResultsPage.jsx';
+import LoginPage from './features/auth/pages/loginPage.jsx';
+import SignupPage from './features/auth/pages/signupPage.jsx';
+import ProfilePage from './features/auth/pages/profilePage.jsx';
+import ScrappedNewsPage from './features/auth/pages/scrappedNewsPage.jsx';
+import { fetchMe } from './api/authApi';
+import { getAuthToken, setAuthSession, clearAuthSession } from './utils/auth';
 
 const MainApp = () => {
   const [selectedNews, setSelectedNews] = useState(null);
@@ -23,6 +29,24 @@ const MainApp = () => {
       // Ignore storage failures.
     }
   }, [selectedNews]);
+
+  useEffect(() => {
+    let active = true;
+    const token = getAuthToken();
+    if (!token) return undefined;
+    fetchMe()
+      .then((user) => {
+        if (!active) return;
+        setAuthSession({ token, user });
+      })
+      .catch(() => {
+        if (!active) return;
+        clearAuthSession();
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
 
   // 검색 처리 함수
   const handleSearch = (term) => {
@@ -75,6 +99,10 @@ const MainApp = () => {
             element={<CalendarPage setSelectedNews={setSelectedNews} />}
           />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/scrap" element={<ScrappedNewsPage setSelectedNews={setSelectedNews} />} />
           <Route
             path="/news/detail"
             element={<NewsDetailPage news={selectedNews} />}

@@ -6,6 +6,10 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
+      '/auth': {
+        target: 'http://localhost:8080', // Spring Boot 서버
+        changeOrigin: true,
+      },
       '/api': {
         target: 'http://localhost:8080', // Spring Boot 서버
         changeOrigin: true,

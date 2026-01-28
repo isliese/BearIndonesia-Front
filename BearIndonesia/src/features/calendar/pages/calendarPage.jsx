@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { fetchAllArticles } from "../../../api/articleApi";
+import ScrapStarButton from "../../../components/ScrapStarButton";
 
 const CalendarPage = ({ setSelectedNews }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -318,8 +319,11 @@ const CalendarPage = ({ setSelectedNews }) => {
                   onMouseEnter={(e) => { e.currentTarget.style.opacity = 0.75; }}
                   onMouseLeave={(e) => { e.currentTarget.style.opacity = 1; }}
                 >
-                  <div style={{ fontSize: '0.95rem', color: 'white', marginBottom: '0.4rem', lineHeight: 1.35 }}>
-                    {news.korTitle || news.title || '제목 없음'}
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "0.6rem" }}>
+                    <div style={{ fontSize: '0.95rem', color: 'white', marginBottom: '0.4rem', lineHeight: 1.35 }}>
+                      {news.korTitle || news.title || '제목 없음'}
+                    </div>
+                    <ScrapStarButton article={news} size={16} />
                   </div>
                   <div style={{ fontSize: '0.8rem', color: '#ccc', marginBottom: '0.4rem' }}>
                     {news.displayDate}

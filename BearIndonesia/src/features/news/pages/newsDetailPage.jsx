@@ -1,6 +1,7 @@
 // 뉴스 상세 페이지
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import ScrapStarButton from '../../../components/ScrapStarButton';
 
 const NewsDetailPage = ({ news }) => {
   const [titleLang, setTitleLang] = useState("ko"); 
@@ -137,23 +138,26 @@ const NewsDetailPage = ({ news }) => {
           </div>
         )}
 
-              <select
-                value={titleLang}
-                onChange={(e) => setTitleLang(e.target.value)}
-                style={{
-                  background: "rgba(255,255,255,0.15)",
-                  color: "white",
-                  border: "1px solid rgba(255,255,255,0.3)",
-                  borderRadius: "8px",
-                  padding: "0.5rem 0.8rem",
-                  fontSize: "0.9rem",
-                  cursor: "pointer",
-                  flexShrink: 0
-                }}
-              >
-                <option value="ko" style={{color: 'black'}}>한국어 제목</option>
-                <option value="id" style={{color: 'black'}}>원문 제목</option>
-              </select>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", flexShrink: 0 }}>
+                <ScrapStarButton article={resolvedNews} size={18} />
+                <select
+                  value={titleLang}
+                  onChange={(e) => setTitleLang(e.target.value)}
+                  style={{
+                    background: "rgba(255,255,255,0.15)",
+                    color: "white",
+                    border: "1px solid rgba(255,255,255,0.3)",
+                    borderRadius: "8px",
+                    padding: "0.5rem 0.8rem",
+                    fontSize: "0.9rem",
+                    cursor: "pointer",
+                    flexShrink: 0
+                  }}
+                >
+                  <option value="ko" style={{color: 'black'}}>한국어 제목</option>
+                  <option value="id" style={{color: 'black'}}>원문 제목</option>
+                </select>
+              </div>
             </div>
 
             {/* 메타 */}
