@@ -19,6 +19,7 @@ const MainApp = () => {
   const [selectedNews, setSelectedNews] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
+  const scrollRef = useRef(null);
 
   useEffect(() => {
     try {
@@ -48,6 +49,32 @@ const MainApp = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const key = `${location.pathname}${location.search}`;
+    const container = scrollRef.current;
+    if (location.state?.preserveScroll) {
+      const saved = sessionStorage.getItem(`scroll:${key}`);
+      if (container && saved !== null) {
+        container.scrollTo({ top: Number(saved) || 0, left: 0, behavior: "auto" });
+      }
+      return () => {
+        if (container) {
+          sessionStorage.setItem(`scroll:${key}`, String(container.scrollTop || 0));
+        }
+      };
+    }
+    if (container && typeof container.scrollTo === "function") {
+      container.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    } else {
+      window.scrollTo(0, 0);
+    }
+    return () => {
+      if (container) {
+        sessionStorage.setItem(`scroll:${key}`, String(container.scrollTop || 0));
+      }
+    };
+  }, [location.pathname, location.search]);
+
   // 검색 처리 함수
   const handleSearch = (term) => {
     if (term && term.trim()) {
@@ -73,8 +100,7 @@ const MainApp = () => {
       
       {/* 스크롤 가능한 콘텐츠 영역 */}
       <div 
-    
-    
+        ref={scrollRef}
         style={{
           flex: 1,
           overflowY: 'auto',

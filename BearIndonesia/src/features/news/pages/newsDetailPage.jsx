@@ -73,7 +73,7 @@ const NewsDetailPage = ({ news }) => {
     <div style={{ position: 'relative', padding: '2rem 1rem', minHeight: 'calc(100vh - 80px)' }}>
       {/* 뒤로가기 */}
       <button
-        onClick={() => navigate(location.state?.from || '/news')}
+        onClick={() => navigate(location.state?.from || '/news', { state: { preserveScroll: true } })}
         style={{
           position: 'absolute',
           top: '3.5rem',
