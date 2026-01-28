@@ -1,16 +1,61 @@
 // 인터렉티브 캘린더 페이지
 import React, { useState, useEffect, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { fetchAllArticles } from "../../../api/articleApi";
 
 const CalendarPage = ({ setSelectedNews }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedRange, setSelectedRange] = useState({ start: null, end: null });
   const [isDragging, setIsDragging] = useState(false);
   const [calendarKey, setCalendarKey] = useState(0);
+  const [articles, setArticles] = useState([]);
+  const [loadError, setLoadError] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
 
   const formatDate = (date) => date.toLocaleDateString('sv-SE');
+
+  const normalizeDate = (value) => {
+    if (!value) return "";
+    const d = new Date(value);
+    if (!Number.isNaN(d.getTime())) return formatDate(d);
+    if (typeof value === "string") return value.slice(0, 10);
+    return "";
+  };
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const load = async () => {
+      setLoadError("");
+      try {
+        const data = await fetchAllArticles();
+        const results = Array.isArray(data) ? data : Array.isArray(data?.results) ? data.results : [];
+        const normalized = results.map((item) => ({
+          ...item,
+          dateKey: normalizeDate(item?.date ?? item?.publishedDate),
+        }));
+        if (isMounted) setArticles(normalized);
+      } catch (err) {
+        if (isMounted) {
+          setLoadError(err.message || "뉴스 데이터를 불러오지 못했습니다.");
+          setArticles([]);
+        }
+      }
+    };
+
+    load();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const getNewsForDate = (dateStr) => {
+    if (!dateStr) return [];
+    return articles.filter((news) => news.dateKey === dateStr);
+  };
+
+  const getNewsCount = (dateStr) => getNewsForDate(dateStr).length;
 
   const getMonthData = (date) => {
     const year = date.getFullYear();
@@ -249,7 +294,11 @@ const CalendarPage = ({ setSelectedNews }) => {
             ) : '날짜를 선택해주세요'}
           </h3>
 
-          {selectedNews.length > 0 ? (
+          {loadError ? (
+            <div style={{ textAlign: 'center', color: '#ff8c42', padding: '1.2rem' }}>
+              {loadError}
+            </div>
+          ) : selectedNews.length > 0 ? (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', maxHeight: 500, overflowY: 'auto' }}>
               {selectedNews.map((news, index) => (
                 <div 
