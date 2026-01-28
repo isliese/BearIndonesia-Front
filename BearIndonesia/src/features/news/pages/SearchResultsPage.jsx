@@ -50,7 +50,11 @@ const searchAPI = async (searchTerm, sortBy = 'relevance', filterType = 'all') =
       console.log('📋 [API] 첫 번째 결과 샘플:', data.results[0]);
     }
     
-    return data.results || [];
+    const results = Array.isArray(data.results) ? data.results : [];
+    return results.map((item) => ({
+      ...item,
+      korContent: item?.korContent ?? item?.translated ?? "",
+    }));
   } catch (error) {
     console.error('💥 [API] 검색 API 호출 실패:', {
       name: error.name,
@@ -176,7 +180,7 @@ const truncateToLines = (text, maxLines = 4) => {
 const SearchCard = ({ article, onOpen, searchTerm, onTagClick }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const koTitle = article.korTitle || article.title || "";
-  const koSummary = article.korSummary || article.translated || "";
+  const koSummary = article.korSummary || article.korContent || article.translated || "";
   const author = article.source || "";
   const avatar = getInitials(author);
   const tags = parseTags(article).slice(0, 5); // 카드에 최대 5개 노출

@@ -330,6 +330,34 @@ const NewsDetailPage = ({ news }) => {
                     </div>
                   )}
 
+                  {/* 인사이트 */}
+                  {insight && (
+                    <div style={{ marginBottom: '2rem' }}>
+                      <h3 style={{ 
+                        color: '#ff8c42', 
+                        fontSize: '1.3rem', 
+                        fontWeight: 600, 
+                        marginBottom: '1rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem'
+                      }}>
+                        💡 인사이트
+                      </h3>
+                      <div style={{ 
+                        color: '#e0e0e0', 
+                        lineHeight: 1.8,
+                        fontSize: '1.02rem',
+                        background: 'rgba(255, 140, 66, 0.08)',
+                        padding: '1.5rem',
+                        borderRadius: '12px',
+                        border: '1px solid rgba(255, 140, 66, 0.2)'
+                      }}>
+                        {insight}
+                      </div>
+                    </div>
+                  )}
+
                   {/* 뉴스 대표 이미지 */}
                   {imageURL && (
                     <div style={{
@@ -362,7 +390,7 @@ const NewsDetailPage = ({ news }) => {
                         fontWeight: 600,
                         marginBottom: '1rem'
                       }}>
-                        📄 원문
+                        📝 원문
                       </h3>
                       <div style={{
                         color: '#e0e0e0',
@@ -371,34 +399,6 @@ const NewsDetailPage = ({ news }) => {
                         whiteSpace: 'pre-wrap'
                       }}>
                         {contentKO}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* 인사이트 */}
-                  {insight && (
-                    <div style={{ marginBottom: '2rem' }}>
-                      <h3 style={{ 
-                        color: '#ff8c42', 
-                        fontSize: '1.3rem', 
-                        fontWeight: 600, 
-                        marginBottom: '1rem',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '0.5rem'
-                      }}>
-                        💡 인사이트
-                      </h3>
-                      <div style={{ 
-                        color: '#e0e0e0', 
-                        lineHeight: 1.8,
-                        fontSize: '1.02rem',
-                        background: 'rgba(255, 140, 66, 0.08)',
-                        padding: '1.5rem',
-                        borderRadius: '12px',
-                        border: '1px solid rgba(255, 140, 66, 0.2)'
-                      }}>
-                        {insight}
                       </div>
                     </div>
                   )}

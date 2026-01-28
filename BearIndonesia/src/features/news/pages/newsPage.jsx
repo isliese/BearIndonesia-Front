@@ -108,7 +108,7 @@ const UnifiedNewsPage = ({ setSelectedNews }) => {
         const normalized = results.map((item) => ({
           ...item,
           date: item?.publishedDate ?? item?.date ?? "",
-          translated: item?.translated ?? item?.korContent ?? "",
+          korContent: item?.korContent ?? item?.translated ?? "",
           idSummary: item?.idSummary ?? item?.id_summary ?? "",
           semanticConfidence: item?.semanticConfidence ?? item?.semantic_confidence ?? null,
           tagMismatch: item?.tagMismatch ?? item?.tag_mismatch ?? null,
@@ -327,7 +327,7 @@ const UnifiedNewsPage = ({ setSelectedNews }) => {
     요약_한국어: a.korSummary || "",
     헤드라인_영어: a.engTitle || "",
     요약_영어: a.engSummary || "",
-    본문_한국어: a.translated || "",
+    본문_한국어: a.korContent || "",
     본문_인도네시아어: a.content || "",
     링크: a.link || "",
     중요도: a.importance ?? "",
