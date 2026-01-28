@@ -1,12 +1,16 @@
 // 공통 nav바 컴포넌트
 
-import React, { useState } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import AReumiUser from '../assets/images/AReumi_User.png';
+import { clearAuthSession, getAuthUser, getDisplayName } from '../utils/auth';
+import { clearScrapCache } from '../utils/scrapStorage';
 
 const Navigation = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [authUser, setAuthUser] = useState(() => getAuthUser());
   const navigate = useNavigate();
+  const location = useLocation();
 
   const navItems = [
     { id: 'about', label: '서비스 소개', to: '/about' },
@@ -15,6 +19,18 @@ const Navigation = () => {
   ];
 
   const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
+  const closeDropdown = () => setDropdownOpen(false);
+
+  useEffect(() => {
+    const update = () => setAuthUser(getAuthUser());
+    update();
+    window.addEventListener("authchange", update);
+    window.addEventListener("storage", update);
+    return () => {
+      window.removeEventListener("authchange", update);
+      window.removeEventListener("storage", update);
+    };
+  }, []);
 
   return (
     <nav style={{
@@ -89,66 +105,99 @@ const Navigation = () => {
               border: '1px solid rgba(255, 255, 255, 0.1)',
               overflow: 'hidden', zIndex: 1000
             }}>
-              {/* 사용자 정보 */}
-              <div style={{
-                padding: '16px',
-                borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '12px'
-              }}>
-                <div style={{
-                  width: '32px',
-                  height: '32px',
-                  borderRadius: '50%',
-                  background: '#f5e6d3',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  border: '1px solid #d4a574'
-                }}>
-                  <img
-                    src={AReumiUser}
-                    alt="User Avatar"
-                    style={{ width: '30px', height: '30px', borderRadius: '50%' }}
-                  />
-                </div>
-                <div>
-                  <div style={{ color: 'white', fontWeight: 'bold', fontSize: '14px' }}>
-                    User
+              {authUser ? (
+                <>
+                  {/* 사용자 정보 */}
+                  <div style={{
+                    padding: '16px',
+                    borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '12px'
+                  }}>
+                    <div style={{
+                      width: '32px',
+                      height: '32px',
+                      borderRadius: '50%',
+                      background: '#f5e6d3',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      border: '1px solid #d4a574'
+                    }}>
+                      <img
+                        src={AReumiUser}
+                        alt="User Avatar"
+                        style={{ width: '30px', height: '30px', borderRadius: '50%' }}
+                      />
+                    </div>
+                    <div>
+                      <div style={{ color: 'white', fontWeight: 'bold', fontSize: '14px' }}>
+                        {getDisplayName(authUser)}
+                      </div>
+                      <div style={{ color: '#888', fontSize: '12px' }}>
+                        {authUser.email || "User"}
+                      </div>
+                    </div>
                   </div>
-                  <div style={{ color: '#888', fontSize: '12px' }}>
-                    AReumi_User_ID
+
+                  {/* 메뉴 아이템 */}
+                  <div style={{ padding: '8px 0' }}>
+                    <button
+                      onClick={() => {
+                        navigate('/profile', { state: { from: location.pathname } });
+                        closeDropdown();
+                      }}
+                      style={menuButtonStyle}
+                      onMouseEnter={(e) => e.target.style.background = 'rgba(255, 255, 255, 0.1)'}
+                      onMouseLeave={(e) => e.target.style.background = 'none'}
+                    >
+                       <span>🍀</span> 회원 정보
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        navigate('/scrap', { state: { from: location.pathname } });
+                        closeDropdown();
+                      }}
+                      style={menuButtonStyle}
+                      onMouseEnter={(e) => e.target.style.background = 'rgba(255, 255, 255, 0.1)'}
+                      onMouseLeave={(e) => e.target.style.background = 'none'}
+                    >
+                       <span>📰</span> 스크랩한 기사
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        clearAuthSession();
+                        clearScrapCache();
+                        window.alert("로그아웃되었습니다.");
+                        navigate('/');
+                        closeDropdown();
+                      }}
+                      style={menuButtonStyle}
+                      onMouseEnter={(e) => e.target.style.background = 'rgba(255, 140, 66, 0.15)'}
+                      onMouseLeave={(e) => e.target.style.background = 'none'}
+                    >
+                       <span>🚪</span> 로그아웃
+                    </button>
                   </div>
+                </>
+              ) : (
+                <div style={{ padding: '8px 0' }}>
+                  <button
+                    onClick={() => {
+                      navigate('/login', { state: { from: location.pathname } });
+                      closeDropdown();
+                    }}
+                    style={menuButtonStyle}
+                    onMouseEnter={(e) => e.target.style.background = 'rgba(255, 255, 255, 0.1)'}
+                    onMouseLeave={(e) => e.target.style.background = 'none'}
+                  >
+                     <span>🔐</span> 로그인
+                  </button>
                 </div>
-              </div>
-
-              {/* 메뉴 아이템 */}
-              <div style={{ padding: '8px 0' }}>
-                <button
-                  onClick={() => {
-                    navigate('/');
-                    setDropdownOpen(false);
-                  }}
-                  style={menuButtonStyle}
-                  onMouseEnter={(e) => e.target.style.background = 'rgba(255, 255, 255, 0.1)'}
-                  onMouseLeave={(e) => e.target.style.background = 'none'}
-                >
-                   <span>🍀</span> 회원 정보
-                </button>
-
-                <button
-                  onClick={() => {
-                    navigate('/');
-                    setDropdownOpen(false);
-                  }}
-                  style={menuButtonStyle}
-                  onMouseEnter={(e) => e.target.style.background = 'rgba(255, 255, 255, 0.1)'}
-                  onMouseLeave={(e) => e.target.style.background = 'none'}
-                >
-                   <span>📰</span> 스크랩한 기사
-                </button>
-              </div>
+              )}
             </div>
           )}
         </div>

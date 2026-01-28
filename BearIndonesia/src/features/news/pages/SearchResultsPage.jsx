@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import ScrapStarButton from '../../../components/ScrapStarButton';
 
 // API 호출 함수
 const searchAPI = async (searchTerm, sortBy = 'relevance', filterType = 'all') => {
@@ -53,6 +54,7 @@ const searchAPI = async (searchTerm, sortBy = 'relevance', filterType = 'all') =
     const results = Array.isArray(data.results) ? data.results : [];
     return results.map((item) => ({
       ...item,
+      id: item?.id ?? item?.rawNewsId ?? item?.raw_news_id ?? null,
       korContent: item?.korContent ?? item?.translated ?? "",
     }));
   } catch (error) {
@@ -211,6 +213,7 @@ const SearchCard = ({ article, onOpen, searchTerm, onTagClick }) => {
         e.currentTarget.style.boxShadow = "none";
       }}
     >
+      <ScrapStarButton article={article} style={{ position: "absolute", top: 12, right: 12 }} />
       <div style={{ display: "flex", alignItems: "center", marginBottom: "1rem" }}>
         <div
           style={{

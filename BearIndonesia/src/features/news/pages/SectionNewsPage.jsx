@@ -2,6 +2,7 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { fetchAllArticles } from "../../../api/articleApi";
+import ScrapStarButton from "../../../components/ScrapStarButton";
 
 /* -------------------- 유틸 함수 -------------------- */
 const getInitials = (name = "") => {
@@ -106,6 +107,7 @@ const SectionNewsPage = ({ setSelectedNews }) => {
           e.currentTarget.style.opacity = 1;
         }}
       >
+        <ScrapStarButton article={article} style={{ position: "absolute", top: 12, right: 12 }} />
         <div style={{ display: "flex", alignItems: "center", marginBottom: "1rem" }}>
           <div
             style={{

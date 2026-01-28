@@ -107,6 +107,7 @@ const UnifiedNewsPage = ({ setSelectedNews }) => {
         const results = Array.isArray(data) ? data : Array.isArray(data?.results) ? data.results : [];
         const normalized = results.map((item) => ({
           ...item,
+          id: item?.id ?? item?.rawNewsId ?? item?.raw_news_id ?? null,
           date: item?.publishedDate ?? item?.date ?? "",
           korContent: item?.korContent ?? item?.translated ?? "",
           idSummary: item?.idSummary ?? item?.id_summary ?? "",
