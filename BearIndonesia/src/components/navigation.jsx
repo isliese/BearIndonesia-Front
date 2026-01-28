@@ -171,6 +171,7 @@ const Navigation = () => {
                       onClick={() => {
                         clearAuthSession();
                         clearScrapCache();
+                        window.alert("로그아웃되었습니다.");
                         navigate('/');
                         closeDropdown();
                       }}

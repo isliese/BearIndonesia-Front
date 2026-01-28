@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { registerUser } from "../../../api/authApi";
-import { setAuthSession } from "../../../utils/auth";
 
 const SignupPage = () => {
   const navigate = useNavigate();
@@ -32,8 +31,8 @@ const SignupPage = () => {
       if (!data?.token || !data?.user) {
         throw new Error("회원가입 응답이 올바르지 않습니다.");
       }
-      setAuthSession({ token: data.token, user: data.user });
-      navigate(location.state?.from || "/");
+      window.alert("회원가입이 완료되었습니다. 로그인해주세요.");
+      navigate("/login", { state: { from: location.state?.from } });
     } catch (err) {
       setError(err?.message || "회원가입에 실패했습니다.");
     }
