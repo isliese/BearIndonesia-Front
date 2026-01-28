@@ -374,7 +374,8 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
                     fontSize: '1.05rem', 
                     color: '#fff', 
                     fontWeight: 600, 
-                    lineHeight: 1.35 
+                    lineHeight: 1.35,
+                    textAlign: 'left'
                   }}>
                     {item.korTitle || item.title || "(제목 없음)"}
                   </div>

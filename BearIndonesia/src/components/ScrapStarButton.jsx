@@ -13,6 +13,7 @@ const ScrapStarButton = ({ article, size = 18, style = {}, onChange }) => {
   }, [article]);
 
   const canScrap = Boolean(article?.id || article?.rawNewsId);
+  const [hovered, setHovered] = useState(false);
   const handleClick = async (e) => {
     e.stopPropagation();
     if (!getAuthToken()) {
@@ -33,32 +34,65 @@ const ScrapStarButton = ({ article, size = 18, style = {}, onChange }) => {
   };
 
   return (
-    <button
-      type="button"
-      onClick={handleClick}
-      disabled={!canScrap}
-      aria-pressed={scrapped}
-      title={scrapped ? "스크랩 해제" : "스크랩"}
+    <div
       style={{
-        background: "rgba(0, 0, 0, 0.25)",
-        border: "1px solid rgba(255, 255, 255, 0.2)",
-        borderRadius: "999px",
-        width: size + 12,
-        height: size + 12,
-        display: "flex",
+        position: "relative",
+        display: "inline-flex",
         alignItems: "center",
         justifyContent: "center",
-        cursor: canScrap ? "pointer" : "not-allowed",
-        color: scrapped ? "#f6d365" : "#9aa0a6",
-        fontSize: size,
-        textShadow: scrapped ? "0 0 6px rgba(246, 211, 101, 0.6)" : "none",
-        opacity: canScrap ? 1 : 0.5,
-        transition: "all 0.2s ease",
-        ...style,
       }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
     >
-      {scrapped ? "★" : "☆"}
-    </button>
+      <button
+        type="button"
+        onClick={handleClick}
+        disabled={!canScrap}
+        aria-pressed={scrapped}
+        title={scrapped ? "스크랩 해제" : "스크랩"}
+        style={{
+          background: "rgba(0, 0, 0, 0.25)",
+          border: "1px solid rgba(255, 255, 255, 0.2)",
+          borderRadius: "999px",
+          width: size + 12,
+          height: size + 12,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          cursor: canScrap ? "pointer" : "not-allowed",
+          color: scrapped ? "#f6d365" : "#9aa0a6",
+          fontSize: size,
+          textShadow: scrapped ? "0 0 6px rgba(246, 211, 101, 0.6)" : "none",
+          opacity: canScrap ? 1 : 0.5,
+          transition: "all 0.2s ease",
+          ...style,
+        }}
+      >
+        {scrapped ? "★" : "☆"}
+      </button>
+
+      {!getAuthToken() && hovered && (
+        <div
+          style={{
+            position: "absolute",
+            top: "calc(100% + 8px)",
+            left: "50%",
+            transform: "translateX(-50%)",
+            background: "rgba(20, 20, 20, 0.95)",
+            color: "#ffcc80",
+            padding: "6px 10px",
+            borderRadius: "8px",
+            fontSize: "0.75rem",
+            whiteSpace: "nowrap",
+            border: "1px solid rgba(255, 140, 66, 0.35)",
+            boxShadow: "0 6px 18px rgba(0,0,0,0.35)",
+            zIndex: 20,
+          }}
+        >
+          로그인 후 이용해주세요.
+        </div>
+      )}
+    </div>
   );
 };
 
