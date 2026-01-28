@@ -42,15 +42,6 @@ const ProfilePage = () => {
           </div>
         </div>
 
-        <div style={infoBoxStyle}>
-          <div style={{ color: "#ff8c42", fontWeight: "600", marginBottom: "0.5rem" }}>
-            회원 정보
-          </div>
-          <div style={{ color: "#d0d0d0", lineHeight: 1.6 }}>
-            BearIndonesia에서 스크랩한 기사와 관심 뉴스를 관리할 수 있습니다.
-          </div>
-        </div>
-
         <button
           type="button"
           onClick={() => navigate("/scrap")}
