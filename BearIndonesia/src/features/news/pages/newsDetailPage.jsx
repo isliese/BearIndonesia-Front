@@ -7,7 +7,16 @@ const NewsDetailPage = ({ news }) => {
   const [contentTab, setContentTab] = useState("ko"); 
   const navigate = useNavigate();
   const location = useLocation();
-  if (!news) {
+  let storedNews = null;
+  try {
+    const raw = sessionStorage.getItem("selectedNews");
+    if (raw) storedNews = JSON.parse(raw);
+  } catch {
+    storedNews = null;
+  }
+  const resolvedNews = news || storedNews;
+
+  if (!resolvedNews) {
     return (
       <div style={{
         padding: '2rem', display: 'flex', justifyContent: 'center',
@@ -18,22 +27,22 @@ const NewsDetailPage = ({ news }) => {
     );
   }
 
-  const titleKO   = news.korTitle || '';
-  const titleID   = news.title || '';
-  const summaryKO = news.korSummary || '';
-  const summaryID = news.idSummary || news.summary || '';
-  const semanticConfidence = news.semanticConfidence ?? null;
-  const tagMismatch = news.tagMismatch ?? false;
-  const categoryMismatch = news.categoryMismatch ?? false;
+  const titleKO   = resolvedNews.korTitle || '';
+  const titleID   = resolvedNews.title || '';
+  const summaryKO = resolvedNews.korSummary || '';
+  const summaryID = resolvedNews.idSummary || resolvedNews.summary || '';
+  const semanticConfidence = resolvedNews.semanticConfidence ?? null;
+  const tagMismatch = resolvedNews.tagMismatch ?? false;
+  const categoryMismatch = resolvedNews.categoryMismatch ?? false;
   const showDev = import.meta.env.MODE !== "production";
-  const imageURL = news.img || '';
-  const contentKO = news.korContent || '';
-  const contentID = news.content || '';
-  const insight   = news.insight || news.insight || '';
-  const author    = news.source || '';
-  const date      = news.date || '';
-  const link      = news.link || '';
-  const tags      = Array.isArray(news.tags) ? news.tags : [];
+  const imageURL = resolvedNews.img || '';
+  const contentKO = resolvedNews.korContent || '';
+  const contentID = resolvedNews.content || '';
+  const insight   = resolvedNews.insight || resolvedNews.insight || '';
+  const author    = resolvedNews.source || '';
+  const date      = resolvedNews.date || '';
+  const link      = resolvedNews.link || '';
+  const tags      = Array.isArray(resolvedNews.tags) ? resolvedNews.tags : [];
 
   // 텍스트 하이라이트
   const renderHighlighted = (text) => {

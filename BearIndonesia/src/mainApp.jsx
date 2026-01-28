@@ -14,6 +14,15 @@ const MainApp = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    try {
+      if (selectedNews) {
+        sessionStorage.setItem("selectedNews", JSON.stringify(selectedNews));
+      }
+    } catch {
+      // Ignore storage failures.
+    }
+  }, [selectedNews]);
 
   // 검색 처리 함수
   const handleSearch = (term) => {
