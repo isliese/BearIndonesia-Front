@@ -1,17 +1,80 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AReumiUser from "../../../assets/images/AReumi_User.png";
-import { getAuthUser, getDisplayName } from "../../../utils/auth";
+import { request } from "../../../api/httpClient";
+import { getAuthToken, getAuthUser, getDisplayName } from "../../../utils/auth";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
   const user = getAuthUser();
+  const token = getAuthToken();
+
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleChangePassword = async (e) => {
+    e.preventDefault();
+    setError("");
+    setSuccess("");
+
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      setError("현재 비밀번호와 새 비밀번호를 모두 입력해주세요.");
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      setError("새 비밀번호가 일치하지 않습니다.");
+      return;
+    }
+    if (!token) {
+      setError("로그인이 필요합니다.");
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      await request("/auth/change-password", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: {
+          currentPassword,
+          newPassword,
+          confirmPassword,
+        },
+      });
+      setSuccess("비밀번호가 변경되었습니다.");
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+    } catch (err) {
+      let message = "비밀번호 변경에 실패했습니다.";
+      if (err?.body) {
+        try {
+          const parsed = JSON.parse(err.body);
+          if (parsed?.message) message = parsed.message;
+          else if (parsed?.error) message = parsed.error;
+        } catch {
+          // ignore parse error
+        }
+      } else if (err?.message) {
+        message = err.message;
+      }
+      setError(message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   if (!user) {
     return (
       <div style={pageContainerStyle}>
         <div style={cardStyle}>
-          <h2 style={{ color: "#ff8c42", marginBottom: "0.6rem" }}>로그인이 필요합니다</h2>
+          <h2 style={{ color: "#ff8c42", marginBottom: "0.6rem" }}>회원 정보</h2>
           <p style={{ color: "#b0b0b0", marginBottom: "1.6rem" }}>
             회원 정보를 보려면 로그인해주세요.
           </p>
@@ -20,7 +83,7 @@ const ProfilePage = () => {
             onClick={() => navigate("/login")}
             style={primaryButtonStyle}
           >
-            로그인하러 가기
+            로그인하기
           </button>
         </div>
       </div>
@@ -30,11 +93,11 @@ const ProfilePage = () => {
   return (
     <div style={pageContainerStyle}>
       <div style={cardStyle}>
-        <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1.5rem" }}>
+        <div style={headerRowStyle}>
           <img
             src={AReumiUser}
             alt="Profile"
-            style={{ width: "64px", height: "64px", borderRadius: "50%", border: "2px solid #ff8c42" }}
+            style={profileImageStyle}
           />
           <div>
             <h2 style={{ margin: 0, color: "white" }}>{getDisplayName(user)}</h2>
@@ -42,13 +105,58 @@ const ProfilePage = () => {
           </div>
         </div>
 
-        <button
-          type="button"
-          onClick={() => navigate("/scrap")}
-          style={secondaryButtonStyle}
-        >
-          스크랩한 기사 보러가기
-        </button>
+        <div style={infoBoxStyle}>
+          <button
+            type="button"
+            onClick={() => navigate("/scrap")}
+            style={secondaryButtonStyle}
+          >
+            스크랩 목록 보기
+          </button>
+        </div>
+
+        <div style={{ marginTop: "1.4rem" }}>
+          <h3 style={{ color: "#ffb07b", marginBottom: "0.8rem" }}>비밀번호 변경</h3>
+          <form onSubmit={handleChangePassword} style={{ display: "grid", gap: "0.8rem" }}>
+            <div style={inputGroupStyle}>
+              <label style={labelStyle}>현재 비밀번호</label>
+              <input
+                type="password"
+                value={currentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
+                placeholder="현재 비밀번호"
+                style={inputStyle}
+              />
+            </div>
+            <div style={inputGroupStyle}>
+              <label style={labelStyle}>새 비밀번호</label>
+              <input
+                type="password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                placeholder="새 비밀번호"
+                style={inputStyle}
+              />
+            </div>
+            <div style={inputGroupStyle}>
+              <label style={labelStyle}>새 비밀번호 확인</label>
+              <input
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="새 비밀번호 확인"
+                style={inputStyle}
+              />
+            </div>
+
+            {error && <div style={errorStyle}>{error}</div>}
+            {success && <div style={successStyle}>{success}</div>}
+
+            <button type="submit" style={primaryButtonStyle} disabled={isLoading}>
+              {isLoading ? "변경 중..." : "비밀번호 변경"}
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );
@@ -73,12 +181,44 @@ const cardStyle = {
   boxShadow: "0 12px 32px rgba(0, 0, 0, 0.25)",
 };
 
+const headerRowStyle = {
+  display: "flex",
+  alignItems: "center",
+  gap: "1rem",
+  marginBottom: "1.5rem",
+};
+
+const profileImageStyle = {
+  width: "64px",
+  height: "64px",
+  borderRadius: "50%",
+  border: "2px solid #ff8c42",
+};
+
 const infoBoxStyle = {
   background: "rgba(255, 140, 66, 0.1)",
   borderRadius: "14px",
   padding: "1rem 1.2rem",
   border: "1px solid rgba(255, 140, 66, 0.25)",
-  marginBottom: "1.6rem",
+};
+
+const inputGroupStyle = {
+  display: "grid",
+  gap: "0.4rem",
+};
+
+const labelStyle = {
+  color: "#d0d0d0",
+  fontSize: "0.9rem",
+};
+
+const inputStyle = {
+  width: "100%",
+  padding: "0.7rem 0.9rem",
+  borderRadius: "10px",
+  border: "1px solid rgba(255, 140, 66, 0.4)",
+  background: "rgba(0, 0, 0, 0.35)",
+  color: "white",
 };
 
 const primaryButtonStyle = {
@@ -103,6 +243,24 @@ const secondaryButtonStyle = {
   cursor: "pointer",
   fontSize: "0.95rem",
   fontWeight: "600",
+};
+
+const errorStyle = {
+  background: "rgba(255, 82, 82, 0.15)",
+  border: "1px solid rgba(255, 82, 82, 0.4)",
+  color: "#ffbdbd",
+  padding: "0.6rem 0.8rem",
+  borderRadius: "10px",
+  fontSize: "0.9rem",
+};
+
+const successStyle = {
+  background: "rgba(76, 175, 80, 0.15)",
+  border: "1px solid rgba(76, 175, 80, 0.4)",
+  color: "#c8f7c5",
+  padding: "0.6rem 0.8rem",
+  borderRadius: "10px",
+  fontSize: "0.9rem",
 };
 
 export default ProfilePage;
