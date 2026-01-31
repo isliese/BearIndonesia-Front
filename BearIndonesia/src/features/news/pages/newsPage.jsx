@@ -2,7 +2,7 @@
 
 import React, { useMemo, useState, useCallback, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import * as XLSX from "xlsx";
+import { request } from "../../../api/httpClient";
 // 컴포넌트 imports
 import NewsFilterPanel from "../components/NewsFilterPanel";
 import NewsGrid from "../components/NewsGrid";
@@ -312,58 +312,31 @@ const UnifiedNewsPage = ({ setSelectedNews }) => {
     setShowCustomDate(false);
   };
 
-  const downloadExcel = useCallback(() => {
-  if (articles.length === 0) {
-    alert("뉴스 데이터가 없습니다.");
-    return;
-  }
+  const downloadExcel = useCallback(async () => {
+    if (!excelYear || !excelMonth) {
+      alert("?? ??? ??????.");
+      return;
+    }
 
-  //  컬럼 순서 정리 
-  const sheetData = articles.map(a => ({
-    날짜: a.date || "",
-    언론사: a.source || "",
-    카테고리: a.category || "",
-    키워드: a.tags.map(t => t.name).join(", "),
-    헤드라인_한국어: a.korTitle || "",
-    요약_한국어: a.korSummary || "",
-    헤드라인_영어: a.engTitle || "",
-    요약_영어: a.engSummary || "",
-    본문_한국어: a.korContent || "",
-    본문_인도네시아어: a.content || "",
-    링크: a.link || "",
-    중요도: a.importance ?? "",
-  }));
-
-  const ws = XLSX.utils.json_to_sheet(sheetData);
-
-  ws["!autofilter"] = {
-  ref: `A1:${XLSX.utils.encode_col(Object.keys(sheetData[0]).length - 1)}1`,
-};
-
-  //  열 너비 고정 (가독성 핵심)
-  ws["!cols"] = [
-    { wch: 12 }, // 날짜
-    { wch: 5 },  // 중요도
-    { wch: 14 }, // 언론사
-    { wch: 16 }, // 카테고리
-    { wch: 30 }, // 키워드
-    { wch: 40 }, // 헤드라인 KR
-    { wch: 50 }, // 요약 KR
-    { wch: 40 }, // 헤드라인 EN
-    { wch: 50 }, // 요약 EN
-    { wch: 60 }, // 본문 KR
-    { wch: 60 }, // 본문 ID
-    { wch: 30 }, // 링크
-  ];
-
-  // 헤더 고정
-  ws["!freeze"] = { ySplit: 1 };
-
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, `${excelYear}-${excelMonth}월뉴스`);
-
-  XLSX.writeFile(wb, `${excelYear}년_${excelMonth}월_뉴스.xlsx`);
-}, [articles, excelYear, excelMonth]);
+    try {
+      const blob = await request(`/api/articles/excel?year=${excelYear}&month=${excelMonth}`, {
+        responseType: "blob",
+      });
+      const safeMonth = String(excelMonth).padStart(2, "0");
+      const fileName = `${excelYear}-${safeMonth}-news.xlsx`;
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("?? ???? ??", error);
+      alert("?? ????? ??????.");
+    }
+  }, [excelYear, excelMonth]);
 
 
   const generateWordCloud = () => {
