@@ -35,6 +35,17 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
           ...item,
           id: item?.id ?? item?.rawNewsId ?? item?.raw_news_id ?? null,
           date: item?.publishedDate ?? item?.date ?? "",
+          img:
+            item?.img ??
+            item?.image ??
+            item?.imageUrl ??
+            item?.image_url ??
+            item?.thumbnail ??
+            item?.thumb ??
+            item?.coverImage ??
+            item?.cover_image ??
+            item?.photo ??
+            "",
         }));
         if (isMounted) {
           setNewsItems(normalized);
@@ -348,7 +359,7 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
                 onClick={() => handleHeadlineClick(item)}
                 style={{
                   display: 'grid',
-                  gridTemplateColumns: '1fr auto',
+                  gridTemplateColumns: '64px 1fr auto',
                   alignItems: 'center',
                   gap: '0.6rem',
                   background: 'rgba(255,255,255,0.06)',
@@ -369,6 +380,30 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
                   e.currentTarget.style.borderColor = 'rgba(255,140,66,0.20)';
                 }}
               >
+                <div
+                  style={{
+                    width: '56px',
+                    height: '56px',
+                    borderRadius: '12px',
+                    overflow: 'hidden',
+                    border: '1px solid rgba(255,255,255,0.18)',
+                    background: 'rgba(255,255,255,0.08)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}
+                >
+                  {item.img ? (
+                    <img
+                      src={item.img}
+                      alt=""
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      loading="lazy"
+                    />
+                  ) : (
+                    <span style={{ color: '#cfcfcf', fontSize: '0.75rem' }}>No Image</span>
+                  )}
+                </div>
                 <div>
                   <div style={{ 
                     fontSize: '1.05rem', 
