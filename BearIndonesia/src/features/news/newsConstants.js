@@ -23,7 +23,20 @@ export const TAG_SECTIONS = {
   ],
   "경쟁사·주주": [
     "칼베 파르마", "키미아 파르마", "바이오 파르마", "덱사 메디카", "산베 파르마", "템포스캔", "파프로스", "피리당 파르마",
-    "화이자", "노바티스", "로슈", "사노피", "GSK", "바이엘", "아스트라제네카", "신약 동향", "동향", "Novo Nordisk", "Pfizer", "AstraZeneca", "Bayer", "GlaxoSmithKline (GSK)", "Merck Sharp & Dohme (MSD)", "Sanofi", "Takeda", "Boehringer Ingelheim", "Eisai", "Daewoong Pharmaceutical", "Chong Kun Dang (CKD)", "HK inno.N", "GC Green Cross", "SK Plasma", "Dong-A ST", "Ildong Pharmaceutical", "Daewon Pharmaceutical", "Kalbe Farma", "Kimia Farma", "Dexa Medica", "Sanbe Farma", "Tempo Scan Pacific", "Darya-Varia Laboratoria", "Phapros", "Pyridam Farma", "Novell Pharmaceutical", "Bio Farma"
+    "화이자", "노바티스", "로슈", "사노피", "GSK", "바이엘", "아스트라제네카", "신약 동향", "동향", "Novo Nordisk", "Pfizer", 
+    "AstraZeneca", "Bayer", "GlaxoSmithKline (GSK)", "Merck Sharp & Dohme (MSD)", "Sanofi", "Takeda", "Boehringer Ingelheim", "Eisai", "Daewoong Pharmaceutical", 
+    "Chong Kun Dang (CKD)", "HK inno.N", "GC Green Cross", "SK Plasma", "Dong-A ST", "Ildong Pharmaceutical", "Daewon Pharmaceutical", "Kalbe Farma", 
+    "Kimia Farma", "Dexa Medica", "Sanbe Farma", "Tempo Scan Pacific", "Darya-Varia Laboratoria", "Phapros", "Pyridam Farma", "Novell Pharmaceutical", "Bio Farma",
+    "PT Kalbe Farma Tbk", "PT Indofarma Tbk", "PT Kimia Farma Tbk",
+"PT Darya-Varia Laboratoria Tbk", "PT Tempo Scan Pacific Tbk", "PT Phapros Tbk",
+"PT Pyridam Farma Tbk", "PT Industri Jamu & Farmasi Sido Muncul Tbk", "PT Merck Tbk",
+"PT Medikaloka Hermina Tbk", "PT Mitra Keluarga Karyasehat Tbk", "PT Prodia Widyahusada Tbk",
+"PT Royal Prima Tbk", "PT Sarana Meditama Metropolitan Tbk", "PT Siloam International Hospitals Tbk",
+"PT Sejahteraraya Anugrahjaya Tbk", "PT Diagnos Laboratorium Utama Tbk", "PT Bundamedik Tbk",
+"PT Famon Awal Bros Sedaya Tbk", "PT Diastika Biotekindo Tbk", "PT Haloni Jane Tbk",
+"PT Itama Ranoraya Tbk", "PT UBC Medical Indonesia Tbk", "PT Hetzer Medical Indonesia Tbk",
+"PT Multi Medika Internasional Tbk", "PT Jayamas Medica Industri Tbk", "PT Maja Agung Latexindo Tbk"
+
   ],
   "트렌드·혁신": [
     "디지털 헬스", "원격의료", "보건 빅데이터", "제약 4.0", "헬스 스타트업", "의약품 연구", "의약품 개발", "인도네시아 임상시험", "디지털 헬스", "AI", "첨단 의료", "헬스케어 시스템"
