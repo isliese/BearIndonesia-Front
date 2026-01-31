@@ -28,14 +28,14 @@ export const TAG_SECTIONS = {
     "Chong Kun Dang (CKD)", "HK inno.N", "GC Green Cross", "SK Plasma", "Dong-A ST", "Ildong Pharmaceutical", "Daewon Pharmaceutical", "Kalbe Farma", 
     "Kimia Farma", "Dexa Medica", "Sanbe Farma", "Tempo Scan Pacific", "Darya-Varia Laboratoria", "Phapros", "Pyridam Farma", "Novell Pharmaceutical", "Bio Farma",
     "PT Kalbe Farma Tbk", "PT Indofarma Tbk", "PT Kimia Farma Tbk",
-"PT Darya-Varia Laboratoria Tbk", "PT Tempo Scan Pacific Tbk", "PT Phapros Tbk",
-"PT Pyridam Farma Tbk", "PT Industri Jamu & Farmasi Sido Muncul Tbk", "PT Merck Tbk",
-"PT Medikaloka Hermina Tbk", "PT Mitra Keluarga Karyasehat Tbk", "PT Prodia Widyahusada Tbk",
-"PT Royal Prima Tbk", "PT Sarana Meditama Metropolitan Tbk", "PT Siloam International Hospitals Tbk",
-"PT Sejahteraraya Anugrahjaya Tbk", "PT Diagnos Laboratorium Utama Tbk", "PT Bundamedik Tbk",
-"PT Famon Awal Bros Sedaya Tbk", "PT Diastika Biotekindo Tbk", "PT Haloni Jane Tbk",
-"PT Itama Ranoraya Tbk", "PT UBC Medical Indonesia Tbk", "PT Hetzer Medical Indonesia Tbk",
-"PT Multi Medika Internasional Tbk", "PT Jayamas Medica Industri Tbk", "PT Maja Agung Latexindo Tbk"
+    "PT Darya-Varia Laboratoria Tbk", "PT Tempo Scan Pacific Tbk", "PT Phapros Tbk",
+    "PT Pyridam Farma Tbk", "PT Industri Jamu & Farmasi Sido Muncul Tbk", "PT Merck Tbk",
+    "PT Medikaloka Hermina Tbk", "PT Mitra Keluarga Karyasehat Tbk", "PT Prodia Widyahusada Tbk",
+    "PT Royal Prima Tbk", "PT Sarana Meditama Metropolitan Tbk", "PT Siloam International Hospitals Tbk",
+    "PT Sejahteraraya Anugrahjaya Tbk", "PT Diagnos Laboratorium Utama Tbk", "PT Bundamedik Tbk",
+    "PT Famon Awal Bros Sedaya Tbk", "PT Diastika Biotekindo Tbk", "PT Haloni Jane Tbk",
+    "PT Itama Ranoraya Tbk", "PT UBC Medical Indonesia Tbk", "PT Hetzer Medical Indonesia Tbk",
+    "PT Multi Medika Internasional Tbk", "PT Jayamas Medica Industri Tbk", "PT Maja Agung Latexindo Tbk"
 
   ],
   "트렌드·혁신": [

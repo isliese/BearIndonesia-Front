@@ -111,6 +111,17 @@ const UnifiedNewsPage = ({ setSelectedNews }) => {
           date: item?.publishedDate ?? item?.date ?? "",
           korContent: item?.korContent ?? item?.translated ?? "",
           idSummary: item?.idSummary ?? item?.id_summary ?? "",
+          img:
+            item?.img ??
+            item?.image ??
+            item?.imageUrl ??
+            item?.image_url ??
+            item?.thumbnail ??
+            item?.thumb ??
+            item?.coverImage ??
+            item?.cover_image ??
+            item?.photo ??
+            "",
           semanticConfidence: item?.semanticConfidence ?? item?.semantic_confidence ?? null,
           tagMismatch: item?.tagMismatch ?? item?.tag_mismatch ?? null,
           categoryMismatch: item?.categoryMismatch ?? item?.category_mismatch ?? null,
