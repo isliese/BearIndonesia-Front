@@ -15,6 +15,25 @@ const ProfilePage = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const resetForm = () => {
+    setCurrentPassword("");
+    setNewPassword("");
+    setConfirmPassword("");
+    setError("");
+    setSuccess("");
+  };
+
+  const openModal = () => {
+    resetForm();
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    resetForm();
+  };
 
   const handleChangePassword = async (e) => {
     e.preventDefault();
@@ -105,7 +124,7 @@ const ProfilePage = () => {
           </div>
         </div>
 
-        <div style={infoBoxStyle}>
+        <div style={actionRowStyle}>
           <button
             type="button"
             onClick={() => navigate("/scrap")}
@@ -113,50 +132,67 @@ const ProfilePage = () => {
           >
             스크랩 목록 보기
           </button>
+          <button
+            type="button"
+            onClick={openModal}
+            style={primaryButtonStyle}
+          >
+            비밀번호 변경
+          </button>
         </div>
 
-        <div style={{ marginTop: "1.4rem" }}>
-          <h3 style={{ color: "#ffb07b", marginBottom: "0.8rem" }}>비밀번호 변경</h3>
-          <form onSubmit={handleChangePassword} style={{ display: "grid", gap: "0.8rem" }}>
-            <div style={inputGroupStyle}>
-              <label style={labelStyle}>현재 비밀번호</label>
-              <input
-                type="password"
-                value={currentPassword}
-                onChange={(e) => setCurrentPassword(e.target.value)}
-                placeholder="현재 비밀번호"
-                style={inputStyle}
-              />
-            </div>
-            <div style={inputGroupStyle}>
-              <label style={labelStyle}>새 비밀번호</label>
-              <input
-                type="password"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                placeholder="새 비밀번호"
-                style={inputStyle}
-              />
-            </div>
-            <div style={inputGroupStyle}>
-              <label style={labelStyle}>새 비밀번호 확인</label>
-              <input
-                type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                placeholder="새 비밀번호 확인"
-                style={inputStyle}
-              />
-            </div>
+        {isModalOpen && (
+          <div style={modalOverlayStyle} role="dialog" aria-modal="true">
+            <div style={modalCardStyle}>
+              <div style={modalHeaderStyle}>
+                <h3 style={{ margin: 0, color: "#ffb07b" }}>비밀번호 변경</h3>
+                <button type="button" onClick={closeModal} style={modalCloseStyle}>
+                  ✕
+                </button>
+              </div>
 
-            {error && <div style={errorStyle}>{error}</div>}
-            {success && <div style={successStyle}>{success}</div>}
+              <form onSubmit={handleChangePassword} style={{ display: "grid", gap: "0.8rem" }}>
+                <div style={inputGroupStyle}>
+                  <label style={labelStyle}>현재 비밀번호</label>
+                  <input
+                    type="password"
+                    value={currentPassword}
+                    onChange={(e) => setCurrentPassword(e.target.value)}
+                    placeholder="현재 비밀번호"
+                    style={inputStyle}
+                  />
+                </div>
+                <div style={inputGroupStyle}>
+                  <label style={labelStyle}>새 비밀번호</label>
+                  <input
+                    type="password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    placeholder="새 비밀번호"
+                    style={inputStyle}
+                  />
+                </div>
+                <div style={inputGroupStyle}>
+                  <label style={labelStyle}>새 비밀번호 확인</label>
+                  <input
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    placeholder="새 비밀번호 확인"
+                    style={inputStyle}
+                  />
+                </div>
 
-            <button type="submit" style={primaryButtonStyle} disabled={isLoading}>
-              {isLoading ? "변경 중..." : "비밀번호 변경"}
-            </button>
-          </form>
-        </div>
+                {error && <div style={errorStyle}>{error}</div>}
+                {success && <div style={successStyle}>{success}</div>}
+
+                <button type="submit" style={primaryButtonStyle} disabled={isLoading}>
+                  {isLoading ? "변경 중..." : "비밀번호 변경"}
+                </button>
+              </form>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -188,18 +224,16 @@ const headerRowStyle = {
   marginBottom: "1.5rem",
 };
 
+const actionRowStyle = {
+  display: "grid",
+  gap: "0.8rem",
+};
+
 const profileImageStyle = {
   width: "64px",
   height: "64px",
   borderRadius: "50%",
   border: "2px solid #ff8c42",
-};
-
-const infoBoxStyle = {
-  background: "rgba(255, 140, 66, 0.1)",
-  borderRadius: "14px",
-  padding: "1rem 1.2rem",
-  border: "1px solid rgba(255, 140, 66, 0.25)",
 };
 
 const inputGroupStyle = {
@@ -261,6 +295,42 @@ const successStyle = {
   padding: "0.6rem 0.8rem",
   borderRadius: "10px",
   fontSize: "0.9rem",
+};
+
+const modalOverlayStyle = {
+  position: "fixed",
+  inset: 0,
+  background: "rgba(9, 12, 20, 0.6)",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  padding: "1.5rem",
+  zIndex: 1000,
+};
+
+const modalCardStyle = {
+  width: "100%",
+  maxWidth: "520px",
+  background: "rgba(22, 27, 41, 0.95)",
+  borderRadius: "18px",
+  border: "1px solid rgba(255, 140, 66, 0.25)",
+  padding: "1.8rem",
+  boxShadow: "0 18px 36px rgba(0, 0, 0, 0.35)",
+};
+
+const modalHeaderStyle = {
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
+  marginBottom: "1rem",
+};
+
+const modalCloseStyle = {
+  background: "transparent",
+  border: "none",
+  color: "#ffb07b",
+  fontSize: "1.2rem",
+  cursor: "pointer",
 };
 
 export default ProfilePage;
