@@ -1,3 +1,5 @@
+import { getAuthToken } from "../utils/auth";
+
 const BASE_URL = import.meta.env?.VITE_API_BASE_URL || "";
 
 const defaultHeaders = {
@@ -13,9 +15,12 @@ const request = async (path, options = {}) => {
     responseType = "json",
   } = options;
 
+  const token = getAuthToken();
+  const authHeader = token ? { Authorization: `Bearer ${token}` } : {};
+
   const response = await fetch(url, {
     method,
-    headers: { ...defaultHeaders, ...headers },
+    headers: { ...defaultHeaders, ...authHeader, ...headers },
     body: body ? JSON.stringify(body) : undefined,
   });
 
