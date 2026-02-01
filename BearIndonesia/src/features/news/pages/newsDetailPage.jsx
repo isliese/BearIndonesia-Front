@@ -70,41 +70,43 @@ const NewsDetailPage = ({ news }) => {
   };
 
   return (
-    <div style={{ position: 'relative', padding: '2rem 1rem', minHeight: 'calc(100vh - 80px)' }}>
-      {/* 뒤로가기 */}
-      <button
-        onClick={() => navigate(location.state?.from || '/news', { state: { preserveScroll: true } })}
-        style={{
-          position: 'absolute',
-          top: '3.5rem',
-          left: '36rem',
-          background: 'rgba(255, 255, 255, 0.1)',
-          border: '1px solid rgba(255, 140, 66, 0.5)', 
-          borderRadius: '50%',
-          width: '50px', 
-          height: '50px', 
-          color: '#ff8c42', 
-          fontSize: '1.5rem',
-          cursor: 'pointer', 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'center',
-          transition: 'all 0.3s ease', 
-          zIndex: 10
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.background = 'rgba(255, 140, 66, 0.2)';
-          e.currentTarget.style.transform = 'scale(1.1)';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
-          e.currentTarget.style.transform = 'scale(1)';
-        }}
-      >
-        <span style={{ fontSize: '1.1rem' }}>←</span>
-      </button>
+    <div style={{ padding: '2rem 1rem', minHeight: 'calc(100vh - 80px)' }}>
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem' }}>
+        <div style={{ width: '60px', display: 'flex', justifyContent: 'center', flexShrink: 0 }}>
+          {/* 뒤로가기 */}
+          <button
+            onClick={() => navigate(location.state?.from || '/news', { state: { preserveScroll: true } })}
+            style={{
+              position: 'sticky',
+              top: '2.5rem',
+              background: 'rgba(255, 255, 255, 0.1)',
+              border: '1px solid rgba(255, 140, 66, 0.5)', 
+              borderRadius: '50%',
+              width: '50px', 
+              height: '50px', 
+              color: '#ff8c42', 
+              fontSize: '1.5rem',
+              cursor: 'pointer', 
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'center',
+              transition: 'all 0.3s ease', 
+              zIndex: 10
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = 'rgba(255, 140, 66, 0.2)';
+              e.currentTarget.style.transform = 'scale(1.1)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
+              e.currentTarget.style.transform = 'scale(1)';
+            }}
+          >
+            <span style={{ fontSize: '1.1rem' }}>←</span>
+          </button>
+        </div>
 
-      <div style={{ maxWidth: '900px', margin: '0 auto', marginTop: '1rem' }}>
+        <div style={{ maxWidth: '900px', width: '100%', marginTop: '1rem' }}>
         <div style={{
           background: 'rgba(255, 255, 255, 0.08)', 
           backdropFilter: 'blur(20px)',

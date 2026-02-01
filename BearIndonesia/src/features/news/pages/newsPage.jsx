@@ -33,6 +33,7 @@ const UnifiedNewsPage = ({ setSelectedNews }) => {
   const [loadError, setLoadError] = useState("");
   const mainContentRef = useRef(null);
   const hasRestoredRef = useRef(false);
+  const isRestoringRef = useRef(false);
   const navigate = useNavigate();
   const location = useLocation();
   
@@ -55,10 +56,13 @@ const UnifiedNewsPage = ({ setSelectedNews }) => {
   const [wcEndDate, setWcEndDate] = useState("2025-12-31");
   
   // 엑셀/뉴스레터 년월 선택
-  const [excelYear, setExcelYear] = useState(2025);
-  const [excelMonth, setExcelMonth] = useState(9);
-  const [newsletterYear, setNewsletterYear] = useState(2025);
-  const [newsletterMonth, setNewsletterMonth] = useState(9);
+  const now = new Date();
+  const currentYear = now.getFullYear();
+  const currentMonth = now.getMonth() + 1;
+  const [excelYear, setExcelYear] = useState(currentYear);
+  const [excelMonth, setExcelMonth] = useState(currentMonth);
+  const [newsletterYear, setNewsletterYear] = useState(currentYear);
+  const [newsletterMonth, setNewsletterMonth] = useState(currentMonth);
 
   const normalizeTags = (value) => {
     if (Array.isArray(value)) {
@@ -88,6 +92,46 @@ const UnifiedNewsPage = ({ setSelectedNews }) => {
     return [];
   };
 
+  const getSessionValue = (key, defaultValue) => {
+    try {
+      const stored = sessionStorage.getItem(key);
+      if (stored === null) return defaultValue;
+      return JSON.parse(stored);
+    } catch {
+      return defaultValue;
+    }
+  };
+
+  useEffect(() => {
+    if (hasRestoredRef.current) return;
+    hasRestoredRef.current = true;
+    const savedSection = getSessionValue("news_activeSection", "all");
+    const savedTags = getSessionValue("news_activeTags", []);
+    if (savedSection && savedSection !== "all") {
+      isRestoringRef.current = true;
+      setActiveSection(savedSection);
+      if (Array.isArray(savedTags) && savedTags.length > 0) {
+        setActiveTags(savedTags);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isRestoringRef.current) {
+      isRestoringRef.current = false;
+      return;
+    }
+    setActiveTags([]);
+  }, [activeSection]);
+
+  useEffect(() => {
+    try {
+      sessionStorage.setItem("news_activeSection", JSON.stringify(activeSection));
+      sessionStorage.setItem("news_activeTags", JSON.stringify(activeTags));
+    } catch {
+      // ignore write errors
+    }
+  }, [activeSection, activeTags]);
 
 
   useEffect(() => {
@@ -168,10 +212,6 @@ const UnifiedNewsPage = ({ setSelectedNews }) => {
     const tags = TAG_SECTIONS[activeSection] || [];
     return tags.filter((name) => tagCount.get(name) > 0);
   }, [activeSection, tagCount]);
-
-  useEffect(() => {
-    setActiveTags([]);
-  }, [activeSection]);
 
   // localStorage에 필터 상태 저장 (옵션 유지 활성화 시)
   useEffect(() => {
