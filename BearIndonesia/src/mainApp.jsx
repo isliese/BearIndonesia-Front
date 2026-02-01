@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
+import { Routes, Route, useLocation, useNavigate, useNavigationType } from 'react-router-dom';
 import Navigation from './components/navigation.jsx';
 import HomePage from './features/home/pages/homePage.jsx';
 import NewsPage from './features/news/pages/newsPage.jsx';
@@ -19,6 +19,7 @@ const MainApp = () => {
   const [selectedNews, setSelectedNews] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
+  const navigationType = useNavigationType();
   const scrollRef = useRef(null);
 
   useEffect(() => {
@@ -52,8 +53,12 @@ const MainApp = () => {
   useEffect(() => {
     const key = `${location.pathname}${location.search}`;
     const container = scrollRef.current;
-    if (location.state?.preserveScroll) {
-      const saved = sessionStorage.getItem(`scroll:${key}`);
+    const saved = sessionStorage.getItem(`scroll:${key}`);
+    const shouldRestore =
+      location.state?.preserveScroll ||
+      (navigationType === "POP" && key === "/" && saved !== null);
+
+    if (shouldRestore) {
       if (container && saved !== null) {
         container.scrollTo({ top: Number(saved) || 0, left: 0, behavior: "auto" });
       }
@@ -73,7 +78,7 @@ const MainApp = () => {
         sessionStorage.setItem(`scroll:${key}`, String(container.scrollTop || 0));
       }
     };
-  }, [location.pathname, location.search]);
+  }, [location.pathname, location.search, navigationType]);
 
   // 검색 처리 함수
   const handleSearch = (term) => {
