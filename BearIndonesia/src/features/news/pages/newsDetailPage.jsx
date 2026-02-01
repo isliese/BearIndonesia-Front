@@ -78,7 +78,7 @@ const NewsDetailPage = ({ news }) => {
             onClick={() => navigate(location.state?.from || '/news', { state: { preserveScroll: true } })}
             style={{
               position: 'sticky',
-              top: '2.5rem',
+              top: '3rem',
               background: 'rgba(255, 255, 255, 0.1)',
               border: '1px solid rgba(255, 140, 66, 0.5)', 
               borderRadius: '50%',
@@ -107,14 +107,14 @@ const NewsDetailPage = ({ news }) => {
         </div>
 
         <div style={{ maxWidth: '900px', width: '100%', marginTop: '1rem' }}>
-        <div style={{
-          background: 'rgba(255, 255, 255, 0.08)', 
-          backdropFilter: 'blur(20px)',
-          borderRadius: '25px', 
-          border: '1px solid rgba(255, 255, 255, 0.1)',
-          overflow: 'hidden', 
-          boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)'
-        }}>
+          <div style={{
+            background: 'rgba(255, 255, 255, 0.08)', 
+            backdropFilter: 'blur(20px)',
+            borderRadius: '25px', 
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            overflow: 'hidden', 
+            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)'
+          }}>
           {/* 헤더 */}
           <div style={{
             background: 'linear-gradient(135deg, rgba(255, 140, 66, 0.15), rgba(255, 167, 38, 0.15))',
@@ -468,6 +468,7 @@ const NewsDetailPage = ({ news }) => {
                 </>
               )}
             </div>
+          </div>
           </div>
         </div>
 
