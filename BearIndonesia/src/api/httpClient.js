@@ -26,9 +26,23 @@ const request = async (path, options = {}) => {
 
   if (!response.ok) {
     const errorText = await response.text().catch(() => "");
-    const error = new Error(`Request failed: ${response.status} ${response.statusText}`);
+    let errorData = null;
+    if (errorText) {
+      try {
+        errorData = JSON.parse(errorText);
+      } catch {
+        // ignore parse error
+      }
+    }
+    const errorMessage =
+      errorData?.message ||
+      errorData?.error ||
+      errorText ||
+      `Request failed: ${response.status} ${response.statusText}`;
+    const error = new Error(errorMessage);
     error.status = response.status;
     error.body = errorText;
+    error.data = errorData;
     throw error;
   }
 

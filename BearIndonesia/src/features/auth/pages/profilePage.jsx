@@ -77,8 +77,9 @@ const ProfilePage = () => {
           const parsed = JSON.parse(err.body);
           if (parsed?.message) message = parsed.message;
           else if (parsed?.error) message = parsed.error;
+          else if (err?.message) message = err.message;
         } catch {
-          // ignore parse error
+          if (err?.message) message = err.message;
         }
       } else if (err?.message) {
         message = err.message;
@@ -153,8 +154,11 @@ const ProfilePage = () => {
 
               <form onSubmit={handleChangePassword} style={{ display: "grid", gap: "0.8rem" }}>
                 <div style={inputGroupStyle}>
-                  <label style={labelStyle}>현재 비밀번호</label>
+                  <label style={labelStyle} htmlFor="currentPassword">
+                    현재 비밀번호
+                  </label>
                   <input
+                    id="currentPassword"
                     type="password"
                     value={currentPassword}
                     onChange={(e) => setCurrentPassword(e.target.value)}
@@ -163,8 +167,11 @@ const ProfilePage = () => {
                   />
                 </div>
                 <div style={inputGroupStyle}>
-                  <label style={labelStyle}>새 비밀번호</label>
+                  <label style={labelStyle} htmlFor="newPassword">
+                    새 비밀번호
+                  </label>
                   <input
+                    id="newPassword"
                     type="password"
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
@@ -173,8 +180,11 @@ const ProfilePage = () => {
                   />
                 </div>
                 <div style={inputGroupStyle}>
-                  <label style={labelStyle}>새 비밀번호 확인</label>
+                  <label style={labelStyle} htmlFor="confirmPassword">
+                    새 비밀번호 확인
+                  </label>
                   <input
+                    id="confirmPassword"
                     type="password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
