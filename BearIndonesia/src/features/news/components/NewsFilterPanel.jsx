@@ -26,6 +26,34 @@ const NewsFilterPanel = ({
   setKeepOptions,
   onReset,
 }) => {
+  const defaultSort = "최신순";
+  const defaultPeriod = "전체";
+  const defaultPress = "전체";
+
+  const toggleSort = (sort) => {
+    setSortOrder(sortOrder === sort ? defaultSort : sort);
+  };
+
+  const clearPeriod = () => {
+    setPeriodFilter(defaultPeriod);
+    setShowCustomDate(false);
+    setShowHourOptions(false);
+  };
+
+  const togglePeriod = (period) => {
+    if (periodFilter === period) {
+      clearPeriod();
+      return;
+    }
+    setPeriodFilter(period);
+    setShowCustomDate(false);
+    setShowHourOptions(false);
+  };
+
+  const togglePress = (press) => {
+    setPressFilter(pressFilter === press ? defaultPress : press);
+  };
+
   return (
     <>
       <div style={{ maxWidth: 1200, margin: "0 auto 1rem" }}>
@@ -70,7 +98,7 @@ const NewsFilterPanel = ({
               {["최신순", "오래된순", "정확도순"].map((sort) => (
                 <button
                   key={sort}
-                  onClick={() => setSortOrder(sort)}
+                  onClick={() => toggleSort(sort)}
                   style={{
                     padding: "0.5rem 1rem",
                     background: sortOrder === sort ? "#ff8c42" : "rgba(255, 255, 255, 0.1)",
@@ -97,15 +125,13 @@ const NewsFilterPanel = ({
               <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
                 <button
                   onClick={() => {
-                    setPeriodFilter("전체");
-                    setShowCustomDate(false);
-                    setShowHourOptions(false);
+                    clearPeriod();
                   }}
                   style={{
                     padding: "0.5rem 1rem",
-                    background: periodFilter === "전체" ? "#ff8c42" : "rgba(255, 255, 255, 0.1)",
+                    background: periodFilter === defaultPeriod ? "#ff8c42" : "rgba(255, 255, 255, 0.1)",
                     border: "1px solid",
-                    borderColor: periodFilter === "전체" ? "#ff8c42" : "rgba(255, 255, 255, 0.2)",
+                    borderColor: periodFilter === defaultPeriod ? "#ff8c42" : "rgba(255, 255, 255, 0.2)",
                     borderRadius: "20px",
                     color: "white",
                     cursor: "pointer",
@@ -118,9 +144,11 @@ const NewsFilterPanel = ({
 
                 <button
                   onClick={() => {
-                    setShowHourOptions(!showHourOptions);
-                    setShowCustomDate(false);
-                    if (!showHourOptions) {
+                    if (periodFilter.includes("시간") && showHourOptions) {
+                      clearPeriod();
+                    } else {
+                      setShowHourOptions(true);
+                      setShowCustomDate(false);
                       setPeriodFilter("1시간");
                     }
                   }}
@@ -146,11 +174,7 @@ const NewsFilterPanel = ({
                 {["1일", "1주", "1개월", "3개월", "6개월", "1년"].map((period) => (
                   <button
                     key={period}
-                    onClick={() => {
-                      setPeriodFilter(period);
-                      setShowCustomDate(false);
-                      setShowHourOptions(false);
-                    }}
+                    onClick={() => togglePeriod(period)}
                     style={{
                       padding: "0.5rem 1rem",
                       background: periodFilter === period ? "#ff8c42" : "rgba(255, 255, 255, 0.1)",
@@ -169,9 +193,11 @@ const NewsFilterPanel = ({
 
                 <button
                   onClick={() => {
-                    setShowCustomDate(!showCustomDate);
-                    setShowHourOptions(false);
-                    if (!showCustomDate) {
+                    if (showCustomDate || periodFilter === "직접입력") {
+                      clearPeriod();
+                    } else {
+                      setShowCustomDate(true);
+                      setShowHourOptions(false);
                       setPeriodFilter("직접입력");
                     }
                   }}
@@ -212,7 +238,13 @@ const NewsFilterPanel = ({
                 {["1시간", "2시간", "3시간", "4시간", "5시간", "6시간"].map((hour) => (
                   <button
                     key={hour}
-                    onClick={() => setPeriodFilter(hour)}
+                    onClick={() => {
+                      if (periodFilter === hour) {
+                        clearPeriod();
+                      } else {
+                        setPeriodFilter(hour);
+                      }
+                    }}
                     style={{
                       padding: "0.5rem 1rem",
                       background: periodFilter === hour ? "#ff8c42" : "rgba(255, 255, 255, 0.1)",
@@ -284,14 +316,14 @@ const NewsFilterPanel = ({
                 <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
                   <button
                     onClick={() => {
-                      setPressFilter("전체");
+                      setPressFilter(defaultPress);
                       setExpandedPressCategories({});
                     }}
                     style={{
                       padding: "0.5rem 1rem",
-                      background: pressFilter === "전체" ? "#ff8c42" : "rgba(255, 255, 255, 0.1)",
+                      background: pressFilter === defaultPress ? "#ff8c42" : "rgba(255, 255, 255, 0.1)",
                       border: "1px solid",
-                      borderColor: pressFilter === "전체" ? "#ff8c42" : "rgba(255, 255, 255, 0.2)",
+                      borderColor: pressFilter === defaultPress ? "#ff8c42" : "rgba(255, 255, 255, 0.2)",
                       borderRadius: "20px",
                       color: "white",
                       cursor: "pointer",
@@ -353,7 +385,7 @@ const NewsFilterPanel = ({
                             {sources.map((source) => (
                               <button
                                 key={source}
-                                onClick={() => setPressFilter(source)}
+                                onClick={() => togglePress(source)}
                                 style={{
                                   padding: "0.5rem 1rem",
                                   background: pressFilter === source ? "#ff8c42" : "rgba(255, 255, 255, 0.1)",
@@ -381,7 +413,7 @@ const NewsFilterPanel = ({
                 {pressList.data.map((press) => (
                   <button
                     key={press}
-                    onClick={() => setPressFilter(press)}
+                    onClick={() => togglePress(press)}
                     style={{
                       padding: "0.5rem 1rem",
                       background: pressFilter === press ? "#ff8c42" : "rgba(255, 255, 255, 0.1)",
