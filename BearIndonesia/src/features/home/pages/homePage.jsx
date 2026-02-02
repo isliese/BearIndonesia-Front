@@ -72,7 +72,13 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
   }, []);
 
   const topHeadlines = useMemo(() => {
+    const cutoff = Date.now() - 7 * 24 * 60 * 60 * 1000;
     return newsItems
+      .filter((a) => {
+        const rawDate = a?.publishedDate ?? a?.date ?? "";
+        const ts = Date.parse(rawDate);
+        return Number.isFinite(ts) && ts >= cutoff;
+      })
       .filter((a) => typeof a?.importance === "number")
       .sort((a, b) => (b.importance ?? 0) - (a.importance ?? 0))
       .slice(0, 6);
