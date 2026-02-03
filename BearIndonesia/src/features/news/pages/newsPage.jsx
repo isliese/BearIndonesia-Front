@@ -482,8 +482,8 @@ const UnifiedNewsPage = ({ setSelectedNews }) => {
       setNewsletterUrl(objectUrl);
     } catch (error) {
       console.error("뉴스레터 생성 실패:", error);
-      if (error?.status === 404) {
-        setNewsletterError("해당 날짜에 뉴스가 없습니다.");
+      if (error?.status === 404 || error?.status === 403) {
+        setNewsletterError("해당 연월에 충분한 뉴스가 없습니다.");
       } else {
         setNewsletterError("뉴스레터를 생성하지 못했습니다.");
       }
@@ -516,7 +516,7 @@ const UnifiedNewsPage = ({ setSelectedNews }) => {
           transition: "margin 0.3s ease",
         }}
       >
-        <h1 style={{ fontSize: "2.3rem", color: "#ff8c42", textAlign: "center", marginBottom: "1.6rem" }}>
+        <h1 style={{ fontSize: "2.3rem", color: "#ff8c42", textAlign: "center", marginBottom: "1.6rem", paddingTop: "1.5rem" }}>
           News
         </h1>
 

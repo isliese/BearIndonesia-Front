@@ -1,6 +1,6 @@
 // 뉴스레터 모달 컴포넌트
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const NewsletterModal = ({
   isOpen,
@@ -15,6 +15,20 @@ const NewsletterModal = ({
 
   const safeMonth = String(month || "").padStart(2, "0");
   const fileName = `뉴스레터-${year || ""}-${safeMonth}.pdf`;
+  const [dots, setDots] = useState(".");
+
+  useEffect(() => {
+    if (!isLoading) {
+      setDots(".");
+      return;
+    }
+
+    const id = setInterval(() => {
+      setDots((prev) => (prev.length >= 3 ? "." : `${prev}.`));
+    }, 400);
+
+    return () => clearInterval(id);
+  }, [isLoading]);
 
   return (
     <div
@@ -46,7 +60,9 @@ const NewsletterModal = ({
         }}
       >
         {isLoading && (
-          <div style={{ color: "#555", fontSize: "1rem" }}>뉴스레터를 생성 중입니다. 잠시만 기다려주세요...</div>
+          <div style={{ color: "#555", fontSize: "1rem" }}>
+            뉴스레터를 생성 중입니다. 잠시만 기다려주세요{dots}
+          </div>
         )}
         {!isLoading && errorMessage && (
           <div style={{ color: "#e53935", fontSize: "1rem" }}>{errorMessage}</div>

@@ -25,11 +25,18 @@ const NewsTopActions = ({
   const [isExcelHover, setIsExcelHover] = useState(false);
   const [isNewsletterHover, setIsNewsletterHover] = useState(false);
 
-  const currentYear = new Date().getFullYear();
+  const now = new Date();
+  const currentYear = now.getFullYear();
+  const currentMonth = now.getMonth() + 1;
+  const today = now.toISOString().slice(0, 10);
   const selectableYears = [];
   for (let year = 2025; year <= currentYear; year += 1) {
     selectableYears.push(year);
   }
+  const getSelectableMonths = (year) => {
+    const maxMonth = year === currentYear ? currentMonth : 12;
+    return Array.from({ length: maxMonth }, (_, i) => i + 1);
+  };
 
   return (
     <div
@@ -60,6 +67,7 @@ const NewsTopActions = ({
           value={wcStartDate}
           onChange={(e) => setWcStartDate(e.target.value)}
           min="2025-01-01"
+          max={today}
           style={{
             background: "rgba(255,255,255,0.1)",
             border: "1px solid rgba(255,255,255,0.2)",
@@ -77,6 +85,7 @@ const NewsTopActions = ({
           value={wcEndDate}
           onChange={(e) => setWcEndDate(e.target.value)}
           min="2025-01-01"
+          max={today}
           style={{
             background: "rgba(255,255,255,0.1)",
             border: "1px solid rgba(255,255,255,0.2)",
@@ -179,7 +188,7 @@ const NewsTopActions = ({
             fontSize: "0.85rem",
           }}
         >
-          {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
+          {getSelectableMonths(excelYear).map((month) => (
             <option key={month} value={month} style={{ background: "#1a1a2e" }}>
               {month}월
             </option>
@@ -252,7 +261,7 @@ const NewsTopActions = ({
             fontSize: "0.85rem",
           }}
         >
-          {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
+          {getSelectableMonths(newsletterYear).map((month) => (
             <option key={month} value={month} style={{ background: "#1a1a2e" }}>
               {month}월
             </option>
