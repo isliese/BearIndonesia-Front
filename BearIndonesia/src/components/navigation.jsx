@@ -8,6 +8,7 @@ import { clearScrapCache } from '../utils/scrapStorage';
 
 const Navigation = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [toast, setToast] = useState({ open: false, message: "", type: "info" });
   const [authUser, setAuthUser] = useState(() => getAuthUser());
   const navigate = useNavigate();
   const location = useLocation();
@@ -20,6 +21,10 @@ const Navigation = () => {
 
   const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
   const closeDropdown = () => setDropdownOpen(false);
+  const openToast = (message, type = "info") => {
+    if (!message) return;
+    setToast({ open: true, message, type });
+  };
 
   useEffect(() => {
     const update = () => setAuthUser(getAuthUser());
@@ -31,6 +36,24 @@ const Navigation = () => {
       window.removeEventListener("storage", update);
     };
   }, []);
+
+  useEffect(() => {
+    const handler = (event) => {
+      const detail = event?.detail || {};
+      if (!detail.message) return;
+      setToast({ open: true, message: detail.message, type: detail.type || "info" });
+    };
+    window.addEventListener("app-toast", handler);
+    return () => window.removeEventListener("app-toast", handler);
+  }, []);
+
+  useEffect(() => {
+    if (!toast.open) return;
+    const id = setTimeout(() => {
+      setToast((prev) => ({ ...prev, open: false }));
+    }, 2200);
+    return () => clearTimeout(id);
+  }, [toast.open, toast.message]);
 
   return (
     <nav style={{
@@ -171,7 +194,7 @@ const Navigation = () => {
                       onClick={() => {
                         clearAuthSession();
                         clearScrapCache();
-                        window.alert("로그아웃되었습니다.");
+                        openToast("로그아웃되었습니다.", "info");
                         navigate('/');
                         closeDropdown();
                       }}
@@ -202,6 +225,34 @@ const Navigation = () => {
           )}
         </div>
       </div>
+      {toast.open && (
+        <div
+          role="status"
+          aria-live="polite"
+          style={{
+            position: "fixed",
+            top: "92px",
+            right: "24px",
+            padding: "0.75rem 1rem",
+            borderRadius: "12px",
+            background:
+              toast.type === "success"
+                ? "rgba(46, 125, 50, 0.92)"
+                : "rgba(30, 41, 59, 0.92)",
+            border:
+              toast.type === "success"
+                ? "1px solid rgba(134, 239, 172, 0.5)"
+                : "1px solid rgba(148, 163, 184, 0.4)",
+            color: "white",
+            fontSize: "0.9rem",
+            boxShadow: "0 12px 28px rgba(0,0,0,0.35)",
+            zIndex: 1001,
+            backdropFilter: "blur(8px)",
+          }}
+        >
+          {toast.message}
+        </div>
+      )}
     </nav>
   );
 };

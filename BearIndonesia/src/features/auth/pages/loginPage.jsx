@@ -23,7 +23,11 @@ const LoginPage = () => {
         throw new Error("로그인 응답이 올바르지 않습니다.");
       }
       setAuthSession({ token: data.token, user: data.user });
-      window.alert("로그인되었습니다.");
+      window.dispatchEvent(
+        new CustomEvent("app-toast", {
+          detail: { message: "로그인되었습니다.", type: "success" },
+        })
+      );
       navigate(location.state?.from || "/");
     } catch (err) {
       setError(err?.message || "로그인에 실패했습니다.");
