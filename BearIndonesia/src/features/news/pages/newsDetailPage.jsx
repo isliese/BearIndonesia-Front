@@ -69,6 +69,26 @@ const NewsDetailPage = ({ news }) => {
     return nodes;
   };
 
+  const renderParagraphs = (text) => {
+    if (!text) return null;
+    const lines = String(text).split(/\n/);
+    return lines.map((line, index) => {
+      const indented = `    ${line}`;
+      return (
+        <p
+          key={`p-${index}`}
+          style={{
+            margin: index === lines.length - 1 ? 0 : "0 0 1rem 0",
+            lineHeight: 1.45,
+            whiteSpace: "pre-wrap",
+          }}
+        >
+          {indented}
+        </p>
+      );
+    });
+  };
+
   return (
     <div style={{ padding: '2rem 1rem', minHeight: 'calc(100vh - 80px)' }}>
       <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem' }}>
@@ -122,12 +142,13 @@ const NewsDetailPage = ({ news }) => {
             borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
           }}>
             {/* 제목 + 드롭다운 */}
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "1rem" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "1rem", marginTop: "0.8rem" }}>
               <h1 style={{
                 fontSize: '2.2rem', 
                 fontWeight: '700', 
                 lineHeight: '1.3',
                 marginBottom: '2rem', 
+                marginTop: '-0.5rem',
                 color: 'white',
                 textShadow: '0 2px 10px rgba(0, 0, 0, 0.3)',
                 flex: 1
@@ -409,11 +430,9 @@ const NewsDetailPage = ({ news }) => {
                       </h3>
                       <div style={{
                         color: '#e0e0e0',
-                        lineHeight: '1.8',
                         fontSize: '1.02rem',
-                        whiteSpace: 'pre-wrap'
                       }}>
-                        {contentKO}
+                        {renderParagraphs(contentKO)}
                       </div>
                     </div>
                   )}
@@ -457,11 +476,9 @@ const NewsDetailPage = ({ news }) => {
                       </h3>
                       <div style={{
                         color: '#e0e0e0',
-                        lineHeight: '1.8',
                         fontSize: '1.02rem',
-                        whiteSpace: 'pre-wrap'
                       }}>
-                        {contentID}
+                        {renderParagraphs(contentID)}
                       </div>
                     </div>
                   )}
