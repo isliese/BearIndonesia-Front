@@ -80,7 +80,16 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
         return Number.isFinite(ts) && ts >= cutoff;
       })
       .filter((a) => typeof a?.importance === "number")
-      .sort((a, b) => (b.importance ?? 0) - (a.importance ?? 0))
+      .sort((a, b) => {
+        const impDiff = (b.importance ?? 0) - (a.importance ?? 0);
+        if (impDiff !== 0) return impDiff;
+        const aDate = Date.parse(a?.publishedDate ?? a?.date ?? "") || 0;
+        const bDate = Date.parse(b?.publishedDate ?? b?.date ?? "") || 0;
+        if (bDate !== aDate) return bDate - aDate;
+        const aId = a?.id ?? 0;
+        const bId = b?.id ?? 0;
+        return bId - aId;
+      })
       .slice(0, 6);
   }, [newsItems]);
 
