@@ -1,6 +1,6 @@
 // 워드클라우드 모달 컴포넌트
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const WordCloudModal = ({
   isOpen,
@@ -15,6 +15,20 @@ const WordCloudModal = ({
 
   const toCompactDate = (value) => String(value || "").replace(/-/g, "");
   const fileName = `워드클라우드${toCompactDate(startDate)}-${toCompactDate(endDate)}.png`;
+  const [dots, setDots] = useState(".");
+
+  useEffect(() => {
+    if (!isLoading) {
+      setDots(".");
+      return;
+    }
+
+    const id = setInterval(() => {
+      setDots((prev) => (prev.length >= 3 ? "." : `${prev}.`));
+    }, 400);
+
+    return () => clearInterval(id);
+  }, [isLoading]);
 
   return (
     <div
@@ -42,7 +56,9 @@ const WordCloudModal = ({
         }}
       >
         {isLoading && (
-          <div style={{ color: "#555", fontSize: "1rem" }}>AI 워드클라우드를 생성 중입니다...</div>
+          <div style={{ color: "#555", fontSize: "1rem" }}>
+            AI 워드클라우드를 생성 중입니다.<br></br>잠시만 기다려주세요{dots}
+          </div>
         )}
         {!isLoading && errorMessage && (
           <div style={{ color: "#e53935", fontSize: "1rem" }}>{errorMessage}</div>

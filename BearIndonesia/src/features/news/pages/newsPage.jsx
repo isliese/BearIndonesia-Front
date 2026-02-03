@@ -64,7 +64,7 @@ const UnifiedNewsPage = ({ setSelectedNews }) => {
   };
   const defaultWcEnd = new Date();
   const defaultWcStart = new Date();
-  defaultWcStart.setMonth(defaultWcStart.getMonth() - 1);
+  defaultWcStart.setMonth(defaultWcStart.getMonth() - 6);
   const [wcStartDate, setWcStartDate] = useState(formatDate(defaultWcStart));
   const [wcEndDate, setWcEndDate] = useState(formatDate(defaultWcEnd));
   
