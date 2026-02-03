@@ -75,7 +75,7 @@ const searchAPI = async (searchTerm, sortBy = 'relevance', filterType = 'all') =
 
 function getInitials(text = "") {
   const s = String(text).trim();
-  if (!s) return "??";
+  if (!s) return "미상";
   if (s.startsWith("@")) return s.replace(/^@/, "").slice(0, 2).toUpperCase();
   const parts = s.split(/\s+/).filter(Boolean);
   const initials = parts.slice(0, 2).map(w => w[0]).join("");

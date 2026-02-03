@@ -191,25 +191,20 @@ const NewsTopActions = ({
             </option>
           ))}
         </select>
-        <a
-          href={`/Newsletter_${newsletterYear}-${String(newsletterMonth).padStart(2, "0")}.html`}
-          target="_blank"
-          rel="noreferrer"
-          style={{ textDecoration: "none" }}
+        <button
+          type="button"
+          onClick={() => alert("현재 개발중인 기능입니다.")}
+          style={{
+            background: "transparent",
+            border: "none",
+            color: "white",
+            cursor: "pointer",
+            fontSize: "0.9rem",
+            fontWeight: "bold",
+          }}
         >
-          <button
-            style={{
-              background: "transparent",
-              border: "none",
-              color: "white",
-              cursor: "pointer",
-              fontSize: "0.9rem",
-              fontWeight: "bold",
-            }}
-          >
-            Newsletter 보러가기
-          </button>
-        </a>
+          Newsletter 보러가기
+        </button>
       </div>
     </div>
   );

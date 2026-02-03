@@ -368,6 +368,11 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
                 {newsError}
               </li>
             )}
+            {!newsLoading && !newsError && topHeadlines.length === 0 && (
+              <li style={{ color: '#b0b0b0', textAlign: 'center', padding: '5rem 0' }}>
+                최근 7일 간의 뉴스가 없습니다.
+              </li>
+            )}
             {topHeadlines.map(item => (
               <li 
                 key={item.id} 

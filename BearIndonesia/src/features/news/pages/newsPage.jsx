@@ -52,8 +52,17 @@ const UnifiedNewsPage = ({ setSelectedNews }) => {
   
   // 워드클라우드 기간 선택
   const [wcYear, setWcYear] = useState(2025);
-  const [wcStartDate, setWcStartDate] = useState("2025-01-01");
-  const [wcEndDate, setWcEndDate] = useState("2025-12-31");
+  const formatDate = (date) => {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, "0");
+    const d = String(date.getDate()).padStart(2, "0");
+    return `${y}-${m}-${d}`;
+  };
+  const defaultWcEnd = new Date();
+  const defaultWcStart = new Date();
+  defaultWcStart.setMonth(defaultWcStart.getMonth() - 1);
+  const [wcStartDate, setWcStartDate] = useState(formatDate(defaultWcStart));
+  const [wcEndDate, setWcEndDate] = useState(formatDate(defaultWcEnd));
   
   // 엑셀/뉴스레터 년월 선택
   const now = new Date();
@@ -365,7 +374,7 @@ const UnifiedNewsPage = ({ setSelectedNews }) => {
 
   const downloadExcel = useCallback(async () => {
     if (!excelYear || !excelMonth) {
-      alert("?? ??? ??????.");
+      alert("연도와 월을 선택해 주세요.");
       return;
     }
 
@@ -384,8 +393,8 @@ const UnifiedNewsPage = ({ setSelectedNews }) => {
       link.remove();
       window.URL.revokeObjectURL(url);
     } catch (error) {
-      console.error("?? ???? ??", error);
-      alert("?? ????? ??????.");
+      console.error("엑셀 다운로드 실패:", error);
+      alert("로그인 후 이용해주세요.");
     }
   }, [excelYear, excelMonth]);
 
