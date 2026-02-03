@@ -1,6 +1,6 @@
 // 공통 nav바 컴포넌트
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import AReumiUser from '../assets/images/AReumi_User.png';
 import { clearAuthSession, getAuthUser, getDisplayName } from '../utils/auth';
@@ -10,6 +10,7 @@ const Navigation = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [toast, setToast] = useState({ open: false, message: "", type: "info" });
   const [authUser, setAuthUser] = useState(() => getAuthUser());
+  const dropdownRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -54,6 +55,18 @@ const Navigation = () => {
     }, 2200);
     return () => clearTimeout(id);
   }, [toast.open, toast.message]);
+
+  useEffect(() => {
+    if (!dropdownOpen) return;
+    const handleClickOutside = (event) => {
+      if (!dropdownRef.current) return;
+      if (!dropdownRef.current.contains(event.target)) {
+        closeDropdown();
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [dropdownOpen]);
 
   return (
     <nav style={{
@@ -101,7 +114,7 @@ const Navigation = () => {
         </ul>
 
         {/* 프로필 드롭다운 */}
-        <div style={{ position: 'relative' }}>
+        <div style={{ position: 'relative' }} ref={dropdownRef}>
           <button
             onClick={toggleDropdown}
             style={{
@@ -194,7 +207,7 @@ const Navigation = () => {
                       onClick={() => {
                         clearAuthSession();
                         clearScrapCache();
-                        openToast("로그아웃되었습니다.", "info");
+                        openToast("로그아웃 되었습니다.", "info");
                         navigate('/');
                         closeDropdown();
                       }}
