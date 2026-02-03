@@ -18,10 +18,18 @@ const NewsTopActions = ({
   newsletterMonth,
   setNewsletterYear,
   setNewsletterMonth,
+  onOpenNewsletter,
+  newsletterLoading,
 }) => {
   const [isWcHover, setIsWcHover] = useState(false);
   const [isExcelHover, setIsExcelHover] = useState(false);
   const [isNewsletterHover, setIsNewsletterHover] = useState(false);
+
+  const currentYear = new Date().getFullYear();
+  const selectableYears = [];
+  for (let year = 2025; year <= currentYear; year += 1) {
+    selectableYears.push(year);
+  }
 
   return (
     <div
@@ -47,8 +55,11 @@ const NewsTopActions = ({
       >
         <input
           type="date"
+          id="wc-start-date"
+          name="wcStartDate"
           value={wcStartDate}
           onChange={(e) => setWcStartDate(e.target.value)}
+          min="2025-01-01"
           style={{
             background: "rgba(255,255,255,0.1)",
             border: "1px solid rgba(255,255,255,0.2)",
@@ -61,8 +72,11 @@ const NewsTopActions = ({
         <span style={{ color: "white" }}>~</span>
         <input
           type="date"
+          id="wc-end-date"
+          name="wcEndDate"
           value={wcEndDate}
           onChange={(e) => setWcEndDate(e.target.value)}
+          min="2025-01-01"
           style={{
             background: "rgba(255,255,255,0.1)",
             border: "1px solid rgba(255,255,255,0.2)",
@@ -132,6 +146,8 @@ const NewsTopActions = ({
         }}
       >
         <select
+          id="excel-year"
+          name="excelYear"
           value={excelYear}
           onChange={(e) => setExcelYear(Number(e.target.value))}
           style={{
@@ -143,13 +159,15 @@ const NewsTopActions = ({
             fontSize: "0.85rem",
           }}
         >
-          {[2024, 2025, 2026].map((year) => (
+          {selectableYears.map((year) => (
             <option key={year} value={year} style={{ background: "#1a1a2e" }}>
               {year}년
             </option>
           ))}
         </select>
         <select
+          id="excel-month"
+          name="excelMonth"
           value={excelMonth}
           onChange={(e) => setExcelMonth(Number(e.target.value))}
           style={{
@@ -201,6 +219,8 @@ const NewsTopActions = ({
         }}
       >
         <select
+          id="newsletter-year"
+          name="newsletterYear"
           value={newsletterYear}
           onChange={(e) => setNewsletterYear(Number(e.target.value))}
           style={{
@@ -212,13 +232,15 @@ const NewsTopActions = ({
             fontSize: "0.85rem",
           }}
         >
-          {[2024, 2025, 2026].map((year) => (
+          {selectableYears.map((year) => (
             <option key={year} value={year} style={{ background: "#1a1a2e" }}>
               {year}년
             </option>
           ))}
         </select>
         <select
+          id="newsletter-month"
+          name="newsletterMonth"
           value={newsletterMonth}
           onChange={(e) => setNewsletterMonth(Number(e.target.value))}
           style={{
@@ -238,14 +260,15 @@ const NewsTopActions = ({
         </select>
         <button
           type="button"
-          onClick={() => alert("현재 개발중인 기능입니다.")}
+          onClick={onOpenNewsletter}
+          disabled={newsletterLoading}
           onMouseEnter={() => setIsNewsletterHover(true)}
           onMouseLeave={() => setIsNewsletterHover(false)}
           style={{
             background: isNewsletterHover ? "rgba(255, 140, 66, 0.22)" : "transparent",
             border: "1px solid rgba(255, 140, 66, 0.45)",
             color: "white",
-            cursor: "pointer",
+            cursor: newsletterLoading ? "not-allowed" : "pointer",
             fontSize: "0.9rem",
             fontWeight: "bold",
             padding: "0.35rem 0.9rem",
@@ -253,9 +276,10 @@ const NewsTopActions = ({
             transition: "transform 0.15s ease, background 0.2s ease, box-shadow 0.2s ease",
             boxShadow: isNewsletterHover ? "0 6px 14px rgba(255, 140, 66, 0.25)" : "none",
             transform: isNewsletterHover ? "translateY(-1px)" : "translateY(0)",
+            opacity: newsletterLoading ? 0.6 : 1,
           }}
         >
-          Newsletter 보러가기
+          {newsletterLoading ? "생성 중..." : "Newsletter 보러가기"}
         </button>
       </div>
     </div>
