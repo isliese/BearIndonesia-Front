@@ -356,10 +356,14 @@ const NewsDetailPage = ({ news }) => {
                       }}>
                         <span>🤖</span>AI 요약
                       </h3>
-                      <div style={{
-                        color: '#d0d0d0',
-                        lineHeight: '1.8',
-                        fontSize: '1.05rem'
+                      <div style={{ 
+                        color: '#e0e0e0', 
+                        lineHeight: 1.6,
+                        fontSize: '1.02rem',
+                        background: 'rgba(255, 140, 66, 0.08)',
+                        padding: '1.5rem',
+                        borderRadius: '12px',
+                        border: '1px solid rgba(255, 140, 66, 0.2)'
                       }}>
                         {renderHighlighted(summaryKO)}
                       </div>
@@ -428,9 +432,14 @@ const NewsDetailPage = ({ news }) => {
                       }}>
                         📝 원문
                       </h3>
-                      <div style={{
-                        color: '#e0e0e0',
+                      <div style={{ 
+                        color: '#e0e0e0', 
+                        lineHeight: 1.6,
                         fontSize: '1.02rem',
+                        background: 'rgba(255, 140, 66, 0.08)',
+                        padding: '1.5rem',
+                        borderRadius: '12px',
+                        border: '1px solid rgba(255, 140, 66, 0.2)'
                       }}>
                         {renderParagraphs(contentKO)}
                       </div>
@@ -453,10 +462,14 @@ const NewsDetailPage = ({ news }) => {
                       }}>
                         <span>🤖</span>AI Ringkasan
                       </h3>
-                      <div style={{
-                        color: '#d0d0d0',
-                        lineHeight: '1.8',
-                        fontSize: '1.05rem'
+                      <div style={{ 
+                        color: '#e0e0e0', 
+                        lineHeight: 1.6,
+                        fontSize: '1.02rem',
+                        background: 'rgba(255, 140, 66, 0.08)',
+                        padding: '1.5rem',
+                        borderRadius: '12px',
+                        border: '1px solid rgba(255, 140, 66, 0.2)'
                       }}>
                         {renderHighlighted(summaryID)}
                       </div>
@@ -474,9 +487,14 @@ const NewsDetailPage = ({ news }) => {
                       }}>
                         📄 Artikel Asli
                       </h3>
-                      <div style={{
-                        color: '#e0e0e0',
+                      <div style={{ 
+                        color: '#e0e0e0', 
+                        lineHeight: 1.6,
                         fontSize: '1.02rem',
+                        background: 'rgba(255, 140, 66, 0.08)',
+                        padding: '1.5rem',
+                        borderRadius: '12px',
+                        border: '1px solid rgba(255, 140, 66, 0.2)'
                       }}>
                         {renderParagraphs(contentID)}
                       </div>
