@@ -8,6 +8,7 @@ const NewsTopActions = ({
   setWcStartDate,
   setWcEndDate,
   onGenerateWordCloud,
+  wordCloudLoading,
   excelYear,
   excelMonth,
   setExcelYear,
@@ -69,16 +70,18 @@ const NewsTopActions = ({
         />
         <button
           onClick={onGenerateWordCloud}
+          disabled={wordCloudLoading}
           style={{
             background: "transparent",
             border: "none",
             color: "white",
-            cursor: "pointer",
+            cursor: wordCloudLoading ? "not-allowed" : "pointer",
             fontSize: "0.9rem",
             fontWeight: "bold",
+            opacity: wordCloudLoading ? 0.6 : 1,
           }}
         >
-          워드클라우드 생성
+          {wordCloudLoading ? "로딩 중..." : "워드클라우드 생성"}
         </button>
       </div>
 

@@ -2,8 +2,19 @@
 
 import React from "react";
 
-const WordCloudModal = ({ isOpen, onClose }) => {
+const WordCloudModal = ({
+  isOpen,
+  onClose,
+  imageUrl,
+  isLoading,
+  errorMessage,
+  startDate,
+  endDate,
+}) => {
   if (!isOpen) return null;
+
+  const toCompactDate = (value) => String(value || "").replace(/-/g, "");
+  const fileName = `워드클라우드${toCompactDate(startDate)}-${toCompactDate(endDate)}.png`;
 
   return (
     <div
@@ -30,17 +41,45 @@ const WordCloudModal = ({ isOpen, onClose }) => {
           maxHeight: "90%",
         }}
       >
-        <img
-          src="/wordcloud.png"
-          alt="워드클라우드"
-          style={{
-            maxWidth: "100%",
-            maxHeight: "70vh",
-            display: "block",
-            borderRadius: "8px",
-            margin: "0 auto",
-          }}
-        />
+        {isLoading && (
+          <div style={{ color: "#555", fontSize: "1rem" }}>AI 워드클라우드를 생성 중입니다...</div>
+        )}
+        {!isLoading && errorMessage && (
+          <div style={{ color: "#e53935", fontSize: "1rem" }}>{errorMessage}</div>
+        )}
+        {!isLoading && !errorMessage && imageUrl && (
+          <img
+            src={imageUrl}
+            alt="워드클라우드"
+            style={{
+              maxWidth: "100%",
+              maxHeight: "70vh",
+              display: "block",
+              borderRadius: "8px",
+              margin: "0 auto",
+            }}
+          />
+        )}
+        {!isLoading && !errorMessage && imageUrl && (
+          <a
+            href={imageUrl}
+            download={fileName}
+            style={{
+              display: "inline-block",
+              marginTop: "1rem",
+              marginRight: "1rem",
+              padding: "0.7rem 1.6rem",
+              background: "#2e7d32",
+              color: "white",
+              borderRadius: "8px",
+              textDecoration: "none",
+              fontSize: "0.95rem",
+              fontWeight: "bold",
+            }}
+          >
+            이미지 저장
+          </a>
+        )}
         <button
           onClick={onClose}
           style={{

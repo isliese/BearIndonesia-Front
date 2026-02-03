@@ -26,6 +26,10 @@ const UnifiedNewsPage = ({ setSelectedNews }) => {
   const [activeSection, setActiveSection] = useState("all");
   const [activeTags, setActiveTags] = useState([]);
   const [showWordCloud, setShowWordCloud] = useState(false);
+  const [wordCloudUrl, setWordCloudUrl] = useState("");
+  const [wordCloudLoading, setWordCloudLoading] = useState(false);
+  const [wordCloudError, setWordCloudError] = useState("");
+  const wordCloudUrlRef = useRef("");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [articles, setArticles] = useState([]);
@@ -150,6 +154,7 @@ const UnifiedNewsPage = ({ setSelectedNews }) => {
     const load = async () => {
       setIsLoading(true);
       setLoadError("");
+      // api 연결
       try {
         const response = await fetch("/api/articles", { signal: controller.signal });
         if (!response.ok) {
@@ -399,10 +404,47 @@ const UnifiedNewsPage = ({ setSelectedNews }) => {
   }, [excelYear, excelMonth]);
 
 
-  const generateWordCloud = () => {
-    alert(`워드클라우드 생성: ${wcStartDate} ~ ${wcEndDate}`);
-    // TODO: 실제 워드클라우드 생성 로직
+  const generateWordCloud = async () => {
+    if (!wcStartDate || !wcEndDate) {
+      alert("기간을 선택해 주세요.");
+      return;
+    }
+    setShowWordCloud(true);
+    setWordCloudLoading(true);
+    setWordCloudError("");
+    setWordCloudUrl("");
+
+    // Back에 워드클라우드 생성 요청 (사용자가 입력한 기간을 보냄)
+    try {
+      const blob = await request("/api/wordcloud", {
+        method: "POST",
+        body: { startDate: wcStartDate, endDate: wcEndDate },
+        responseType: "blob",
+      });
+      if (!blob || blob.size === 0) {
+        throw new Error("이미지 바이너리를 받지 못했습니다.");
+      }
+      if (wordCloudUrlRef.current) {
+        URL.revokeObjectURL(wordCloudUrlRef.current);
+      }
+      const objectUrl = URL.createObjectURL(blob);
+      wordCloudUrlRef.current = objectUrl;
+      setWordCloudUrl(objectUrl);
+    } catch (error) {
+      console.error("워드클라우드 생성 실패:", error);
+      setWordCloudError("워드클라우드를 생성하지 못했습니다.");
+    } finally {
+      setWordCloudLoading(false);
+    }
   };
+
+  useEffect(() => {
+    return () => {
+      if (wordCloudUrlRef.current) {
+        URL.revokeObjectURL(wordCloudUrlRef.current);
+      }
+    };
+  }, []);
 
   const sidebarWidth = isSidebarCollapsed ? 80 : 240;
 
@@ -439,6 +481,7 @@ const UnifiedNewsPage = ({ setSelectedNews }) => {
           setWcStartDate={setWcStartDate}
           setWcEndDate={setWcEndDate}
           onGenerateWordCloud={generateWordCloud}
+          wordCloudLoading={wordCloudLoading}
           excelYear={excelYear}
           excelMonth={excelMonth}
           setExcelYear={setExcelYear}
@@ -505,7 +548,19 @@ const UnifiedNewsPage = ({ setSelectedNews }) => {
       {/* 워드클라우드 모달 */}
       <WordCloudModal
         isOpen={showWordCloud}
-        onClose={() => setShowWordCloud(false)}
+        onClose={() => {
+          setShowWordCloud(false);
+          if (wordCloudUrlRef.current) {
+            URL.revokeObjectURL(wordCloudUrlRef.current);
+            wordCloudUrlRef.current = "";
+          }
+          setWordCloudUrl("");
+        }}
+        imageUrl={wordCloudUrl}
+        isLoading={wordCloudLoading}
+        errorMessage={wordCloudError}
+        startDate={wcStartDate}
+        endDate={wcEndDate}
       />
 
     </div>
