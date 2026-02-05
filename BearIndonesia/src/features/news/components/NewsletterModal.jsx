@@ -61,7 +61,7 @@ const NewsletterModal = ({
       >
         {isLoading && (
           <div style={{ color: "#555", fontSize: "1rem" }}>
-            뉴스레터를 생성 중입니다. 잠시만 기다려주세요{dots}
+            AI 뉴스레터를 생성 중입니다. 잠시만 기다려주세요.{dots}
           </div>
         )}
         {!isLoading && errorMessage && (
