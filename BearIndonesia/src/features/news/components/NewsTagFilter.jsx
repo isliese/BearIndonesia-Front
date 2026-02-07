@@ -78,13 +78,15 @@ const NewsTagFilter = ({ activeSection, currentSectionTags, activeTags, setActiv
   return (
     <div
       style={{
-        maxWidth: 1150,
+        maxWidth: 1200,
+        width: "100%",
         margin: "0 auto 2rem",
         padding: "1.5rem",
         background: "rgba(255, 255, 255, 0.05)",
         backdropFilter: "blur(10px)",
         borderRadius: "16px",
         border: "1px solid rgba(255, 255, 255, 0.1)",
+        boxSizing: "border-box",
       }}
     >
       <div style={{ color: "#ff8c42", fontWeight: 700, marginBottom: "1rem", fontSize: "1.1rem" }}>

@@ -649,7 +649,7 @@ const SearchResultsPage = ({ setSelectedNews }) => {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(400px, 1fr))",
+              gridTemplateColumns: "repeat(auto-fill, minmax(clamp(280px, 90vw, 440px), 1fr))",
               gap: "1.5rem",
             }}
           >
