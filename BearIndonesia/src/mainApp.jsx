@@ -54,17 +54,28 @@ const MainApp = () => {
     const key = `${location.pathname}${location.search}`;
     const container = scrollRef.current;
     const saved = sessionStorage.getItem(`scroll:${key}`);
+    const restoreOnPopPaths = new Set(["/", "/news"]);
     const shouldRestore =
       location.state?.preserveScroll ||
-      (navigationType === "POP" && key === "/" && saved !== null);
+      (navigationType === "POP" && restoreOnPopPaths.has(location.pathname) && saved !== null);
 
     if (shouldRestore) {
+      const top = Number(saved) || 0;
       if (container && saved !== null) {
-        container.scrollTo({ top: Number(saved) || 0, left: 0, behavior: "auto" });
+        container.scrollTo({ top, left: 0, behavior: "auto" });
       }
+      window.scrollTo({ top, left: 0, behavior: "auto" });
+      document.documentElement.scrollTo({ top, left: 0, behavior: "auto" });
+      document.body.scrollTo({ top, left: 0, behavior: "auto" });
       return () => {
         if (container) {
-          sessionStorage.setItem(`scroll:${key}`, String(container.scrollTop || 0));
+          const savedTop = Math.max(
+            container.scrollTop || 0,
+            window.scrollY || 0,
+            document.documentElement.scrollTop || 0,
+            document.body.scrollTop || 0,
+          );
+          sessionStorage.setItem(`scroll:${key}`, String(savedTop || 0));
         }
       };
     }
@@ -73,9 +84,17 @@ const MainApp = () => {
     } else {
       window.scrollTo(0, 0);
     }
+    document.documentElement.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    document.body.scrollTo({ top: 0, left: 0, behavior: "auto" });
     return () => {
       if (container) {
-        sessionStorage.setItem(`scroll:${key}`, String(container.scrollTop || 0));
+        const savedTop = Math.max(
+          container.scrollTop || 0,
+          window.scrollY || 0,
+          document.documentElement.scrollTop || 0,
+          document.body.scrollTop || 0,
+        );
+        sessionStorage.setItem(`scroll:${key}`, String(savedTop || 0));
       }
     };
   }, [location.pathname, location.search, navigationType]);
@@ -106,6 +125,7 @@ const MainApp = () => {
       {/* 스크롤 가능한 콘텐츠 영역 */}
       <div 
         ref={scrollRef}
+        id="app-scroll-container"
         style={{
           flex: 1,
           overflowY: 'auto',

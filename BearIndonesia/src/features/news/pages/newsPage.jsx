@@ -1,7 +1,7 @@
 // News 페이지 (통합 버전) 
 
 import React, { useMemo, useState, useCallback, useEffect, useRef } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useNavigationType } from "react-router-dom";
 import { request } from "../../../api/httpClient";
 // 컴포넌트 imports
 import NewsFilterPanel from "../components/NewsFilterPanel";
@@ -44,8 +44,26 @@ const UnifiedNewsPage = ({ setSelectedNews }) => {
   const mainContentRef = useRef(null);
   const hasRestoredRef = useRef(false);
   const isRestoringRef = useRef(false);
+  const scrollRestoredRef = useRef(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const navigationType = useNavigationType();
+
+  const saveScrollPosition = useCallback(() => {
+    try {
+      const key = `${location.pathname}${location.search}`;
+      const container = document.getElementById("app-scroll-container");
+      const top = Math.max(
+        container?.scrollTop || 0,
+        window.scrollY || 0,
+        document.documentElement.scrollTop || 0,
+        document.body.scrollTop || 0,
+      );
+      sessionStorage.setItem(`scroll:${key}`, String(top || 0));
+    } catch {
+      // ignore write errors
+    }
+  }, [location.pathname, location.search]);
   
   // 옵션 유지 체크박스
   const [keepOptions, setKeepOptions] = useState(true);
@@ -214,6 +232,39 @@ const UnifiedNewsPage = ({ setSelectedNews }) => {
       controller.abort();
     };
   }, []);
+
+  // News → Detail → Back(POP) 시 스크롤 복원
+  useEffect(() => {
+    if (scrollRestoredRef.current) return;
+    const shouldRestore = navigationType === "POP" || Boolean(location.state?.preserveScroll);
+    if (!shouldRestore) return;
+    if (isLoading) return;
+    if (articles.length === 0 && !loadError) return;
+
+    const key = `${location.pathname}${location.search}`;
+    const saved = sessionStorage.getItem(`scroll:${key}`);
+    if (saved === null) return;
+
+    const container = document.getElementById("app-scroll-container");
+    if (!container || typeof container.scrollTo !== "function") return;
+
+    scrollRestoredRef.current = true;
+    requestAnimationFrame(() => {
+      const top = Number(saved) || 0;
+      container.scrollTo({ top, left: 0, behavior: "auto" });
+      window.scrollTo({ top, left: 0, behavior: "auto" });
+      document.documentElement.scrollTo({ top, left: 0, behavior: "auto" });
+      document.body.scrollTo({ top, left: 0, behavior: "auto" });
+    });
+  }, [
+    navigationType,
+    location.state?.preserveScroll,
+    isLoading,
+    articles.length,
+    loadError,
+    location.pathname,
+    location.search,
+  ]);
 
   const tagCount = useMemo(() => {
     const m = new Map();
@@ -587,6 +638,7 @@ const UnifiedNewsPage = ({ setSelectedNews }) => {
         <NewsGrid
           articles={filtered}
           onOpen={(article) => {
+            saveScrollPosition();
             setSelectedNews?.(article);
             navigate("/news/detail", { state: { from: `${location.pathname}${location.search}` } });
           }}

@@ -1,6 +1,6 @@
 // 홈 페이지
 import React, { useState, useMemo, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useNavigationType } from 'react-router-dom';
 import BpomLogo from "../../../assets/images/BPOM.jpg";
 import CnbcLogo from "../../../assets/images/CNBC.png";
 import CnnLogo from "../../../assets/images/CNN.png";
@@ -12,9 +12,11 @@ import ScrapStarButton from "../../../components/ScrapStarButton";
 const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const navigationType = useNavigationType();
   const [newsItems, setNewsItems] = useState([]);
   const [newsError, setNewsError] = useState("");
   const [newsLoading, setNewsLoading] = useState(false);
+  const [scrollRestored, setScrollRestored] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -70,6 +72,36 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
       controller.abort();
     };
   }, []);
+
+  // Home → Detail → Back(POP) 시 스크롤 복원 (데이터 로딩 후 높이 확보)
+  useEffect(() => {
+    if (scrollRestored) return;
+    const shouldRestore = navigationType === "POP" || Boolean(location.state?.preserveScroll);
+    if (!shouldRestore) return;
+    if (newsLoading) return;
+    if (newsItems.length === 0 && !newsError) return;
+
+    const key = `${location.pathname}${location.search}`;
+    const saved = sessionStorage.getItem(`scroll:${key}`);
+    if (saved === null) return;
+
+    const container = document.getElementById("app-scroll-container");
+    if (!container || typeof container.scrollTo !== "function") return;
+
+    setScrollRestored(true);
+    requestAnimationFrame(() => {
+      container.scrollTo({ top: Number(saved) || 0, left: 0, behavior: "auto" });
+    });
+  }, [
+    scrollRestored,
+    navigationType,
+    location.state?.preserveScroll,
+    newsLoading,
+    newsItems.length,
+    newsError,
+    location.pathname,
+    location.search,
+  ]);
 
   const topHeadlines = useMemo(() => {
     const cutoff = Date.now() - 7 * 24 * 60 * 60 * 1000;
