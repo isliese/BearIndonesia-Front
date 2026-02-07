@@ -5,14 +5,17 @@ import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import AReumiUser from '../assets/images/AReumi_User.png';
 import { clearAuthSession, getAuthUser, getDisplayName } from '../utils/auth';
 import { clearScrapCache } from '../utils/scrapStorage';
+import { useMediaQuery } from "../hooks/useMediaQuery";
 
 const Navigation = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [toast, setToast] = useState({ open: false, message: "", type: "info" });
   const [authUser, setAuthUser] = useState(() => getAuthUser());
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
+  const isMobile = useMediaQuery("(max-width: 768px)");
 
   const navItems = [
     { id: 'about', label: '서비스 소개', to: '/about' },
@@ -26,6 +29,10 @@ const Navigation = () => {
     if (!message) return;
     setToast({ open: true, message, type });
   };
+
+  useEffect(() => {
+    if (!isMobile && mobileMenuOpen) setMobileMenuOpen(false);
+  }, [isMobile, mobileMenuOpen]);
 
   useEffect(() => {
     const update = () => setAuthUser(getAuthUser());
@@ -72,10 +79,12 @@ const Navigation = () => {
     <nav style={{
       background: 'rgba(255, 255, 255, 0.1)',
       backdropFilter: 'blur(10px)',
-      padding: '1rem 2.5rem 1rem 2rem',
+      padding: 'clamp(0.75rem, 1.2vw, 1rem) clamp(1rem, 3vw, 2.5rem)',
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
+      gap: 'clamp(0.6rem, 1.2vw, 1.2rem)',
+      flexWrap: 'wrap',
       borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
       position: 'sticky',
       top: 0,
@@ -90,28 +99,49 @@ const Navigation = () => {
       </div>
 
       {/* Navigation */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '1.6rem' }}>
-        <ul style={{ display: 'flex', gap: '1rem', listStyle: 'none', margin: 0, padding: 0 }}>
-          {navItems.map((item) => (
-            <li key={item.id}>
-              <NavLink
-                to={item.to}
-                style={({ isActive }) => ({
-                  whiteSpace: 'nowrap',
-                  color: 'white',
-                  textDecoration: 'none',
-                  padding: '0.5rem 1rem',
-                  fontSize: '1.1rem',
-                  borderRadius: '8px',
-                  transition: 'all 0.3s ease',
-                  background: isActive ? '#ff8c42' : 'transparent'
-                })}
-              >
-                {item.label}
-              </NavLink>
-            </li>
-          ))}
-        </ul>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 'clamp(0.8rem, 1.6vw, 1.6rem)', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+        {!isMobile && (
+          <ul style={{ display: 'flex', gap: 'clamp(0.4rem, 1vw, 1rem)', flexWrap: 'wrap', listStyle: 'none', margin: 0, padding: 0 }}>
+            {navItems.map((item) => (
+              <li key={item.id}>
+                <NavLink
+                  to={item.to}
+                  style={({ isActive }) => ({
+                    whiteSpace: 'nowrap',
+                    color: 'white',
+                    textDecoration: 'none',
+                    padding: 'clamp(0.4rem, 0.8vw, 0.55rem) clamp(0.6rem, 1.2vw, 1rem)',
+                    fontSize: 'clamp(0.95rem, 1.05vw, 1.1rem)',
+                    borderRadius: '8px',
+                    transition: 'all 0.3s ease',
+                    background: isActive ? '#ff8c42' : 'transparent'
+                  })}
+                >
+                  {item.label}
+                </NavLink>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {isMobile && (
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen((prev) => !prev)}
+            aria-label="Toggle menu"
+            style={{
+              background: 'rgba(255, 255, 255, 0.08)',
+              border: '1px solid rgba(255, 255, 255, 0.12)',
+              color: 'white',
+              padding: '0.45rem 0.7rem',
+              borderRadius: '10px',
+              cursor: 'pointer',
+              lineHeight: 1,
+            }}
+          >
+            ☰
+          </button>
+        )}
 
         {/* 프로필 드롭다운 */}
         <div style={{ position: 'relative' }} ref={dropdownRef}>
@@ -238,6 +268,39 @@ const Navigation = () => {
           )}
         </div>
       </div>
+
+      {isMobile && mobileMenuOpen && (
+        <div
+          style={{
+            width: "100%",
+            marginTop: "0.2rem",
+            background: "rgba(20, 20, 30, 0.75)",
+            border: "1px solid rgba(255, 255, 255, 0.12)",
+            borderRadius: "14px",
+            padding: "0.6rem",
+          }}
+        >
+          <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
+            {navItems.map((item) => (
+              <NavLink
+                key={item.id}
+                to={item.to}
+                onClick={() => setMobileMenuOpen(false)}
+                style={({ isActive }) => ({
+                  color: "white",
+                  textDecoration: "none",
+                  padding: "0.65rem 0.8rem",
+                  borderRadius: "12px",
+                  background: isActive ? "rgba(255, 140, 66, 0.22)" : "transparent",
+                  border: isActive ? "1px solid rgba(255, 140, 66, 0.35)" : "1px solid transparent",
+                })}
+              >
+                {item.label}
+              </NavLink>
+            ))}
+          </div>
+        </div>
+      )}
       {toast.open && (
         <div
           role="status"

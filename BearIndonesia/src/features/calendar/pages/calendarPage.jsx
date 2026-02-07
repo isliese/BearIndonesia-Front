@@ -3,6 +3,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { fetchAllArticles } from "../../../api/articleApi";
 import ScrapStarButton from "../../../components/ScrapStarButton";
+import { useMediaQuery } from "../../../hooks/useMediaQuery";
 
 const CalendarPage = ({ setSelectedNews }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -13,6 +14,7 @@ const CalendarPage = ({ setSelectedNews }) => {
   const [loadError, setLoadError] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
 
   const formatDate = (date) => date.toLocaleDateString('sv-SE');
 
@@ -193,9 +195,9 @@ const CalendarPage = ({ setSelectedNews }) => {
         인터렉티브 캘린더
       </h1>
 
-      <div style={{ display: 'flex', gap: '1rem', maxWidth: '1200px', margin: '0 auto' }}>
+      <div style={{ display: 'flex', gap: '1rem', maxWidth: '1200px', margin: '0 auto', flexWrap: isDesktop ? 'nowrap' : 'wrap', alignItems: 'stretch' }}>
         {/* 캘린더 */}
-        <div style={{ flex: 2, background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(10px)', borderRadius: '12px', padding: '1.1rem' }}>
+        <div style={{ flex: '2 1 clamp(320px, 60vw, 720px)', minWidth: 0, background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(10px)', borderRadius: '12px', padding: '1.1rem' }}>
           {/* 헤더 */}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
             <button
@@ -285,7 +287,7 @@ const CalendarPage = ({ setSelectedNews }) => {
         {/* 선택된 날짜 범위 뉴스 목록 */}
         <div
           key={`side-${calendarKey}`}
-          style={{ flex: 1, background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(10px)', borderRadius: '12px', padding: '1.1rem' }}
+          style={{ flex: '1 1 clamp(280px, 35vw, 420px)', minWidth: 0, background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(10px)', borderRadius: '12px', padding: '1.1rem' }}
         >
           <h3 style={{ textAlign: 'center', color: '#ff8c42', marginBottom: '0.85rem', fontSize: '1.05rem' }}>
             {selectedRange.start ? (
@@ -340,7 +342,7 @@ const CalendarPage = ({ setSelectedNews }) => {
               ))}
             </div>
           ) : (
-            <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', color: '#b0b0b0', fontSize: '1.05rem', lineHeight: 1.35, padding: '1.5rem', marginTop: '55%' }}>
+            <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', color: '#b0b0b0', fontSize: '1.05rem', lineHeight: 1.35, padding: '1.5rem', marginTop: '45%' }}>
               {hasSelectedRange ? 
                 '선택된 날짜 범위에는 뉴스가 없습니다.' :
                 '캘린더에서 날짜를 드래그하여 뉴스를 확인하세요.'
