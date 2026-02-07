@@ -110,7 +110,7 @@ const ScrappedNewsPage = ({ setSelectedNews }) => {
                     e.currentTarget.style.boxShadow = "none";
                   }}
                 >
-                  <ScrapStarButton article={item} size={18} style={{ position: "absolute", top: 12, right: 12 }} />
+                  <ScrapStarButton article={item} size={18} style={{ position: "absolute", top: 12, left: 12 }} />
 
                   <div style={{ color: "#d0d0d0", fontSize: "0.85rem", marginBottom: "0.3rem" }}>
                     {item.source || "출처 미상"} · {item.date || "날짜 없음"}
