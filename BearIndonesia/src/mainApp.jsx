@@ -8,6 +8,7 @@ import AboutPage from './features/about/pages/aboutPage.jsx';
 import SectionNewsPage from './features/news/pages/SectionNewsPage.jsx';
 import NewsDetailPage from './features/news/pages/newsDetailPage.jsx';
 import SearchResultsPage from './features/news/pages/SearchResultsPage.jsx';
+import CompetitorReportPage from './features/report/pages/competitorReportPage.jsx';
 import LoginPage from './features/auth/pages/loginPage.jsx';
 import SignupPage from './features/auth/pages/signupPage.jsx';
 import ProfilePage from './features/auth/pages/profilePage.jsx';
@@ -162,6 +163,7 @@ const MainApp = () => {
             path="/search"
             element={<SearchResultsPage setSelectedNews={setSelectedNews} />}
           />
+          <Route path="/report/competitor" element={<CompetitorReportPage />} />
           <Route
             path="*"
             element={<HomePage onSearch={handleSearch} setSelectedNews={setSelectedNews} />}

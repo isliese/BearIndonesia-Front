@@ -18,9 +18,10 @@ const Navigation = () => {
   const isMobile = useMediaQuery("(max-width: 768px)");
 
   const navItems = [
-    { id: 'about', label: '서비스 소개', to: '/about' },
+    { id: 'about', label: '\uc11c\ube44\uc2a4 \uc18c\uac1c', to: '/about' },
     { id: 'news', label: 'News', to: '/news' },
-    { id: 'calendar', label: '인터렉티브 캘린더', to: '/calendar' }
+    { id: 'calendar', label: '\uc778\ud130\ub809\ud2f0\ube0c \uce98\ub9b0\ub354', to: '/calendar' },
+    { id: 'report', label: 'Report', to: '/report/competitor' }
   ];
 
   const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
