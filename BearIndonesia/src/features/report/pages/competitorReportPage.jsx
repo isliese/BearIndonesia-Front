@@ -4,24 +4,34 @@ import { fetchCompetitorReport } from "../../../api/reportApi";
 const MAJOR_COMPETITORS = ["Kalbe Farma", "Kimia Farma", "Indofarma", "Bio Farma"];
 const OTHER_COMPETITORS = ["Dexa Medica", "Sanbe Farma", "Tempo Scan Pacific", "Phapros"];
 const PRESET_KEYWORDS = [...MAJOR_COMPETITORS, ...OTHER_COMPETITORS];
+const DEFAULT_DAYS = 30;
+const formatDateInput = (date) => date.toISOString().slice(0, 10);
 
 const CompetitorReportPage = () => {
   const [selectedKeyword, setSelectedKeyword] = useState(PRESET_KEYWORDS[0]);
+  const [startDate, setStartDate] = useState(() => {
+    const d = new Date();
+    d.setDate(d.getDate() - DEFAULT_DAYS);
+    return formatDateInput(d);
+  });
+  const [endDate, setEndDate] = useState(() => formatDateInput(new Date()));
   const [report, setReport] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const keywords = PRESET_KEYWORDS;
+  const competitorKeywords = PRESET_KEYWORDS;
 
   const fetchReport = async () => {
-    if (!keywords.length) return;
+    if (!competitorKeywords.length) return;
     setLoading(true);
     setError("");
     try {
       const data = await fetchCompetitorReport({
-        keywords: keywords.join(","),
+        keywords: competitorKeywords.join(","),
         topLimit: 8,
+        start: startDate,
+        end: endDate,
       });
       setReport(data);
     } catch (err) {
@@ -133,39 +143,10 @@ const CompetitorReportPage = () => {
   const keywordRanks = report?.keywordRanks || [];
   const weeklyIssues = report?.weeklyIssues || [];
   const monthlyIssues = report?.monthlyIssues || [];
-  const keywordTrends = report?.keywordTrends || [];
 
-  const trendSeries = useMemo(() => {
-    const dateMap = new Map();
-    keywordTrends.forEach((row) => {
-      (row.points || []).forEach((p) => {
-        if (!dateMap.has(p.date)) dateMap.set(p.date, {});
-        dateMap.get(p.date)[row.keyword] = p.count;
-      });
-    });
-
-    const dates = Array.from(dateMap.keys()).sort();
-    const slicedDates = dates.length > 30 ? dates.slice(dates.length - 30) : dates;
-    const series = slicedDates.map((date) => {
-      const counts = dateMap.get(date) || {};
-      const total = keywords.reduce((sum, k) => sum + (counts[k] || 0), 0);
-      return { date, counts, total };
-    });
-    const maxTotal = Math.max(1, ...series.map((s) => s.total));
-
-    return { series, maxTotal };
-  }, [keywordTrends, keywords]);
-
-  const colorPalette = [
-    "#ff8c42",
-    "#5bd1ff",
-    "#8b6cff",
-    "#69f0ae",
-    "#ffd166",
-    "#ff6b6b",
-    "#4db6ac",
-    "#9575cd",
-  ];
+  const overallKeywordRanks = useMemo(() => {
+    return keywordRanks.slice(0, 12);
+  }, [keywordRanks]);
 
   return (
     <div style={pageStyle}>
@@ -177,10 +158,25 @@ const CompetitorReportPage = () => {
           <div style={cardStyle}>
             <div style={titleRow}>
               <h2 style={sectionTitleLarge}>월간/주간 핵심 이슈 TOP</h2>
-              <div style={periodStyle}>
-                전체 기간: {report?.start ?? "-"} ~ {report?.end ?? "-"}
+              <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
+                <label style={filterLabel}>기간 필터</label>
+                <input
+                  type="date"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                  style={dateInputStyle}
+                />
+                <span style={{ color: "#cfcfcf" }}>~</span>
+                <input
+                  type="date"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                  style={dateInputStyle}
+                />
+                <button onClick={fetchReport} style={primaryButton}>필터 적용</button>
               </div>
             </div>
+            <div style={periodStyle}>선택 기간 기준: {startDate} ~ {endDate}</div>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
               <div>
                 <div style={{ color: "#b8b8b8", marginBottom: "0.4rem" }}>최근 30일</div>
@@ -214,35 +210,23 @@ const CompetitorReportPage = () => {
           </div>
 
           <div style={cardStyle}>
-            <h3 style={sectionTitle}>키워드 트렌드 그래프 (스택드 바)</h3>
-            {trendSeries.series.length === 0 && (
+            <h3 style={sectionTitle}>전체 키워드 언급량</h3>
+            {overallKeywordRanks.length === 0 && (
               <div style={{ color: "#b0b0b0" }}>데이터 없음</div>
             )}
-            <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap", marginBottom: "0.8rem" }}>
-              {keywords.map((kw, idx) => (
-                <div key={kw} style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-                  <span style={{ width: "10px", height: "10px", borderRadius: "3px", background: colorPalette[idx] }} />
-                  <span style={{ fontSize: "0.85rem", color: "#dcdcdc" }}>{kw}</span>
-                </div>
-              ))}
-            </div>
-            <div style={{ display: "flex", gap: "6px", alignItems: "flex-end", height: "140px", overflowX: "auto", paddingBottom: "0.4rem" }}>
-              {trendSeries.series.map((row) => (
-                <div key={row.date} style={{ width: "14px", display: "flex", flexDirection: "column", justifyContent: "flex-end" }} title={`${row.date}: ${row.total}`}>
-                  {keywords.map((kw, idx) => {
-                    const count = row.counts[kw] || 0;
-                    const height = row.total === 0 ? 0 : (count / trendSeries.maxTotal) * 120;
-                    return (
-                      <div
-                        key={`${row.date}-${kw}`}
-                        style={{
-                          height: `${height}px`,
-                          background: colorPalette[idx],
-                          borderRadius: "3px 3px 0 0",
-                        }}
-                      />
-                    );
-                  })}
+            <div style={{ display: "grid", gap: "0.6rem" }}>
+              {overallKeywordRanks.map((row) => (
+                <div key={row.keyword} style={{ display: "grid", gridTemplateColumns: "160px 1fr 60px", gap: "0.8rem", alignItems: "center" }}>
+                  <div style={{ color: "#e6e6e6" }}>{row.keyword}</div>
+                  <div style={barTrack}>
+                    <div
+                      style={{
+                        ...barFill,
+                        width: `${Math.min(100, (row.count / (overallKeywordRanks[0]?.count || 1)) * 100)}%`,
+                      }}
+                    />
+                  </div>
+                  <div style={{ textAlign: "right", color: "#ffb86b", fontWeight: 600 }}>{row.count}</div>
                 </div>
               ))}
             </div>
@@ -254,7 +238,7 @@ const CompetitorReportPage = () => {
               <button onClick={() => setIsModalOpen(true)} style={primaryButton}>동향 모달 열기</button>
             </div>
             <div style={{ display: "flex", gap: "0.6rem", flexWrap: "wrap" }}>
-              {keywords.map((kw) => (
+              {competitorKeywords.map((kw) => (
                 <button
                   key={kw}
                   onClick={() => setSelectedKeyword(kw)}
@@ -505,12 +489,28 @@ const titleRow = {
   alignItems: "center",
   justifyContent: "space-between",
   gap: "1rem",
-  marginBottom: "0.8rem",
+  marginBottom: "0.6rem",
+  flexWrap: "wrap",
 };
 
 const periodStyle = {
   color: "#d0d0d0",
   fontSize: "0.9rem",
+  marginBottom: "0.8rem",
+};
+
+const filterLabel = {
+  color: "#d8d8d8",
+  fontSize: "0.85rem",
+};
+
+const dateInputStyle = {
+  padding: "0.4rem 0.6rem",
+  borderRadius: "10px",
+  border: "1px solid rgba(255,255,255,0.2)",
+  background: "rgba(10,10,20,0.6)",
+  color: "white",
+  outline: "none",
 };
 
 const primaryButton = {
@@ -581,6 +581,19 @@ const chipStyle = {
   border: "1px solid rgba(255, 140, 66, 0.45)",
   fontSize: "0.8rem",
   cursor: "pointer",
+};
+
+const barTrack = {
+  height: "10px",
+  borderRadius: "999px",
+  background: "rgba(255,255,255,0.08)",
+  overflow: "hidden",
+};
+
+const barFill = {
+  height: "100%",
+  borderRadius: "999px",
+  background: "linear-gradient(90deg, #ff8c42, #ffa726)",
 };
 
 const modalOverlay = {
