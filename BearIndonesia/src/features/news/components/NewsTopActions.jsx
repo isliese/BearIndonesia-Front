@@ -156,12 +156,12 @@ const NewsTopActions = ({
                 boxShadow: "0 10px 24px rgba(0,0,0,0.25)",
                 zIndex: 1,
               }}
-            >
-              기간을 너무 좁게 설정하면 단어 개수가 적어질 수 있습니다.
-            </div>
-          )}
-        </div>
-      </div>
+	            >
+	              기간을 넓게 설정하면 워드클라우드 생성 시간이 다소 길어질 수 있습니다.
+	            </div>
+	          )}
+	        </div>
+	      </div>
 
       <div
         style={{
