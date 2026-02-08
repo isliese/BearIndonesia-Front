@@ -2,6 +2,7 @@
 
 import React from "react";
 import ScrapStarButton from "../../../components/ScrapStarButton";
+import { useMediaQuery } from "../../../hooks/useMediaQuery";
 
 function getInitials(text = "") {
   const s = String(text).trim();
@@ -28,6 +29,7 @@ const renderHighlighted = (text = "") => {
 };
 
 const NewsCard = ({ article, onOpen }) => {
+  const isMobile = useMediaQuery("(max-width: 768px)");
   const koTitle = article.korTitle || article.title;
   const koSummary = article.korSummary || "";
   const author = article.source || "";
@@ -47,8 +49,8 @@ const NewsCard = ({ article, onOpen }) => {
         position: "relative",
         background: dimmed ? "rgba(255, 255, 255, 0.06)" : "rgba(255, 255, 255, 0.1)",
         backdropFilter: "blur(10px)",
-        borderRadius: "16px",
-        padding: "clamp(0.95rem, 1.4vw, 1.2rem)",
+        borderRadius: isMobile ? "14px" : "16px",
+        padding: isMobile ? "0.9rem" : "clamp(0.95rem, 1.4vw, 1.2rem)",
         transition: "all 0.25s ease",
         cursor: "pointer",
         overflow: "hidden",
@@ -105,7 +107,7 @@ const NewsCard = ({ article, onOpen }) => {
         <div style={{ color: "#b0b0b0", fontSize: "clamp(0.82rem, 1vw, 0.9rem)" }}>{author}</div>
       </div>
 
-      <div style={{ fontSize: "clamp(1.05rem, 1.35vw, 1.25rem)", fontWeight: 700, marginBottom: "0.55rem", color: "white" }}>
+      <div style={{ fontSize: isMobile ? "1.05rem" : "clamp(1.05rem, 1.35vw, 1.25rem)", fontWeight: 700, marginBottom: "0.55rem", color: "white" }}>
         {koTitle}
       </div>
 
@@ -114,7 +116,7 @@ const NewsCard = ({ article, onOpen }) => {
           color: "#d0d0d0",
           marginBottom: "clamp(0.7rem, 1vw, 0.9rem)",
           lineHeight: 1.6,
-          fontSize: "clamp(0.95rem, 1.1vw, 1.05rem)",
+          fontSize: isMobile ? "0.92rem" : "clamp(0.95rem, 1.1vw, 1.05rem)",
           display: "-webkit-box",
           WebkitLineClamp: 5,
           WebkitBoxOrient: "vertical",

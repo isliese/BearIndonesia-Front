@@ -1,6 +1,7 @@
 // 상단 액션 컴포넌트
 
 import React, { useState } from "react";
+import { useMediaQuery } from "../../../hooks/useMediaQuery";
 
 const NewsTopActions = ({
   wcStartDate,
@@ -24,6 +25,7 @@ const NewsTopActions = ({
   const [isWcHover, setIsWcHover] = useState(false);
   const [isExcelHover, setIsExcelHover] = useState(false);
   const [isNewsletterHover, setIsNewsletterHover] = useState(false);
+  const isMobile = useMediaQuery("(max-width: 768px)");
 
   const now = new Date();
   const currentYear = now.getFullYear();
@@ -47,6 +49,13 @@ const NewsTopActions = ({
         marginBottom: "2rem",
         flexWrap: "wrap",
         alignItems: "center",
+        ...(isMobile
+          ? {
+              flexDirection: "column",
+              gap: "0.75rem",
+              width: "100%",
+            }
+          : null),
       }}
     >
       <div
@@ -58,6 +67,14 @@ const NewsTopActions = ({
           padding: "0.5rem 1rem",
           borderRadius: "50px",
           border: "1px solid rgba(100, 181, 246, 0.3)",
+          ...(isMobile
+            ? {
+                flexWrap: "wrap",
+                width: "100%",
+                maxWidth: "560px",
+                boxSizing: "border-box",
+              }
+            : null),
         }}
       >
         <input
@@ -75,6 +92,7 @@ const NewsTopActions = ({
             padding: "0.4rem",
             color: "white",
             fontSize: "0.85rem",
+            ...(isMobile ? { flex: "1 1 150px", minWidth: 0 } : null),
           }}
         />
         <span style={{ color: "white" }}>~</span>
@@ -93,6 +111,7 @@ const NewsTopActions = ({
             padding: "0.4rem",
             color: "white",
             fontSize: "0.85rem",
+            ...(isMobile ? { flex: "1 1 150px", minWidth: 0 } : null),
           }}
         />
         <div style={{ position: "relative", display: "inline-flex" }}>
@@ -114,6 +133,7 @@ const NewsTopActions = ({
               transition: "transform 0.15s ease, background 0.2s ease, box-shadow 0.2s ease",
               boxShadow: isWcHover ? "0 6px 14px rgba(100, 181, 246, 0.25)" : "none",
               transform: isWcHover ? "translateY(-1px)" : "translateY(0)",
+              ...(isMobile ? { width: "100%", whiteSpace: "nowrap" } : null),
             }}
           >
             {wordCloudLoading ? "로딩 중..." : "워드클라우드 생성"}
@@ -152,6 +172,14 @@ const NewsTopActions = ({
           padding: "0.5rem 1rem",
           borderRadius: "50px",
           border: "1px solid rgba(76, 175, 80, 0.3)",
+          ...(isMobile
+            ? {
+                flexWrap: "wrap",
+                width: "100%",
+                maxWidth: "560px",
+                boxSizing: "border-box",
+              }
+            : null),
         }}
       >
         <select
@@ -166,6 +194,7 @@ const NewsTopActions = ({
             padding: "0.4rem",
             color: "white",
             fontSize: "0.85rem",
+            ...(isMobile ? { flex: "1 1 110px", minWidth: 0 } : null),
           }}
         >
           {selectableYears.map((year) => (
@@ -186,6 +215,7 @@ const NewsTopActions = ({
             padding: "0.4rem",
             color: "white",
             fontSize: "0.85rem",
+            ...(isMobile ? { flex: "1 1 90px", minWidth: 0 } : null),
           }}
         >
           {getSelectableMonths(excelYear).map((month) => (
@@ -210,6 +240,7 @@ const NewsTopActions = ({
             transition: "transform 0.15s ease, background 0.2s ease, box-shadow 0.2s ease",
             boxShadow: isExcelHover ? "0 6px 14px rgba(76, 175, 80, 0.25)" : "none",
             transform: isExcelHover ? "translateY(-1px)" : "translateY(0)",
+            ...(isMobile ? { width: "100%", whiteSpace: "nowrap" } : null),
           }}
         >
           Excel 다운로드
@@ -225,6 +256,14 @@ const NewsTopActions = ({
           padding: "0.5rem 1rem",
           borderRadius: "50px",
           border: "1px solid rgba(255, 140, 66, 0.35)",
+          ...(isMobile
+            ? {
+                flexWrap: "wrap",
+                width: "100%",
+                maxWidth: "560px",
+                boxSizing: "border-box",
+              }
+            : null),
         }}
       >
         <select
@@ -239,6 +278,7 @@ const NewsTopActions = ({
             padding: "0.4rem",
             color: "white",
             fontSize: "0.85rem",
+            ...(isMobile ? { flex: "1 1 110px", minWidth: 0 } : null),
           }}
         >
           {selectableYears.map((year) => (
@@ -259,6 +299,7 @@ const NewsTopActions = ({
             padding: "0.4rem",
             color: "white",
             fontSize: "0.85rem",
+            ...(isMobile ? { flex: "1 1 90px", minWidth: 0 } : null),
           }}
         >
           {getSelectableMonths(newsletterYear).map((month) => (
@@ -286,6 +327,7 @@ const NewsTopActions = ({
             boxShadow: isNewsletterHover ? "0 6px 14px rgba(255, 140, 66, 0.25)" : "none",
             transform: isNewsletterHover ? "translateY(-1px)" : "translateY(0)",
             opacity: newsletterLoading ? 0.6 : 1,
+            ...(isMobile ? { width: "100%", whiteSpace: "nowrap" } : null),
           }}
         >
           {newsletterLoading ? "생성 중..." : "Newsletter 보러가기"}

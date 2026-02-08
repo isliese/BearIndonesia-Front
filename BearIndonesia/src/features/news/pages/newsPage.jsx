@@ -612,7 +612,7 @@ const UnifiedNewsPage = ({ setSelectedNews }) => {
         ref={mainContentRef}
         style={{
           flex: 1,
-          padding: "clamp(0.5rem, 1.5vw, 1rem)",
+          padding: isMobile ? "0.9rem 0.95rem" : "clamp(0.5rem, 1.5vw, 1rem)",
           marginLeft: `${effectiveSidebarWidth}px`,
           transition: "margin 0.3s ease",
           boxSizing: "border-box",

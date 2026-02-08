@@ -1,6 +1,7 @@
 // 홈 페이지
 import React, { useState, useMemo, useEffect } from 'react';
 import { useLocation, useNavigate, useNavigationType } from 'react-router-dom';
+import { useMediaQuery } from "../../../hooks/useMediaQuery";
 import BpomLogo from "../../../assets/images/bpom.png";
 import CnbcLogo from "../../../assets/images/cnbc.png";
 import CnnLogo from "../../../assets/images/cnn.png";
@@ -21,6 +22,7 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const navigationType = useNavigationType();
+  const isMobile = useMediaQuery("(max-width: 768px)");
   const [newsItems, setNewsItems] = useState([]);
   const [newsError, setNewsError] = useState("");
   const [newsLoading, setNewsLoading] = useState(false);
@@ -231,17 +233,18 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
       <div style={{
         position: 'relative',
         width: '100%',
-        maxWidth: '850px'
+        maxWidth: '1200px'
       }}>
         <input
+          className="home-search-input"
           type="text"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
           placeholder="제약 회사명, 의약품명 등을 검색해보세요!"
           style={{
-            width: '98%',
-            padding: '1em 0.2rem 1em 1rem',
+            width: '100%',
+            padding: '1em 6.4rem 1em 1.4rem',
             fontSize: '1.2rem',
             border: '2px solid rgba(255, 140, 66, 0.3)',
             borderRadius: '50px',
@@ -249,14 +252,16 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
             backdropFilter: 'blur(10px)',
             color: 'white',
             outline: 'none',
-            transition: 'all 0.3s ease'
+            transition: 'all 0.3s ease',
+            boxSizing: 'border-box'
           }}
         />
         <button
+          className="home-search-btn"
           onClick={handleSearch}
           style={{
             position: 'absolute',
-            right: '10px',
+            right: '26px',
             top: '50%',
             transform: 'translateY(-50%)',
             background: '#ff8c42',
@@ -318,7 +323,7 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
           </div>
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
+            gridTemplateColumns: isMobile ? 'repeat(2, minmax(0, 1fr))' : 'repeat(auto-fit, minmax(160px, 1fr))',
             gap: '1rem'
           }}>
             {newsStandItems.map((item) => (
@@ -365,27 +370,27 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
                         e.currentTarget.style.boxShadow = 'none';
                       }}
                     >
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', alignItems: 'center' }}>
-                        <div
-                          style={{
-                            height: '72px',
-                            width: '100%',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                          }}
-                        >
-                          <img
-                            src={item.image}
-                            alt={item.name}
-                            style={{
-                              maxWidth: item.name === "Bisnis" ? '190px' : '120px',
-                              maxHeight: '72px',
-                              objectFit: 'contain',
-                              filter: 'drop-shadow(0 4px 10px rgba(0,0,0,0.25))'
-                            }}
-                          />
-                        </div>
+	                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', alignItems: 'center' }}>
+	                        <div
+	                          style={{
+	                            height: isMobile ? '56px' : '72px',
+	                            width: '100%',
+	                            display: 'flex',
+	                            alignItems: 'center',
+	                            justifyContent: 'center',
+	                          }}
+	                        >
+	                          <img
+	                            src={item.image}
+	                            alt={item.name}
+	                            style={{
+	                              maxWidth: isMobile ? (item.name === "Bisnis" ? '150px' : '95px') : (item.name === "Bisnis" ? '190px' : '120px'),
+	                              maxHeight: isMobile ? '56px' : '72px',
+	                              objectFit: 'contain',
+	                              filter: 'drop-shadow(0 4px 10px rgba(0,0,0,0.25))'
+	                            }}
+	                          />
+	                        </div>
                         <span style={{ fontSize: '0.85rem', color: '#d9e7ef', letterSpacing: '0.02em' }}>
                           {item.name}
                         </span>

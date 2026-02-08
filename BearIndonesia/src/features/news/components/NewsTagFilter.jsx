@@ -78,7 +78,7 @@ const NewsTagFilter = ({ activeSection, currentSectionTags, activeTags, setActiv
   return (
     <div
       style={{
-        maxWidth: 1200,
+        maxWidth: 1304,
         width: "100%",
         margin: "0 auto 2rem",
         padding: "1.5rem",

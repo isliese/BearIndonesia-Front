@@ -41,6 +41,7 @@ export const getArticleKey = (article) => {
 };
 
 export const isScrapped = (article) => {
+  if (!getAuthToken()) return false;
   const key = getArticleKey(article);
   if (!key) return false;
   return getCache().includes(key);

@@ -2,14 +2,19 @@
 
 import React from "react";
 import NewsCard from "./NewsCard";
+import { useMediaQuery } from "../../../hooks/useMediaQuery";
 
 const NewsGrid = ({ articles, onOpen }) => {
+  const isMobile = useMediaQuery("(max-width: 768px)");
+
   return (
     <div
       style={{
-        overflowX: "auto",
+        overflowX: isMobile ? "visible" : "auto",
         overflowY: "hidden",
-        paddingBottom: "0.25rem",
+        paddingBottom: isMobile ? 0 : "0.25rem",
+        paddingLeft: isMobile ? "0.25rem" : 0,
+        paddingRight: isMobile ? "0.25rem" : 0,
         WebkitOverflowScrolling: "touch",
       }}
     >
@@ -17,10 +22,10 @@ const NewsGrid = ({ articles, onOpen }) => {
         style={{
           display: "grid",
           // 화면이 줄어도 항상 3열 유지 (필요 시 가로 스크롤)
-          gridTemplateColumns: "repeat(3, 420px)",
-          gap: "22px",
-          width: "1304px",
-          maxWidth: "1304px",
+          gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 420px)",
+          gap: isMobile ? "14px" : "22px",
+          width: isMobile ? "100%" : "1304px",
+          maxWidth: isMobile ? "560px" : "1304px",
           margin: "0 auto",
           marginBottom: "2.5rem",
         }}

@@ -72,6 +72,7 @@ const ScrapStarButton = ({ article, size = 18, style = {}, onChange }) => {
         display: "inline-flex",
         alignItems: "center",
         justifyContent: "center",
+        ...style,
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -97,7 +98,6 @@ const ScrapStarButton = ({ article, size = 18, style = {}, onChange }) => {
           textShadow: scrapped ? "0 0 6px rgba(246, 211, 101, 0.6)" : "none",
           opacity: canScrap ? 1 : 0.5,
           transition: "all 0.2s ease",
-          ...style,
         }}
       >
         {scrapped ? "★" : "☆"}

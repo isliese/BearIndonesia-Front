@@ -1,3 +1,9 @@
+@import url("https://cdn.jsdelivr.net/gh/sunn-us/suit@latest/fonts/variable/woff2/SUIT-Variable.css");
+
+:root {
+  font-family: "SUIT Variable", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
 /* 페이지 전체의 흰색 테두리만 제거 */
 html, body, #root {
   margin: 0;
@@ -13,6 +19,11 @@ html, body, #root {
 body {
   box-sizing: border-box;
   overflow-y: hidden; /* body 전체 세로 스크롤도 숨김 */
+  font-family: inherit;
+}
+
+button, input, textarea, select {
+  font-family: inherit;
 }
 
 #root {
@@ -43,7 +54,7 @@ body {
 
 /* 스크롤바 썸 (움직이는 부분) */
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #ff8c42, #ffa726);
+  background: linear-gradient(135deg, rgba(255, 140, 66, 0.85), rgba(255, 167, 38, 0.85));
   border-radius: 10px;
   border: 2px solid rgba(255, 255, 255, 0.05);
   transition: all 0.3s ease;
@@ -51,14 +62,14 @@ body {
 
 /* 스크롤바 썸 호버 */
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, #ffa726, #ffb74d);
+  background: linear-gradient(135deg, rgba(255, 167, 38, 0.85), rgba(255, 183, 77, 0.85));
   box-shadow: 0 0 12px rgba(255, 140, 66, 0.5);
   border-color: rgba(255, 255, 255, 0.1);
 }
 
 /* 스크롤바 썸 클릭 */
 ::-webkit-scrollbar-thumb:active {
-  background: linear-gradient(135deg, #ff7043, #ff8c42);
+  background: linear-gradient(135deg, rgba(255, 112, 67, 0.85), rgba(255, 140, 66, 0.85));
 }
 
 /* 스크롤바 코너 (가로/세로 스크롤바가 만나는 부분) */
@@ -69,10 +80,32 @@ body {
 /* Firefox용 스크롤바 */
 * {
   scrollbar-width: thin;
-  scrollbar-color: #ff8c42 rgba(30, 30, 35, 0.6);
+  scrollbar-color: rgba(255, 140, 66, 0.85) rgba(30, 30, 35, 0.6);
 }
 
 /* 스크롤 애니메이션 부드럽게 */
 html {
   scroll-behavior: smooth;
+}
+
+/* Home search placeholder (mobile) */
+@media (max-width: 768px) {
+  .home-search-input::placeholder {
+    font-size: 0.72rem;
+  }
+
+  .home-search-input {
+    padding-top: 0.55rem !important;
+    padding-bottom: 0.55rem !important;
+    padding-left: 0.9rem !important;
+    padding-right: 4.4rem !important;
+    font-size: 0.95rem !important;
+  }
+
+  .home-search-btn {
+    right: 14px !important;
+    padding: 0.42rem 0.75rem !important;
+    font-size: 0.85rem !important;
+    opacity: 0.85;
+  }
 }
