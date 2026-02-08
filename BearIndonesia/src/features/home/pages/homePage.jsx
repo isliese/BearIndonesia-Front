@@ -13,6 +13,8 @@ import SindonewsLogo from "../../../assets/images/sindonews.png";
 import SuaraLogo from "../../../assets/images/suara.png";
 import TempoLogo from "../../../assets/images/tempo.png";
 import VivaLogo from "../../../assets/images/viva.svg";
+import KompasLogo from "../../../assets/images/Kompas.png";
+import IdxLogo from "../../../assets/images/idx.png";
 import ScrapStarButton from "../../../components/ScrapStarButton";
 
 const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
@@ -134,6 +136,7 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedNewsStand, setSelectedNewsStand] = useState(null);
+  const [hoveredStand, setHoveredStand] = useState(null);
 
   const handleSearch = () => {
     if (searchTerm.trim()) {
@@ -180,14 +183,21 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
     { name: "CNN", image: CnnLogo, filterValue: "CNN Indonesia", website: "https://www.cnnindonesia.com/" },
     { name: "Detik", image: DetikLogo, filterValue: "detik", website: "https://www.detik.com/" },
     { name: "Farmasetika", image: FarmasetikaLogo, filterValue: "Farmasetika", website: "https://farmasetika.com/" },
+    { name: "Kompas", image: KompasLogo, filterValue: "Kompas", website: "https://www.kompas.com/" },
     { name: "MOH", image: MohLogo, filterValue: "MOH", website: "https://www.kemkes.go.id/" },
-    { name: "Market Bisnis", image: MarketbisnisLogo, filterValue: "Market Bisnis", website: "https://market.bisnis.com/" },
-    { name: "Nasional Kontan", image: NasionalkontanLogo, filterValue: "Nasional Kontan", website: "https://nasional.kontan.co.id/" },
+    { name: "Bisnis", image: MarketbisnisLogo, filterValue: "Bisnis", website: "https://bisnis.com/" },
+    { name: "Kontan", image: NasionalkontanLogo, filterValue: "Kontan", website: "https://www.kontan.co.id/" },
+    { name: "IDX", image: IdxLogo, filterValue: "IDX", website: "https://www.idx.co.id/" },
     { name: "Sindo News", image: SindonewsLogo, filterValue: "Sindo News", website: "https://www.sindonews.com/" },
     { name: "Suara", image: SuaraLogo, filterValue: "Suara", website: "https://www.suara.com/" },
     { name: "Tempo", image: TempoLogo, filterValue: "Tempo", website: "https://tempo.co/" },
     { name: "Viva", image: VivaLogo, filterValue: "Viva", website: "https://www.viva.co.id/" },
   ];
+
+  const disabledStandMessages = {
+    CNN: "CNN 뉴스를 더 수집 중입니다.",
+    Tempo: "Tempo 뉴스를 더 수집 중입니다.",
+  };
   
   return (
     <div style={{
@@ -312,51 +322,101 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
             gap: '1rem'
           }}>
             {newsStandItems.map((item) => (
-              <button
-                key={item.name}
-                type="button"
-                onClick={() => handleNewsStandClick(item)}
-                style={{
-                  background: 'rgba(255,255,255,0.08)',
-                  border: '1px solid rgba(255,255,255,0.16)',
-                  borderRadius: '16px',
-                  padding: '0.9rem',
-                  cursor: 'pointer',
-                  transition: 'all 0.25s ease',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  minHeight: '110px'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-4px)';
-                  e.currentTarget.style.background = 'rgba(255,255,255,0.14)';
-                  e.currentTarget.style.borderColor = 'rgba(128,203,196,0.6)';
-                  e.currentTarget.style.boxShadow = '0 10px 24px rgba(0,0,0,0.2)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'none';
-                  e.currentTarget.style.background = 'rgba(255,255,255,0.08)';
-                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.16)';
-                  e.currentTarget.style.boxShadow = 'none';
-                }}
-              >
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', alignItems: 'center' }}>
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    style={{
-                      maxWidth: item.name === "Market Bisnis" ? '190px' : '120px',
-                      maxHeight: item.name === "Market Bisnis" ? '72px' : '48px',
-                      objectFit: 'contain',
-                      filter: 'drop-shadow(0 4px 10px rgba(0,0,0,0.25))'
-                    }}
-                  />
-                  <span style={{ fontSize: '0.85rem', color: '#d9e7ef', letterSpacing: '0.02em' }}>
-                    {item.name}
-                  </span>
-                </div>
-              </button>
+              (() => {
+                const tooltip = disabledStandMessages[item.name];
+                const disabled = Boolean(tooltip);
+                return (
+                  <div
+                    key={item.name}
+                    style={{ position: "relative" }}
+                    onMouseEnter={() => setHoveredStand(item.name)}
+                    onMouseLeave={() => setHoveredStand(null)}
+                  >
+                    <button
+                      type="button"
+                      disabled={disabled}
+                      onClick={disabled ? undefined : () => handleNewsStandClick(item)}
+                      style={{
+                        background: 'rgba(255,255,255,0.08)',
+                        border: '1px solid rgba(255,255,255,0.16)',
+                        borderRadius: '16px',
+                        padding: '0.9rem',
+                        cursor: disabled ? 'not-allowed' : 'pointer',
+                        transition: 'all 0.25s ease',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        minHeight: '110px',
+                        width: "100%",
+                        opacity: disabled ? 0.7 : 1,
+                      }}
+                      onMouseEnter={(e) => {
+                        if (disabled) return;
+                        e.currentTarget.style.transform = 'translateY(-4px)';
+                        e.currentTarget.style.background = 'rgba(255,255,255,0.14)';
+                        e.currentTarget.style.borderColor = 'rgba(128,203,196,0.6)';
+                        e.currentTarget.style.boxShadow = '0 10px 24px rgba(0,0,0,0.2)';
+                      }}
+                      onMouseLeave={(e) => {
+                        if (disabled) return;
+                        e.currentTarget.style.transform = 'none';
+                        e.currentTarget.style.background = 'rgba(255,255,255,0.08)';
+                        e.currentTarget.style.borderColor = 'rgba(255,255,255,0.16)';
+                        e.currentTarget.style.boxShadow = 'none';
+                      }}
+                    >
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', alignItems: 'center' }}>
+                        <div
+                          style={{
+                            height: '72px',
+                            width: '100%',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                          }}
+                        >
+                          <img
+                            src={item.image}
+                            alt={item.name}
+                            style={{
+                              maxWidth: item.name === "Bisnis" ? '190px' : '120px',
+                              maxHeight: '72px',
+                              objectFit: 'contain',
+                              filter: 'drop-shadow(0 4px 10px rgba(0,0,0,0.25))'
+                            }}
+                          />
+                        </div>
+                        <span style={{ fontSize: '0.85rem', color: '#d9e7ef', letterSpacing: '0.02em' }}>
+                          {item.name}
+                        </span>
+                      </div>
+                    </button>
+
+                    {disabled && hoveredStand === item.name && (
+                      <div
+                        style={{
+                          position: "absolute",
+                          top: "calc(100% + 8px)",
+                          left: "50%",
+                          transform: "translateX(-50%)",
+                          background: "rgba(20, 20, 20, 0.95)",
+                          color: "#ffcc80",
+                          padding: "6px 10px",
+                          borderRadius: "8px",
+                          fontSize: "0.8rem",
+                          whiteSpace: "nowrap",
+                          border: "1px solid rgba(255, 140, 66, 0.35)",
+                          boxShadow: "0 6px 18px rgba(0,0,0,0.35)",
+                          zIndex: 20,
+                          pointerEvents: "none",
+                        }}
+                      >
+                        {tooltip}
+                      </div>
+                    )}
+                  </div>
+                );
+              })()
             ))}
           </div>
         </div>
