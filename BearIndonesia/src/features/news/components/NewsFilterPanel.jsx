@@ -366,6 +366,57 @@ const NewsFilterPanel = ({
                       {Object.keys(expandedPressCategories).length > 0 ? "▲" : "▼"}
                     </span>
                   </button>
+
+                  {pressFilter !== defaultPress && (
+                    <div
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "0.45rem",
+                        padding: "0.5rem 0.9rem",
+                        borderRadius: "20px",
+                        background: "rgba(255, 140, 66, 0.18)",
+                        border: "1px solid rgba(255, 140, 66, 0.35)",
+                        color: "#ffae66",
+                        fontSize: "0.85rem",
+                        fontWeight: 600,
+                        maxWidth: "min(380px, 70vw)",
+                      }}
+                      title={pressFilter}
+                    >
+                      <span
+                        style={{
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {pressFilter}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setPressFilter(defaultPress)}
+                        style={{
+                          width: 22,
+                          height: 22,
+                          borderRadius: 999,
+                          border: "1px solid rgba(255, 255, 255, 0.18)",
+                          background: "rgba(0,0,0,0.2)",
+                          color: "white",
+                          cursor: "pointer",
+                          lineHeight: 1,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          padding: 0,
+                        }}
+                        aria-label="선택된 뉴스 사이트 해제"
+                        title="선택 해제"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  )}
                 </div>
 
                 {Object.keys(expandedPressCategories).length > 0 && (
