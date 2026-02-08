@@ -7,21 +7,23 @@ const AboutPage = () => {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-      justifyContent: 'center',
+      justifyContent: 'flex-start',
       minHeight: 'calc(100vh - 80px)',
       textAlign: 'center',
-      
+      padding: 'clamp(1.5rem, 5vw, 3rem) clamp(1.25rem, 4vw, 2rem)',
+      boxSizing: 'border-box',
     }}>
       <div style={{
-        paddingTop: '30px',
-        marginTop: '50px',
+        paddingTop: 'clamp(12px, 3vw, 30px)',
+        marginTop: 'clamp(16px, 4vw, 50px)',
         maxWidth: '840px',
         width: '100%',
         background: 'rgba(255, 255, 255, 0.1)',
         backdropFilter: 'blur(10px)',
         borderRadius: '15px',
-        padding: '2rem',
-        marginBottom: '4rem'
+        padding: 'clamp(1.6rem, 4vw, 2rem)',
+        marginBottom: 'clamp(1.75rem, 5vw, 4rem)',
+        boxSizing: 'border-box',
       }}>
         <h2 style={{
           fontSize: '1.5rem',
@@ -36,20 +38,21 @@ const AboutPage = () => {
           marginBottom: '1.5rem'
         }}>
           복잡하고 빠르게 변화하는 인도네시아 제약 시장, 정보의 홍수 속에서 핵심을 놓치고 계신가요?
-          <br></br>BearIndonesia는 매일 쏟아지는 뉴스 속에서 당신이 반드시 알아야 할 인사이트를 AI 기술로 찾아드립니다.
+          <br />
+          BearIndonesia는 매일 쏟아지는 뉴스 속에서 당신이 반드시 알아야 할 인사이트를 AI 기술로 찾아드립니다.
         </p>
         <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(258px, 1fr))',
+          display: 'flex',
+          flexDirection: 'column',
           gap: '1rem',
           marginTop: '2rem'
         }}>
           <div style={{
             background: 'rgba(255, 140, 66, 0.1)',
-            padding: '1rem',
+            padding: '1.25rem',
             borderRadius: '10px',
             border: '1px solid rgba(255, 140, 66, 0.2)',
-            minHeight: '200px',
+            minHeight: 'unset',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center'
@@ -63,15 +66,15 @@ const AboutPage = () => {
               alignItems: 'center',
               justifyContent: 'center'
               }}>
-            '신약 허가', 'M&A' 등 핵심 카테고리와<br></br>키워드로 뉴스를 자동 분류합니다.<br></br>불필요한 정보는 걸러내고<br></br>가장 중요한 소식에만 집중하여<br></br>시간을 절약하세요. 
+            '신약 허가', 'M&A' 등 핵심 카테고리와 키워드로 뉴스를 자동 분류합니다. <br></br>불필요한 정보는 걸러내고 가장 중요한 소식에만 집중하여 시간을 절약하세요.
             </p>
           </div>
           <div style={{
             background: 'rgba(255, 140, 66, 0.1)',
-            padding: '1rem',
+            padding: '1.25rem',
             borderRadius: '10px',
             border: '1px solid rgba(255, 140, 66, 0.2)',
-            minHeight: '200px',
+            minHeight: 'unset',
             display: 'flex',
             flexDirection: 'column'
           }}>
@@ -83,15 +86,15 @@ const AboutPage = () => {
               alignItems: 'center',
               justifyContent: 'center'
               }}>
-              AI가 긴 기사의 핵심 내용을<br></br>단 몇 줄로 요약해 드립니다.<br></br>출퇴근길, 커피 한 잔의 시간에<br></br>시장의 핵심 동향을<br></br>완벽하게 파악할 수 있습니다.
+              AI가 긴 기사의 핵심 내용을 단 몇 줄로 요약해 드립니다. <br></br>출퇴근길, 커피 한 잔의 시간에 시장의 핵심 동향을 빠르게 파악할 수 있습니다.
             </p>
           </div>
           <div style={{
             background: 'rgba(255, 140, 66, 0.1)',
-            padding: '1rem',
+            padding: '1.25rem',
             borderRadius: '10px',
             border: '1px solid rgba(255, 140, 66, 0.2)',
-            minHeight: '200px',
+            minHeight: 'unset',
             display: 'flex',
             flexDirection: 'column'
           }}>
@@ -104,19 +107,20 @@ const AboutPage = () => {
               alignItems: 'center',
               justifyContent: 'center'
               }}> 
-              특정 기간의 아티클을<br></br>손쉽게 필터링하여 확인할 수 있습니다.
+              특정 기간의 아티클을 손쉽게 필터링하여 확인할 수 있습니다.
             </p>
           </div>
         </div>
       </div>
       <div style={{
         maxWidth: '840px',
-        marginBottom: '100px',
+        marginBottom: 'clamp(2.5rem, 8vw, 100px)',
         width: '100%',
         background: 'rgba(255, 255, 255, 0.1)',
         backdropFilter: 'blur(10px)',
         borderRadius: '15px',
-        padding: '2rem'
+        padding: 'clamp(1.6rem, 4vw, 2rem)',
+        boxSizing: 'border-box',
       }}>
         <h2 style={{
           fontSize: '1.5rem',
@@ -131,11 +135,12 @@ const AboutPage = () => {
           marginBottom: '1.5rem'
         }}>
           BearIndonesia의 강력한 기능들을 아래 3단계로 간단하게 활용해 보세요.
-          <br></br>매일 업데이트되는 제약 산업의 핵심 정보를 놓치지 않고 따라갈 수 있습니다.
+          <br />
+          매일 업데이트되는 제약 산업의 핵심 정보를 놓치지 않고 따라갈 수 있습니다.
         </p>
         <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(258px, 1fr))',
+          display: 'flex',
+          flexDirection: 'column',
           gap: '1rem',
           marginTop: '2rem'
         }}>
@@ -144,7 +149,7 @@ const AboutPage = () => {
             padding: '1rem',
             borderRadius: '10px',
             border: '1px solid rgba(255, 140, 66, 0.2)',
-            minHeight: '200px',
+            minHeight: 'unset',
             display: 'flex',
             flexDirection: 'column'
           }}>
@@ -157,7 +162,7 @@ const AboutPage = () => {
               alignItems: 'center',
               justifyContent: 'center'
               }}> 
-              '최신뉴스' 페이지에서 AI가 분류한<br></br>다양한 카테고리의 기사들을 확인하고<br></br>최신 50개 뉴스 워드 클라우드도<br></br>함께 확인해보세요.
+              '최신뉴스' 페이지에서 AI가 분류한 다양한 카테고리의 기사들을 확인하고, <br></br>최신 뉴스 워드클라우드도 함께 확인해보세요.
               </p>
           </div>
           <div style={{
@@ -165,7 +170,7 @@ const AboutPage = () => {
             padding: '1rem',
             borderRadius: '10px',
             border: '1px solid rgba(255, 140, 66, 0.2)',
-            minHeight: '200px',
+            minHeight: 'unset',
             display: 'flex',
             flexDirection: 'column'
           }}>
@@ -178,7 +183,7 @@ const AboutPage = () => {
               alignItems: 'center',
               justifyContent: 'center'
               }}> 
-              이달의 뉴스 기사를 정리한<br></br>Excel과 보고서를<br></br>다운로드 할 수 있어요.
+              이달의 뉴스 기사를 정리한 Excel과 보고서를 다운로드할 수 있어요.
             </p>
           </div>
           <div style={{
@@ -186,7 +191,7 @@ const AboutPage = () => {
             padding: '1rem',
             borderRadius: '10px',
             border: '1px solid rgba(255, 140, 66, 0.2)',
-            minHeight: '200px',
+            minHeight: 'unset',
             display: 'flex',
             flexDirection: 'column'
           }}>
@@ -199,7 +204,7 @@ const AboutPage = () => {
               alignItems: 'center',
               justifyContent: 'center'
               }}> 
-              '인터렉티브 캘린더'에서<br></br>기간별 주요 기사를 확인하고<br></br>관련 뉴스를 함께 모아봐요.
+              '인터렉티브 캘린더'에서 기간별 주요 기사를 확인하고 관련 뉴스를 함께 모아봐요.
             </p>
         </div>
       </div>

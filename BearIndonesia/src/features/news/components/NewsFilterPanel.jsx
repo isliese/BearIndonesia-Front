@@ -56,7 +56,7 @@ const NewsFilterPanel = ({
 
   return (
     <>
-      <div style={{ maxWidth: 1200, margin: "0 auto 1rem" }}>
+      <div style={{ maxWidth: 1200, width: "100%", margin: "0 auto 1rem", boxSizing: "border-box" }}>
         <button
           onClick={onToggle}
           style={{
@@ -81,13 +81,15 @@ const NewsFilterPanel = ({
       {isOpen && (
         <div
           style={{
-            maxWidth: 1150,
+            maxWidth: 1200,
+            width: "100%",
             margin: "0 auto 2rem",
             padding: "1.5rem",
             background: "rgba(255, 255, 255, 0.05)",
             backdropFilter: "blur(10px)",
             borderRadius: "16px",
             border: "1px solid rgba(255, 255, 255, 0.1)",
+            boxSizing: "border-box",
           }}
         >
           <div style={{ marginBottom: "1.5rem", display: "flex", gap: "1rem", flexWrap: "wrap" }}>

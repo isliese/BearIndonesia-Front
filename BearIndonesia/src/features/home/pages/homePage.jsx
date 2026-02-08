@@ -1,20 +1,28 @@
 // 홈 페이지
 import React, { useState, useMemo, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import BpomLogo from "../../../assets/images/BPOM.jpg";
-import CnbcLogo from "../../../assets/images/CNBC.png";
-import CnnLogo from "../../../assets/images/CNN.png";
+import { useLocation, useNavigate, useNavigationType } from 'react-router-dom';
+import BpomLogo from "../../../assets/images/bpom.png";
+import CnbcLogo from "../../../assets/images/cnbc.png";
+import CnnLogo from "../../../assets/images/cnn.png";
 import DetikLogo from "../../../assets/images/detik.png";
-import FarmasetikaLogo from "../../../assets/images/farmasetika.webp";
-import MohLogo from "../../../assets/images/MOH.png";
+import FarmasetikaLogo from "../../../assets/images/farmasetika.png";
+import MohLogo from "../../../assets/images/moh.png";
+import MarketbisnisLogo from "../../../assets/images/marketbisnis.png";
+import NasionalkontanLogo from "../../../assets/images/nasionalkontan.png";
+import SindonewsLogo from "../../../assets/images/sindonews.png";
+import SuaraLogo from "../../../assets/images/suara.png";
+import TempoLogo from "../../../assets/images/tempo.png";
+import VivaLogo from "../../../assets/images/viva.svg";
 import ScrapStarButton from "../../../components/ScrapStarButton";
 
 const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const navigationType = useNavigationType();
   const [newsItems, setNewsItems] = useState([]);
   const [newsError, setNewsError] = useState("");
   const [newsLoading, setNewsLoading] = useState(false);
+  const [scrollRestored, setScrollRestored] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -70,6 +78,36 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
       controller.abort();
     };
   }, []);
+
+  // Home → Detail → Back(POP) 시 스크롤 복원 (데이터 로딩 후 높이 확보)
+  useEffect(() => {
+    if (scrollRestored) return;
+    const shouldRestore = navigationType === "POP" || Boolean(location.state?.preserveScroll);
+    if (!shouldRestore) return;
+    if (newsLoading) return;
+    if (newsItems.length === 0 && !newsError) return;
+
+    const key = `${location.pathname}${location.search}`;
+    const saved = sessionStorage.getItem(`scroll:${key}`);
+    if (saved === null) return;
+
+    const container = document.getElementById("app-scroll-container");
+    if (!container || typeof container.scrollTo !== "function") return;
+
+    setScrollRestored(true);
+    requestAnimationFrame(() => {
+      container.scrollTo({ top: Number(saved) || 0, left: 0, behavior: "auto" });
+    });
+  }, [
+    scrollRestored,
+    navigationType,
+    location.state?.preserveScroll,
+    newsLoading,
+    newsItems.length,
+    newsError,
+    location.pathname,
+    location.search,
+  ]);
 
   const topHeadlines = useMemo(() => {
     const cutoff = Date.now() - 7 * 24 * 60 * 60 * 1000;
@@ -143,6 +181,12 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
     { name: "Detik", image: DetikLogo, filterValue: "detik", website: "https://www.detik.com/" },
     { name: "Farmasetika", image: FarmasetikaLogo, filterValue: "Farmasetika", website: "https://farmasetika.com/" },
     { name: "MOH", image: MohLogo, filterValue: "MOH", website: "https://www.kemkes.go.id/" },
+    { name: "Market Bisnis", image: MarketbisnisLogo, filterValue: "Market Bisnis", website: "https://market.bisnis.com/" },
+    { name: "Nasional Kontan", image: NasionalkontanLogo, filterValue: "Nasional Kontan", website: "https://nasional.kontan.co.id/" },
+    { name: "Sindo News", image: SindonewsLogo, filterValue: "Sindo News", website: "https://www.sindonews.com/" },
+    { name: "Suara", image: SuaraLogo, filterValue: "Suara", website: "https://www.suara.com/" },
+    { name: "Tempo", image: TempoLogo, filterValue: "Tempo", website: "https://tempo.co/" },
+    { name: "Viva", image: VivaLogo, filterValue: "Viva", website: "https://www.viva.co.id/" },
   ];
   
   return (
@@ -156,7 +200,7 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
       padding: '2rem'
     }}>
       <h1 style={{
-        fontSize: '3.5rem',
+        fontSize: 'clamp(2.2rem, 4vw, 3.5rem)',
         marginBottom: '1rem',
         background: 'linear-gradient(135deg, #ff8c42, #ffa726)',
         WebkitBackgroundClip: 'text',
@@ -166,7 +210,7 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
         BearIndonesia
       </h1>
       <p style={{
-        fontSize: '1.4rem',
+        fontSize: 'clamp(1.05rem, 1.6vw, 1.4rem)',
         color: '#b0b0b0',
         marginBottom: '3rem',
         maxWidth: '1000px'
@@ -302,8 +346,8 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
                     src={item.image}
                     alt={item.name}
                     style={{
-                      maxWidth: '120px',
-                      maxHeight: '48px',
+                      maxWidth: item.name === "Market Bisnis" ? '190px' : '120px',
+                      maxHeight: item.name === "Market Bisnis" ? '72px' : '48px',
                       objectFit: 'contain',
                       filter: 'drop-shadow(0 4px 10px rgba(0,0,0,0.25))'
                     }}

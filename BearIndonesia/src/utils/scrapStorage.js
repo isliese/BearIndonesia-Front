@@ -58,7 +58,7 @@ export const syncScrapList = async () => {
   return list;
 };
 
-export const toggleScrap = async (article) => {
+export const toggleScrap = async (article, options = {}) => {
   const token = getAuthToken();
   const key = getArticleKey(article);
   if (!token || !key) return false;
@@ -71,7 +71,8 @@ export const toggleScrap = async (article) => {
     window.dispatchEvent(new Event("scrapchange"));
     return false;
   }
-  await addScrap(key);
+  const comment = typeof options?.comment === "string" ? options.comment.slice(0, 300) : undefined;
+  await addScrap(key, comment !== undefined ? { comment } : undefined);
   const next = [key, ...cached];
   setCache(next);
   window.dispatchEvent(new Event("scrapchange"));

@@ -86,7 +86,7 @@ const ScrappedNewsPage = ({ setSelectedNews }) => {
             <div style={{ display: "grid", gap: "1rem" }}>
               {scrapped.map((item) => (
                 <div
-                  key={item.key}
+                  key={item.key || item.id}
                   onClick={() => {
                     setSelectedNews?.(item);
                     window.scrollTo({ top: 0, left: 0, behavior: "instant" });
@@ -110,7 +110,7 @@ const ScrappedNewsPage = ({ setSelectedNews }) => {
                     e.currentTarget.style.boxShadow = "none";
                   }}
                 >
-                  <ScrapStarButton article={item} size={18} style={{ position: "absolute", top: 12, right: 12 }} />
+                  <ScrapStarButton article={item} size={18} style={{ position: "absolute", top: 12, left: 12 }} />
 
                   <div style={{ color: "#d0d0d0", fontSize: "0.85rem", marginBottom: "0.3rem" }}>
                     {item.source || "출처 미상"} · {item.date || "날짜 없음"}
@@ -118,9 +118,25 @@ const ScrappedNewsPage = ({ setSelectedNews }) => {
                   <div style={{ fontSize: "1.05rem", fontWeight: 600, color: "white", marginBottom: "0.5rem" }}>
                     {item.korTitle || item.title || "제목 없음"}
                   </div>
-                  <div style={{ color: "#b0b0b0", lineHeight: 1.6 }}>
-                    {item.korSummary || item.korContent || item.translated || "요약 없음"}
-                  </div>
+                  {item?.comment ? (
+                    <div
+                      style={{
+                        marginTop: "0.75rem",
+                        background: "rgba(255, 255, 255, 0.05)",
+                        border: "1px solid rgba(255, 255, 255, 0.10)",
+                        borderRadius: "12px",
+                        padding: "0.85rem",
+                        color: "#d9e7ef",
+                        lineHeight: 1.55,
+                        whiteSpace: "pre-wrap",
+                      }}
+                    >
+                      <div style={{ color: "#ff8c42", fontWeight: 700, marginBottom: "0.35rem", fontSize: "0.9rem" }}>
+                        내 코멘트
+                      </div>
+                      {String(item.comment).slice(0, 300)}
+                    </div>
+                  ) : null}
                 </div>
               ))}
             </div>

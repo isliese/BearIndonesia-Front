@@ -1,9 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { getAuthToken } from "../utils/auth";
 import { isScrapped, toggleScrap } from "../utils/scrapStorage";
+import ScrapCommentModal from "./ScrapCommentModal";
 
 const ScrapStarButton = ({ article, size = 18, style = {}, onChange }) => {
   const [scrapped, setScrapped] = useState(() => isScrapped(article));
+  const [commentOpen, setCommentOpen] = useState(false);
+  const [comment, setComment] = useState("");
+
+  const showToast = (message, type = "info") => {
+    try {
+      window.dispatchEvent(new CustomEvent("app-toast", { detail: { message, type } }));
+    } catch {
+      // ignore
+    }
+  };
 
   useEffect(() => {
     const update = () => setScrapped(isScrapped(article));
@@ -24,10 +35,31 @@ const ScrapStarButton = ({ article, size = 18, style = {}, onChange }) => {
       window.alert("이 기사는 스크랩할 수 없어요.");
       return;
     }
+    if (!scrapped) {
+      setComment("");
+      setCommentOpen(true);
+      return;
+    }
     try {
       const next = await toggleScrap(article);
       setScrapped(next);
       onChange?.(next);
+      showToast("스크랩이 해제되었습니다.", "info");
+    } catch {
+      window.alert("스크랩 처리에 실패했습니다.");
+    }
+  };
+
+  const handleSaveComment = async () => {
+    try {
+      const next = await toggleScrap(article, { comment });
+      setScrapped(next);
+      onChange?.(next);
+      setCommentOpen(false);
+      setComment("");
+      if (next) {
+        showToast("스크랩되었습니다.", "success");
+      }
     } catch {
       window.alert("스크랩 처리에 실패했습니다.");
     }
@@ -92,6 +124,14 @@ const ScrapStarButton = ({ article, size = 18, style = {}, onChange }) => {
           로그인 후 이용해주세요.
         </div>
       )}
+
+      <ScrapCommentModal
+        isOpen={commentOpen}
+        value={comment}
+        onChange={setComment}
+        onClose={() => setCommentOpen(false)}
+        onSave={handleSaveComment}
+      />
     </div>
   );
 };

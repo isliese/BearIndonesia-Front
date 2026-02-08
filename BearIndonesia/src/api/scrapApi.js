@@ -14,10 +14,11 @@ export const fetchScraps = () => {
   });
 };
 
-export const addScrap = (rawNewsId) => {
+export const addScrap = (rawNewsId, payload = undefined) => {
   return request(`/api/scrap/${rawNewsId}`, {
     method: "POST",
     headers: withAuth(),
+    body: payload,
   });
 };
 

@@ -9,6 +9,7 @@ const NewsSidebar = ({
   sectionOrder,
   isCollapsed,
   onToggleCollapse,
+  isMobile = false,
 }) => {
 
   // 스크롤을 맨 위로 초기화하는 함수
@@ -36,13 +37,25 @@ const NewsSidebar = ({
   };
   return (
     <>
+      {isMobile && !isCollapsed && (
+        <div
+          onClick={onToggleCollapse}
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0,0,0,0.45)",
+            backdropFilter: "blur(2px)",
+            zIndex: 9,
+          }}
+        />
+      )}
       {isCollapsed && (
         <button
           onClick={onToggleCollapse}
           type="button"
           style={{
             position: "fixed",
-            top: "92px",
+            top: "clamp(92px, 12vw, 132px)",
             left: "12px",
             width: "36px",
             height: "36px",
@@ -71,7 +84,7 @@ const NewsSidebar = ({
         width: isCollapsed ? "0px" : "260px",
         background: "rgba(255, 255, 255, 0.05)",
         backdropFilter: "blur(10px)",
-        padding: "80px 0 0",
+        padding: isMobile ? "112px 0 0" : "80px 0 0",
         borderRight: isCollapsed ? "none" : "1px solid rgba(255, 255, 255, 0.1)",
         position: "fixed",
         top: 0,
@@ -80,6 +93,7 @@ const NewsSidebar = ({
         overflowY: "auto",
         overflowX: "hidden",
         zIndex: 10,
+        boxShadow: isMobile && !isCollapsed ? "0 18px 44px rgba(0,0,0,0.45)" : "none",
         opacity: isCollapsed ? 0 : 1,
         pointerEvents: isCollapsed ? "none" : "auto",
         transition: "width 0.3s ease, opacity 0.3s ease",
@@ -90,7 +104,7 @@ const NewsSidebar = ({
         type="button"
         style={{
           position: "absolute",
-          top: "92px",
+          top: isMobile ? "clamp(92px, 12vw, 132px)" : "92px",
           right: "12px",
           width: "36px",
           height: "36px",
