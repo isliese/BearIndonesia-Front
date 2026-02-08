@@ -5,14 +5,22 @@ import NewsCard from "./NewsCard";
 
 const NewsGrid = ({ articles, onOpen }) => {
   return (
-    <div style={{ overflowX: "auto", overflowY: "hidden", paddingBottom: "0.25rem" }}>
+    <div
+      style={{
+        overflowX: "auto",
+        overflowY: "hidden",
+        paddingBottom: "0.25rem",
+        WebkitOverflowScrolling: "touch",
+      }}
+    >
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(clamp(240px, 26vw, 380px), 1fr))",
-          gap: "clamp(0.8rem, 1.2vw, 1.2rem)",
-          maxWidth: "1200px",
-          minWidth: "max(100%, 240px)",
+          // 화면이 줄어도 항상 3열 유지 (필요 시 가로 스크롤)
+          gridTemplateColumns: "repeat(3, 420px)",
+          gap: "22px",
+          width: "1304px",
+          maxWidth: "1304px",
           margin: "0 auto",
           marginBottom: "2.5rem",
         }}

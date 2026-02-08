@@ -105,7 +105,7 @@ const NewsCard = ({ article, onOpen }) => {
         <div style={{ color: "#b0b0b0", fontSize: "clamp(0.82rem, 1vw, 0.9rem)" }}>{author}</div>
       </div>
 
-      <div style={{ fontSize: "clamp(1.0rem, 1.25vw, 1.15rem)", fontWeight: 700, marginBottom: "0.5rem", color: "white" }}>
+      <div style={{ fontSize: "clamp(1.05rem, 1.35vw, 1.25rem)", fontWeight: 700, marginBottom: "0.55rem", color: "white" }}>
         {koTitle}
       </div>
 
@@ -114,7 +114,7 @@ const NewsCard = ({ article, onOpen }) => {
           color: "#d0d0d0",
           marginBottom: "clamp(0.7rem, 1vw, 0.9rem)",
           lineHeight: 1.6,
-          fontSize: "clamp(0.9rem, 1.05vw, 1rem)",
+          fontSize: "clamp(0.95rem, 1.1vw, 1.05rem)",
           display: "-webkit-box",
           WebkitLineClamp: 5,
           WebkitBoxOrient: "vertical",
@@ -130,7 +130,7 @@ const NewsCard = ({ article, onOpen }) => {
           justifyContent: "space-between",
           alignItems: "center",
           color: "#999",
-          fontSize: "clamp(0.78rem, 0.95vw, 0.85rem)",
+          fontSize: "clamp(0.8rem, 0.98vw, 0.9rem)",
         }}
       >
         <span>{article.date}</span>

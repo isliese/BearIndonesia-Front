@@ -188,7 +188,7 @@ const CalendarPage = ({ setSelectedNews }) => {
     <div
       className="calendar-container"
       onMouseUp={handleMouseUp}
-      style={{ padding: '1.5rem', minHeight: 'calc(100vh - 80px)' }}
+      style={{ padding: '1.5rem', minHeight: 'calc(100vh - 80px)', paddingTop: '3rem' }}
       key={`page-${calendarKey}`}
     >
       <h1 style={{ fontSize: '2.1rem', textAlign: 'center', marginBottom: '1.25rem', color: '#ff8c42' }}>

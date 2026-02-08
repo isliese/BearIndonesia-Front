@@ -47,10 +47,26 @@ const UnifiedNewsPage = ({ setSelectedNews }) => {
   const isRestoringRef = useRef(false);
   const scrollRestoredRef = useRef(false);
   const autoCollapsedRef = useRef(false);
+  const userSidebarOverrideRef = useRef(false);
+  const lastNarrowRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
   const navigationType = useNavigationType();
   const isMobile = useMediaQuery("(max-width: 768px)");
+
+  const showToast = useCallback((message, type = "info") => {
+    try {
+      window.dispatchEvent(new CustomEvent("app-toast", { detail: { message, type } }));
+    } catch {
+      // ignore
+    }
+  }, []);
+
+  const handleToggleSidebar = useCallback(() => {
+    userSidebarOverrideRef.current = true;
+    autoCollapsedRef.current = false;
+    setIsSidebarCollapsed((prev) => !prev);
+  }, []);
 
   const saveScrollPosition = useCallback(() => {
     try {
@@ -273,12 +289,23 @@ const UnifiedNewsPage = ({ setSelectedNews }) => {
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 1180px)");
     const apply = () => {
-      if (mq.matches) {
-        if (!isSidebarCollapsed) {
+      const isNarrow = mq.matches;
+      const prevNarrow = lastNarrowRef.current;
+      lastNarrowRef.current = isNarrow;
+
+      if (isNarrow) {
+        const entering = prevNarrow === false || prevNarrow === null;
+        if (entering && !userSidebarOverrideRef.current && !isSidebarCollapsed) {
           setIsSidebarCollapsed(true);
           autoCollapsedRef.current = true;
+          showToast("화면이 좁아 사이드바를 접었습니다. 좌측 상단 버튼으로 열 수 있어요.", "info");
         }
-      } else if (autoCollapsedRef.current) {
+        return;
+      }
+
+      // Leaving narrow: only revert if it was auto-collapsed (and reset override)
+      userSidebarOverrideRef.current = false;
+      if (autoCollapsedRef.current) {
         setIsSidebarCollapsed(false);
         autoCollapsedRef.current = false;
       }
@@ -286,7 +313,7 @@ const UnifiedNewsPage = ({ setSelectedNews }) => {
     apply();
     mq.addEventListener?.("change", apply);
     return () => mq.removeEventListener?.("change", apply);
-  }, [isSidebarCollapsed]);
+  }, [isSidebarCollapsed, showToast]);
 
   const tagCount = useMemo(() => {
     const m = new Map();
@@ -576,7 +603,7 @@ const UnifiedNewsPage = ({ setSelectedNews }) => {
         onChangeSection={setActiveSection}
         sectionOrder={SECTION_ORDER}
         isCollapsed={isSidebarCollapsed}
-        onToggleCollapse={() => setIsSidebarCollapsed((prev) => !prev)}
+        onToggleCollapse={handleToggleSidebar}
         isMobile={isMobile}
       />
 
