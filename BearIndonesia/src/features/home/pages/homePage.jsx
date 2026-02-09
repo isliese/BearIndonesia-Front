@@ -17,6 +17,7 @@ import VivaLogo from "../../../assets/images/viva.svg";
 import KompasLogo from "../../../assets/images/Kompas.png";
 import IdxLogo from "../../../assets/images/idx.png";
 import ScrapStarButton from "../../../components/ScrapStarButton";
+import { getAuthUser, isAdminUser } from "../../../utils/auth";
 
 const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
   const navigate = useNavigate();
@@ -27,6 +28,18 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
   const [newsError, setNewsError] = useState("");
   const [newsLoading, setNewsLoading] = useState(false);
   const [scrollRestored, setScrollRestored] = useState(false);
+  const [authUser, setAuthUser] = useState(() => getAuthUser());
+
+  useEffect(() => {
+    const update = () => setAuthUser(getAuthUser());
+    update();
+    window.addEventListener("authchange", update);
+    window.addEventListener("storage", update);
+    return () => {
+      window.removeEventListener("authchange", update);
+      window.removeEventListener("storage", update);
+    };
+  }, []);
 
   useEffect(() => {
     let isMounted = true;
@@ -117,6 +130,11 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
     const cutoff = Date.now() - 7 * 24 * 60 * 60 * 1000;
     return newsItems
       .filter((a) => {
+        if (isAdminUser(authUser)) return true;
+        const needsReview = Boolean(a?.tagMismatch ?? a?.tag_mismatch) || Boolean(a?.categoryMismatch ?? a?.category_mismatch);
+        return !needsReview;
+      })
+      .filter((a) => {
         const rawDate = a?.publishedDate ?? a?.date ?? "";
         const ts = Date.parse(rawDate);
         return Number.isFinite(ts) && ts >= cutoff;
@@ -133,7 +151,7 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
         return bId - aId;
       })
       .slice(0, 6);
-  }, [newsItems]);
+  }, [newsItems, authUser]);
 
   const [searchTerm, setSearchTerm] = useState('');
   const [modalOpen, setModalOpen] = useState(false);

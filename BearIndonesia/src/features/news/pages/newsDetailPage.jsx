@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ScrapStarButton from '../../../components/ScrapStarButton';
+import { getAuthUser, isAdminUser } from '../../../utils/auth';
 
 const NewsDetailPage = ({ news }) => {
   const [titleLang, setTitleLang] = useState("ko"); 
@@ -16,6 +17,8 @@ const NewsDetailPage = ({ news }) => {
     storedNews = null;
   }
   const resolvedNews = news || storedNews;
+  const authUser = getAuthUser();
+  const isAdmin = isAdminUser(authUser);
 
   if (!resolvedNews) {
     return (
@@ -44,6 +47,42 @@ const NewsDetailPage = ({ news }) => {
   const date      = resolvedNews.date || '';
   const link      = resolvedNews.link || '';
   const tags      = Array.isArray(resolvedNews.tags) ? resolvedNews.tags : [];
+
+  if (!isAdmin && (tagMismatch || categoryMismatch)) {
+    return (
+      <div
+        style={{
+          padding: "2rem",
+          display: "flex",
+          flexDirection: "column",
+          gap: "1rem",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "50vh",
+          color: "#ff8c42",
+          fontSize: "1.05rem",
+          textAlign: "center",
+        }}
+      >
+        <div>검증 중인 기사입니다.</div>
+        <button
+          type="button"
+          onClick={() => navigate(location.state?.from || "/news", { state: { preserveScroll: true } })}
+          style={{
+            padding: "0.7rem 1.2rem",
+            background: "rgba(255, 140, 66, 0.18)",
+            border: "1px solid rgba(255, 140, 66, 0.45)",
+            color: "white",
+            borderRadius: "12px",
+            cursor: "pointer",
+            fontWeight: 700,
+          }}
+        >
+          돌아가기
+        </button>
+      </div>
+    );
+  }
 
   // 텍스트 하이라이트
   const renderHighlighted = (text) => {

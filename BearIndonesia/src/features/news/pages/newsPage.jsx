@@ -13,6 +13,7 @@ import NewsTopActions from "../components/NewsTopActions";
 import WordCloudModal from "../components/WordCloudModal";
 import NewsletterModal from "../components/NewsletterModal";
 import { SECTION_ORDER, TAG_SECTIONS, CRAWLED_NEWS_SITES } from "../newsConstants";
+import { getAuthUser, isAdminUser } from "../../../utils/auth";
 
 
 const UnifiedNewsPage = ({ setSelectedNews }) => {
@@ -55,6 +56,18 @@ const UnifiedNewsPage = ({ setSelectedNews }) => {
   const location = useLocation();
   const navigationType = useNavigationType();
   const isMobile = useMediaQuery("(max-width: 768px)");
+  const [authUser, setAuthUser] = useState(() => getAuthUser());
+
+  useEffect(() => {
+    const update = () => setAuthUser(getAuthUser());
+    update();
+    window.addEventListener("authchange", update);
+    window.addEventListener("storage", update);
+    return () => {
+      window.removeEventListener("authchange", update);
+      window.removeEventListener("storage", update);
+    };
+  }, []);
 
   const showToast = useCallback((message, type = "info") => {
     try {
@@ -476,6 +489,14 @@ const UnifiedNewsPage = ({ setSelectedNews }) => {
     return result;
   }, [activeSection, activeTags, sortOrder, periodFilter, pressFilter, articles, customStartDate, customEndDate]);
 
+  const visibleFiltered = useMemo(() => {
+    if (isAdminUser(authUser)) return filtered;
+    return filtered.filter((a) => {
+      const needsReview = Boolean(a?.tagMismatch ?? a?.tag_mismatch) || Boolean(a?.categoryMismatch ?? a?.category_mismatch);
+      return !needsReview;
+    });
+  }, [filtered, authUser]);
+
   const resetFilters = () => {
     setSortOrder("최신순");
     setPeriodFilter("전체");
@@ -711,7 +732,7 @@ const UnifiedNewsPage = ({ setSelectedNews }) => {
         )}
 
         <NewsGrid
-          articles={filtered}
+          articles={visibleFiltered}
           onOpen={(article) => {
             saveScrollPosition();
             setSelectedNews?.(article);

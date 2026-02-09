@@ -3,6 +3,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import ScrapStarButton from '../../../components/ScrapStarButton';
+import { getAuthUser, isAdminUser } from '../../../utils/auth';
 
 // API 호출 함수
 const searchAPI = async (searchTerm, sortBy = 'relevance', filterType = 'all') => {
@@ -362,12 +363,24 @@ const SearchResultsPage = ({ setSelectedNews }) => {
   const searchTerm = searchParams.get("query") || "";
   const navigate = useNavigate();
   const location = useLocation();
+  const [authUser, setAuthUser] = useState(() => getAuthUser());
   const [sortBy, setSortBy] = useState("relevance");
   const [filterType, setFilterType] = useState("all");
   const [searchResults, setSearchResults] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]); // 다중 태그 선택
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const update = () => setAuthUser(getAuthUser());
+    update();
+    window.addEventListener("authchange", update);
+    window.addEventListener("storage", update);
+    return () => {
+      window.removeEventListener("authchange", update);
+      window.removeEventListener("storage", update);
+    };
+  }, []);
 
   // 검색 실행 함수
   const performSearch = async (term, sort, filter) => {
@@ -456,6 +469,14 @@ const SearchResultsPage = ({ setSelectedNews }) => {
     });
   }, [searchResults, selectedTags]);
 
+  const visibleResults = useMemo(() => {
+    if (isAdminUser(authUser)) return filteredResults;
+    return (filteredResults || []).filter((a) => {
+      const needsReview = Boolean(a?.tagMismatch ?? a?.tag_mismatch) || Boolean(a?.categoryMismatch ?? a?.category_mismatch);
+      return !needsReview;
+    });
+  }, [filteredResults, authUser]);
+
   return (
     <div style={{ position: 'relative', padding: '2rem 1rem', minHeight: 'calc(100vh - 80px)' }}>
       {/* 뒤로가기 버튼 */}
@@ -512,16 +533,16 @@ const SearchResultsPage = ({ setSelectedNews }) => {
           }}>
             검색 결과
           </h1>
-          <p style={{ 
-            fontSize: "1.2rem", 
-            color: "#b0b0b0",
-            marginBottom: "0.5rem"
-          }}>
-            "<span style={{ color: "#ff8c42", fontWeight: "bold" }}>{searchTerm}</span>"에 대한 
-            <span style={{ color: "#4CAF50", fontWeight: "bold", marginLeft: "0.5rem" }}>
-              {filteredResults.length}개
-            </span>의 검색 결과
-          </p>
+	          <p style={{ 
+	            fontSize: "1.2rem", 
+	            color: "#b0b0b0",
+	            marginBottom: "0.5rem"
+	          }}>
+	            "<span style={{ color: "#ff8c42", fontWeight: "bold" }}>{searchTerm}</span>"에 대한 
+	            <span style={{ color: "#4CAF50", fontWeight: "bold", marginLeft: "0.5rem" }}>
+	              {visibleResults.length}개
+	            </span>의 검색 결과
+	          </p>
           <div style={{ color: "#999", fontSize: "0.9rem" }}>
             인도네시아 제약 산업 관련 최신 정보를 확인하세요 (한국어/영어 검색 지원)
           </div>
@@ -653,12 +674,12 @@ const SearchResultsPage = ({ setSelectedNews }) => {
               gap: "1.5rem",
             }}
           >
-            {filteredResults.map((article) => (
-              <SearchCard
-                key={article.id}
-                article={article}
-                searchTerm={searchTerm}
-                onTagClick={toggleTag}
+	            {visibleResults.map((article) => (
+	              <SearchCard
+	                key={article.id}
+	                article={article}
+	                searchTerm={searchTerm}
+	                onTagClick={toggleTag}
                 onOpen={() => {
                   if (setSelectedNews) setSelectedNews({
                     ...article,
@@ -669,17 +690,17 @@ const SearchResultsPage = ({ setSelectedNews }) => {
                   navigate('/news/detail', { state: { from: `${location.pathname}${location.search}` } });
                 }}
               />
-            ))}
-          </div>
-        )}
+	            ))}
+	          </div>
+	        )}
 
         {/* 검색 결과가 없을 때 */}
-        {!loading && !error && filteredResults.length === 0 && searchTerm && (
-          <div style={{
-            textAlign: "center",
-            padding: "3rem",
-            color: "#b0b0b0"
-          }}>
+	        {!loading && !error && visibleResults.length === 0 && searchTerm && (
+	          <div style={{
+	            textAlign: "center",
+	            padding: "3rem",
+	            color: "#b0b0b0"
+	          }}>
             <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>🔍</div>
             <h3 style={{ color: "#ff8c42", marginBottom: "1rem" }}>검색 결과가 없습니다</h3>
             <p>"{searchTerm}"에 대한 결과를 찾을 수 없습니다.</p>

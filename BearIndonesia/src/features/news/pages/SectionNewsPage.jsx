@@ -3,6 +3,7 @@ import React, { useState, useMemo, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { fetchAllArticles } from "../../../api/articleApi";
 import ScrapStarButton from "../../../components/ScrapStarButton";
+import { getAuthUser, isAdminUser } from "../../../utils/auth";
 
 /* -------------------- 유틸 함수 -------------------- */
 const getInitials = (name = "") => {
@@ -38,6 +39,18 @@ const SectionNewsPage = ({ setSelectedNews }) => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
+  const [authUser, setAuthUser] = useState(() => getAuthUser());
+
+  useEffect(() => {
+    const update = () => setAuthUser(getAuthUser());
+    update();
+    window.addEventListener("authchange", update);
+    window.addEventListener("storage", update);
+    return () => {
+      window.removeEventListener("authchange", update);
+      window.removeEventListener("storage", update);
+    };
+  }, []);
 
   // 6개 파일에서 합쳐진 전체 기사 로드
   useEffect(() => {
@@ -73,9 +86,13 @@ const SectionNewsPage = ({ setSelectedNews }) => {
 
   // activeTag에 따라 필터링
   const filteredNews = useMemo(() => {
-    if (activeTag === "all") return allNews;
-    return allNews.filter((news) => (news?.tag ?? news?.category) === activeTag);
-  }, [activeTag, allNews]);
+    const base = activeTag === "all" ? allNews : allNews.filter((news) => (news?.tag ?? news?.category) === activeTag);
+    if (isAdminUser(authUser)) return base;
+    return base.filter((news) => {
+      const needsReview = Boolean(news?.tagMismatch ?? news?.tag_mismatch) || Boolean(news?.categoryMismatch ?? news?.category_mismatch);
+      return !needsReview;
+    });
+  }, [activeTag, allNews, authUser]);
 
   // 뉴스 카드
   const NewsCard = ({ article, onOpen }) => {
