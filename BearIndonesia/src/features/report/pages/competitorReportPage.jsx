@@ -344,7 +344,10 @@ const pageStyle = {
   display: "flex",
   flexDirection: "column",
   gap: "1.5rem",
-  padding: "2rem",
+  padding: "2rem 1.2rem",
+  maxWidth: 1180,
+  width: "100%",
+  margin: "0 auto",
   color: "white",
 };
 
@@ -477,7 +480,7 @@ const modalOverlay = {
 };
 
 const modalCard = {
-  width: "min(880px, 95vw)",
+  width: "min(820px, 92vw)",
   background: "rgba(20, 20, 35, 0.95)",
   borderRadius: "20px",
   padding: "1.5rem",
