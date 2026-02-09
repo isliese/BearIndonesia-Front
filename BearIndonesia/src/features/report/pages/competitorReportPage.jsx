@@ -18,8 +18,6 @@ const CompetitorReportPage = () => {
   const [report, setReport] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
   const competitorKeywords = PRESET_KEYWORDS;
 
   const fetchReport = async () => {
@@ -143,10 +141,23 @@ const CompetitorReportPage = () => {
   const keywordRanks = report?.keywordRanks || [];
   const weeklyIssues = report?.weeklyIssues || [];
   const monthlyIssues = report?.monthlyIssues || [];
+  const rangeIssueTitles = report?.rangeIssueTitles || [];
+  const mentionedKeywords = report?.mentionedKeywords || [];
 
   const overallKeywordRanks = useMemo(() => {
     return keywordRanks.slice(0, 12);
   }, [keywordRanks]);
+
+  const mentionedByKeyword = useMemo(() => {
+    const out = {};
+    mentionedKeywords.forEach((row) => {
+      if (!out[row.keyword]) out[row.keyword] = [];
+      out[row.keyword].push(row);
+    });
+    return out;
+  }, [mentionedKeywords]);
+
+  const selectedMentions = mentionedByKeyword[selectedKeyword] || [];
 
   return (
     <div style={pageStyle}>
@@ -177,40 +188,21 @@ const CompetitorReportPage = () => {
               </div>
             </div>
             <div style={periodStyle}>선택 기간 기준: {startDate} ~ {endDate}</div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
-              <div>
-                <div style={{ color: "#b8b8b8", marginBottom: "0.4rem" }}>최근 30일</div>
-                {monthlyIssues.length === 0 && (
-                  <div style={{ color: "#b0b0b0" }}>데이터 없음</div>
-                )}
-                <div style={{ display: "grid", gap: "0.45rem" }}>
-                  {monthlyIssues.slice(0, 8).map((row, idx) => (
-                    <div key={`m-${row.keyword}-${idx}`} style={rankRow}>
-                      <span>{idx + 1}. {row.keyword}</span>
-                      <span style={rankCount}>{row.count}</span>
-                    </div>
-                  ))}
+            {rangeIssueTitles.length === 0 && (
+              <div style={{ color: "#b0b0b0" }}>데이터 없음</div>
+            )}
+            <div style={{ display: "grid", gap: "0.45rem" }}>
+              {rangeIssueTitles.slice(0, 8).map((row, idx) => (
+                <div key={`range-title-${idx}`} style={rankRow}>
+                  <span>{idx + 1}. {row.title}</span>
+                  <span style={rankMeta}>{row.source || ""}</span>
                 </div>
-              </div>
-              <div>
-                <div style={{ color: "#b8b8b8", marginBottom: "0.4rem" }}>최근 7일</div>
-                {weeklyIssues.length === 0 && (
-                  <div style={{ color: "#b0b0b0" }}>데이터 없음</div>
-                )}
-                <div style={{ display: "grid", gap: "0.45rem" }}>
-                  {weeklyIssues.slice(0, 8).map((row, idx) => (
-                    <div key={`w-${row.keyword}-${idx}`} style={rankRow}>
-                      <span>{idx + 1}. {row.keyword}</span>
-                      <span style={rankCount}>{row.count}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              ))}
             </div>
           </div>
 
           <div style={cardStyle}>
-            <h3 style={sectionTitle}>전체 키워드 언급량</h3>
+            <h3 style={sectionTitle}>전체 키워드 언급량 (전체 기사 기준)</h3>
             {overallKeywordRanks.length === 0 && (
               <div style={{ color: "#b0b0b0" }}>데이터 없음</div>
             )}
@@ -235,9 +227,8 @@ const CompetitorReportPage = () => {
           <div style={cardStyle}>
             <div style={titleRow}>
               <h3 style={sectionTitle}>경쟁사 리포트 대시보드</h3>
-              <button onClick={() => setIsModalOpen(true)} style={primaryButton}>동향 모달 열기</button>
             </div>
-            <div style={{ display: "flex", gap: "0.6rem", flexWrap: "wrap" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", flexWrap: "wrap" }}>
               {competitorKeywords.map((kw) => (
                 <button
                   key={kw}
@@ -254,122 +245,27 @@ const CompetitorReportPage = () => {
             </div>
           </div>
 
-          {selectedInsight && (
-            <div style={cardStyle}>
-              <h3 style={sectionTitle}>이슈 요약</h3>
-              <div style={{ color: "#dcdcdc", lineHeight: 1.6 }}>{selectedInsight}</div>
-            </div>
-          )}
-
-          <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: "1rem" }}>
-            <div style={cardStyle}>
-              <h3 style={sectionTitle}>일자별 언급 추이</h3>
-              <div style={{ display: "flex", gap: "6px", alignItems: "flex-end", height: "140px" }}>
-                {selectedDaily.length === 0 && (
-                  <div style={{ color: "#b0b0b0" }}>데이터 없음</div>
-                )}
-                {selectedDaily.map((d) => {
-                  const pin = pinsByDate[d.date];
-                  return (
-                    <div
-                      key={`${d.keyword}-${d.date}`}
-                      title={`${d.date}: ${d.count}${pin ? ` (핀 ${pin.ratio}x)` : ""}`}
-                      style={{
-                        width: "10px",
-                        height: `${(d.count / maxDaily) * 120}px`,
-                        background: pin
-                          ? "linear-gradient(180deg, #ff5252, #ff8c42)"
-                          : "linear-gradient(180deg, #ff8c42, #ffa726)",
-                        borderRadius: "4px",
-                        border: pin ? "1px solid rgba(255,255,255,0.7)" : "none",
-                      }}
-                    />
-                  );
-                })}
-              </div>
-              {selectedPins.length > 0 && (
-                <div style={{ marginTop: "0.8rem", color: "#ffc1a6", fontSize: "0.85rem" }}>
-                  이벤트 핀: {selectedPins.map((p) => p.date).join(", ")}
-                </div>
-              )}
-            </div>
-
-            <div style={cardStyle}>
-              <h3 style={sectionTitle}>주요 출처</h3>
-              {selectedSources.length === 0 && (
-                <div style={{ color: "#b0b0b0" }}>데이터 없음</div>
-              )}
-              <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-                {selectedSources.slice(0, 6).map((s) => (
-                  <li key={`${s.keyword}-${s.source}`} style={{ marginBottom: "0.6rem" }}>
-                    <div style={{ display: "flex", justifyContent: "space-between" }}>
-                      <span>{s.source}</span>
-                      <span style={{ color: "#ffb86b" }}>{s.count}</span>
-                    </div>
-                    <div
-                      style={{
-                        height: "6px",
-                        background: "rgba(255,255,255,0.08)",
-                        borderRadius: "999px",
-                        overflow: "hidden",
-                      }}
-                    >
-                      <div
-                        style={{
-                          height: "100%",
-                          width: `${Math.min(100, (s.count / (selectedSources[0]?.count || 1)) * 100)}%`,
-                          background: "linear-gradient(90deg, #80cbc4, #64b5f6)",
-                        }}
-                      />
-                    </div>
-                  </li>
-                ))}
-              </ul>
+          <div style={cardStyle}>
+            <h3 style={sectionTitle}>동향 요약</h3>
+            <div style={{ color: "#dcdcdc", lineHeight: 1.6 }}>
+              {selectedInsight || "요약 데이터 없음"}
             </div>
           </div>
 
-          {selectedClusters.length > 0 && (
-            <div style={cardStyle}>
-              <h3 style={sectionTitle}>이슈 클러스터</h3>
-              <div style={{ display: "grid", gap: "0.9rem" }}>
-                {selectedClusters.map((c) => (
-                  <div
-                    key={`${c.keyword}-${c.clusterId}`}
-                    style={{
-                      padding: "0.8rem",
-                      borderRadius: "12px",
-                      background: "rgba(255,255,255,0.05)",
-                      border: "1px solid rgba(255,255,255,0.08)",
-                    }}
-                  >
-                    <div style={{ fontWeight: 600, marginBottom: "0.25rem" }}>
-                      {c.title}
-                    </div>
-                    <div style={{ color: "#b8b8b8", fontSize: "0.85rem", marginBottom: "0.35rem" }}>
-                      기사 {c.count}건 · {c.topTitles?.join(" / ")}
-                    </div>
-                    <div style={{ display: "grid", gap: "0.4rem" }}>
-                      {(c.sampleArticles || []).map((a) => (
-                        <a
-                          key={`${a.articleId}-${a.link}`}
-                          href={a.link}
-                          target="_blank"
-                          rel="noreferrer"
-                          style={{
-                            color: "#ffd3b5",
-                            textDecoration: "none",
-                            fontSize: "0.9rem",
-                          }}
-                        >
-                          {a.title}
-                        </a>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
+          <div style={cardStyle}>
+            <h3 style={sectionTitle}>언급 키워드</h3>
+            {selectedMentions.length === 0 && (
+              <div style={{ color: "#b0b0b0" }}>데이터 없음</div>
+            )}
+            <div style={{ display: "grid", gap: "0.6rem" }}>
+              {selectedMentions.slice(0, 10).map((row) => (
+                <div key={`${row.keyword}-${row.tag}`} style={rankRow}>
+                  <span>{row.tag}</span>
+                  <span style={rankCount}>{row.count}</span>
+                </div>
+              ))}
             </div>
-          )}
+          </div>
 
           <div style={cardStyle}>
             <h3 style={sectionTitle}>관련 기사</h3>
@@ -440,38 +336,6 @@ const CompetitorReportPage = () => {
         </>
       )}
 
-      {isModalOpen && (
-        <div style={modalOverlay}>
-          <div style={modalCard}>
-            <div style={modalHeader}>
-              <h3 style={{ margin: 0, color: "#ffb86b" }}>경쟁사 동향 모달</h3>
-              <button style={closeButton} onClick={() => setIsModalOpen(false)}>닫기</button>
-            </div>
-            <div style={modalSectionTitle}>메이저 4개</div>
-            <div style={modalGrid}>
-              {MAJOR_COMPETITORS.map((kw) => (
-                <div key={kw} style={modalItem}>
-                  <div style={{ fontWeight: 600 }}>{kw}</div>
-                  <div style={{ fontSize: "1.6rem", color: "#ffb86b" }}>{totalsByKeyword[kw]?.count ?? 0}</div>
-                  <div style={{ fontSize: "0.8rem", color: "#b8b8b8" }}>언급 수</div>
-                  <div style={{ fontSize: "0.8rem", color: "#b8b8b8" }}>영향도 {impactsByKeyword[kw]?.score ?? "-"}</div>
-                </div>
-              ))}
-            </div>
-            <div style={modalSectionTitle}>그 외 4개</div>
-            <div style={modalGrid}>
-              {OTHER_COMPETITORS.map((kw) => (
-                <div key={kw} style={modalItem}>
-                  <div style={{ fontWeight: 600 }}>{kw}</div>
-                  <div style={{ fontSize: "1.6rem", color: "#ffb86b" }}>{totalsByKeyword[kw]?.count ?? 0}</div>
-                  <div style={{ fontSize: "0.8rem", color: "#b8b8b8" }}>언급 수</div>
-                  <div style={{ fontSize: "0.8rem", color: "#b8b8b8" }}>영향도 {impactsByKeyword[kw]?.score ?? "-"}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
@@ -573,6 +437,11 @@ const rankCount = {
   fontWeight: 600,
 };
 
+const rankMeta = {
+  color: "#b8b8b8",
+  fontSize: "0.8rem",
+};
+
 const chipStyle = {
   background: "rgba(255, 140, 66, 0.18)",
   color: "#ffb86b",
@@ -645,13 +514,16 @@ const modalGrid = {
   gap: "0.8rem",
 };
 
-const modalItem = {
+const modalItemButton = {
   background: "rgba(255,255,255,0.06)",
   borderRadius: "14px",
   padding: "0.8rem",
   border: "1px solid rgba(255,255,255,0.08)",
   display: "grid",
   gap: "0.3rem",
+  textAlign: "left",
+  color: "white",
+  cursor: "pointer",
 };
 
 export default CompetitorReportPage;
