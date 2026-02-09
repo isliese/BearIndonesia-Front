@@ -2,61 +2,82 @@
 
 import React from "react";
 
-const COMPANY_TICKER_LABELS = {
-  "PT Kalbe Farma Tbk": "KLBF/Kalbe Farma",
-  "Kalbe Farma": "KLBF/Kalbe Farma",
-  "PT Indofarma Tbk": "INAF/Indofarma",
-  "Indofarma": "INAF/Indofarma",
-  "PT Kimia Farma Tbk": "KAEF/Kimia Farma",
-  "Kimia Farma": "KAEF/Kimia Farma",
-  "PT Darya-Varia Laboratoria Tbk": "DVLA/Darya-Varia",
-  "Darya-Varia Laboratoria": "DVLA/Darya-Varia",
-  "PT Tempo Scan Pacific Tbk": "TSPC/Tempo Scan",
-  "Tempo Scan Pacific": "TSPC/Tempo Scan",
-  "PT Phapros Tbk": "PEHA/Phapros",
-  "Phapros": "PEHA/Phapros",
-  "PT Pyridam Farma Tbk": "PYFA/Pyridam Farma",
-  "Pyridam Farma": "PYFA/Pyridam Farma",
-  "PT Industri Jamu & Farmasi Sido Muncul Tbk": "SIDO/Sido Muncul",
-  "Sido Muncul": "SIDO/Sido Muncul",
-  "PT Merck Tbk": "MERK/Merck",
-  "Merck": "MERK/Merck",
-  "PT Medikaloka Hermina Tbk": "HEAL/Hermina",
-  "Medikaloka Hermina": "HEAL/Hermina",
-  "PT Mitra Keluarga Karyasehat Tbk": "MIKA/Mitra Keluarga",
-  "Mitra Keluarga Karyasehat": "MIKA/Mitra Keluarga",
-  "PT Prodia Widyahusada Tbk": "PRDA/Prodia",
-  "Prodia Widyahusada": "PRDA/Prodia",
-  "PT Royal Prima Tbk": "PRIM/Royal Prima",
-  "Royal Prima": "PRIM/Royal Prima",
-  "PT Sarana Meditama Metropolitan Tbk": "SAME/Sarana Meditama",
-  "Sarana Meditama Metropolitan": "SAME/Sarana Meditama",
-  "PT Siloam International Hospitals Tbk": "SILO/Siloam",
-  "Siloam International Hospitals": "SILO/Siloam",
-  "PT Sejahteraraya Anugrahjaya Tbk": "SRAJ/Sejahteraraya",
-  "Sejahteraraya Anugrahjaya": "SRAJ/Sejahteraraya",
-  "PT Diagnos Laboratorium Utama Tbk": "DGNS/Diagnos",
-  "Diagnos Laboratorium Utama": "DGNS/Diagnos",
-  "PT Bundamedik Tbk": "BMHS/Bundamedik",
-  "Bundamedik": "BMHS/Bundamedik",
-  "PT Famon Awal Bros Sedaya Tbk": "PRAY/Awal Bros",
-  "Famon Awal Bros Sedaya": "PRAY/Awal Bros",
-  "PT Diastika Biotekindo Tbk": "CHEK/Diastika Biotekindo",
-  "Diastika Biotekindo": "CHEK/Diastika Biotekindo",
-  "PT Haloni Jane Tbk": "HALO/Haloni Jane",
-  "Haloni Jane": "HALO/Haloni Jane",
-  "PT Itama Ranoraya Tbk": "IRRA/Itama Ranoraya",
-  "Itama Ranoraya": "IRRA/Itama Ranoraya",
-  "PT UBC Medical Indonesia Tbk": "LABS/UBC Medical",
-  "UBC Medical Indonesia": "LABS/UBC Medical",
-  "PT Hetzer Medical Indonesia Tbk": "MEDS/Hetzer Medical",
-  "Hetzer Medical Indonesia": "MEDS/Hetzer Medical",
-  "PT Multi Medika Internasional Tbk": "MMIX/Multi Medika",
-  "Multi Medika Internasional": "MMIX/Multi Medika",
-  "PT Jayamas Medica Industri Tbk": "OMED/Jayamas Medica",
-  "Jayamas Medica Industri": "OMED/Jayamas Medica",
-  "PT Maja Agung Latexindo Tbk": "SURI/Maja Agung",
-  "Maja Agung Latexindo": "SURI/Maja Agung",
+const COMPANY_TICKERS = {
+  // Global pharma (tickers only when confident)
+  화이자: { ticker: "PFE", name: "Pfizer" },
+  Pfizer: { ticker: "PFE", name: "Pfizer" },
+  "Pfizer Inc.": { ticker: "PFE", name: "Pfizer" },
+  사노피: { ticker: "SAN", name: "Sanofi" },
+  Sanofi: { ticker: "SAN", name: "Sanofi" },
+  바이엘: { ticker: "BAYN", name: "Bayer" },
+  Bayer: { ticker: "BAYN", name: "Bayer" },
+
+  // 제약·바이오
+  "PT Kalbe Farma Tbk": { ticker: "KLBF", name: "Kalbe Farma" },
+  "Kalbe Farma": { ticker: "KLBF", name: "Kalbe Farma" },
+  "PT Indofarma Tbk": { ticker: "INAF", name: "Indofarma" },
+  Indofarma: { ticker: "INAF", name: "Indofarma" },
+  "PT Kimia Farma Tbk": { ticker: "KAEF", name: "Kimia Farma" },
+  "Kimia Farma": { ticker: "KAEF", name: "Kimia Farma" },
+  "PT Darya-Varia Laboratoria Tbk": { ticker: "DVLA", name: "Darya-Varia" },
+  "Darya-Varia Laboratoria": { ticker: "DVLA", name: "Darya-Varia" },
+  "PT Tempo Scan Pacific Tbk": { ticker: "TSPC", name: "Tempo Scan" },
+  "Tempo Scan Pacific": { ticker: "TSPC", name: "Tempo Scan" },
+  "PT Phapros Tbk": { ticker: "PEHA", name: "Phapros" },
+  Phapros: { ticker: "PEHA", name: "Phapros" },
+  "PT Pyridam Farma Tbk": { ticker: "PYFA", name: "Pyridam Farma" },
+  "Pyridam Farma": { ticker: "PYFA", name: "Pyridam Farma" },
+  "PT Industri Jamu & Farmasi Sido Muncul Tbk": { ticker: "SIDO", name: "Sido Muncul" },
+  "PT Industri Jamu & Farmasi Sido Muncul Tbk.": { ticker: "SIDO", name: "Sido Muncul" },
+  "Sido Muncul": { ticker: "SIDO", name: "Sido Muncul" },
+  "PT Merck Tbk": { ticker: "MERK", name: "Merck" },
+  Merck: { ticker: "MERK", name: "Merck" },
+
+  // 의료 서비스/헬스케어
+  "PT Medikaloka Hermina Tbk": { ticker: "HEAL", name: "Hermina" },
+  "Medikaloka Hermina": { ticker: "HEAL", name: "Hermina" },
+  "PT Mitra Keluarga Karyasehat Tbk": { ticker: "MIKA", name: "Mitra Keluarga" },
+  "Mitra Keluarga Karyasehat": { ticker: "MIKA", name: "Mitra Keluarga" },
+  "PT Prodia Widyahusada Tbk": { ticker: "PRDA", name: "Prodia" },
+  "Prodia Widyahusada": { ticker: "PRDA", name: "Prodia" },
+  "PT Royal Prima Tbk": { ticker: "PRIM", name: "Royal Prima" },
+  "Royal Prima": { ticker: "PRIM", name: "Royal Prima" },
+  "PT Sarana Meditama Metropolitan Tbk": { ticker: "SAME", name: "Sarana Meditama" },
+  "Sarana Meditama Metropolitan": { ticker: "SAME", name: "Sarana Meditama" },
+  "PT Siloam International Hospitals Tbk": { ticker: "SILO", name: "Siloam" },
+  "Siloam International Hospitals": { ticker: "SILO", name: "Siloam" },
+  "PT Sejahteraraya Anugrahjaya Tbk": { ticker: "SRAJ", name: "Sejahteraraya" },
+  "Sejahteraraya Anugrahjaya": { ticker: "SRAJ", name: "Sejahteraraya" },
+  "PT Diagnos Laboratorium Utama Tbk": { ticker: "DGNS", name: "Diagnos" },
+  "Diagnos Laboratorium Utama": { ticker: "DGNS", name: "Diagnos" },
+  "PT Bundamedik Tbk": { ticker: "BMHS", name: "Bundamedik" },
+  Bundamedik: { ticker: "BMHS", name: "Bundamedik" },
+  "PT Famon Awal Bros Sedaya Tbk": { ticker: "PRAY", name: "Awal Bros" },
+  "Famon Awal Bros Sedaya": { ticker: "PRAY", name: "Awal Bros" },
+
+  // 의료기기/장비 등
+  "PT Diastika Biotekindo Tbk": { ticker: "CHEK", name: "Diastika Biotekindo" },
+  "Diastika Biotekindo": { ticker: "CHEK", name: "Diastika Biotekindo" },
+  "PT Haloni Jane Tbk": { ticker: "HALO", name: "Haloni Jane" },
+  "Haloni Jane": { ticker: "HALO", name: "Haloni Jane" },
+  "PT Itama Ranoraya Tbk": { ticker: "IRRA", name: "Itama Ranoraya" },
+  "Itama Ranoraya": { ticker: "IRRA", name: "Itama Ranoraya" },
+  "PT UBC Medical Indonesia Tbk": { ticker: "LABS", name: "UBC Medical" },
+  "UBC Medical Indonesia": { ticker: "LABS", name: "UBC Medical" },
+  "PT Hetzer Medical Indonesia Tbk": { ticker: "MEDS", name: "Hetzer Medical" },
+  "Hetzer Medical Indonesia": { ticker: "MEDS", name: "Hetzer Medical" },
+  "PT Multi Medika Internasional Tbk": { ticker: "MMIX", name: "Multi Medika" },
+  "Multi Medika Internasional": { ticker: "MMIX", name: "Multi Medika" },
+  "PT Jayamas Medica Industri Tbk": { ticker: "OMED", name: "Jayamas Medica" },
+  "Jayamas Medica Industri": { ticker: "OMED", name: "Jayamas Medica" },
+  "PT Maja Agung Latexindo Tbk": { ticker: "SURI", name: "Maja Agung" },
+  "Maja Agung Latexindo": { ticker: "SURI", name: "Maja Agung" },
+};
+
+const toLabel = (tag) => {
+  const info = COMPANY_TICKERS[tag];
+  if (!info) return tag;
+  return `${info.name}(#${info.ticker})`;
 };
 
 const NewsTagFilter = ({ activeSection, currentSectionTags, activeTags, setActiveTags }) => {
@@ -112,7 +133,7 @@ const NewsTagFilter = ({ activeSection, currentSectionTags, activeTags, setActiv
         </button>
 
         {currentSectionTags.map((tag) => {
-          const label = COMPANY_TICKER_LABELS[tag] || tag;
+          const label = toLabel(tag);
           return (
           <button
             key={tag}
