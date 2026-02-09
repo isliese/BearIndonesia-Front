@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { getAuthToken } from "../utils/auth";
 import { isScrapped, toggleScrap } from "../utils/scrapStorage";
 import ScrapCommentModal from "./ScrapCommentModal";
@@ -7,6 +8,9 @@ const ScrapStarButton = ({ article, size = 18, style = {}, onChange }) => {
   const [scrapped, setScrapped] = useState(() => isScrapped(article));
   const [commentOpen, setCommentOpen] = useState(false);
   const [comment, setComment] = useState("");
+  const wrapperRef = useRef(null);
+  const tooltipRef = useRef(null);
+  const [tooltipPos, setTooltipPos] = useState({ top: 0, left: 0 });
 
   const showToast = (message, type = "info") => {
     try {
@@ -25,6 +29,46 @@ const ScrapStarButton = ({ article, size = 18, style = {}, onChange }) => {
 
   const canScrap = Boolean(article?.id || article?.rawNewsId);
   const [hovered, setHovered] = useState(false);
+  const isLoggedIn = Boolean(getAuthToken());
+
+  useLayoutEffect(() => {
+    if (!hovered || isLoggedIn) return;
+    const rect = wrapperRef.current?.getBoundingClientRect?.();
+    if (!rect) return;
+    setTooltipPos({ top: rect.bottom + 8, left: rect.left + rect.width / 2 });
+  }, [hovered, isLoggedIn]);
+
+  useLayoutEffect(() => {
+    if (!hovered || isLoggedIn) return;
+    const rect = wrapperRef.current?.getBoundingClientRect?.();
+    const tip = tooltipRef.current;
+    if (!rect || !tip) return;
+
+    const nextTop = rect.bottom + 8;
+    let nextLeft = rect.left + rect.width / 2;
+    const half = tip.offsetWidth / 2;
+    const minLeft = 8 + half;
+    const maxLeft = window.innerWidth - 8 - half;
+    nextLeft = Math.min(Math.max(nextLeft, minLeft), maxLeft);
+
+    setTooltipPos((prev) => (prev.top === nextTop && prev.left === nextLeft ? prev : { top: nextTop, left: nextLeft }));
+  }, [tooltipPos.top, tooltipPos.left, hovered, isLoggedIn]);
+
+  useEffect(() => {
+    if (!hovered || isLoggedIn) return undefined;
+    const update = () => {
+      const rect = wrapperRef.current?.getBoundingClientRect?.();
+      if (!rect) return;
+      setTooltipPos({ top: rect.bottom + 8, left: rect.left + rect.width / 2 });
+    };
+    window.addEventListener("resize", update);
+    window.addEventListener("scroll", update, true);
+    return () => {
+      window.removeEventListener("resize", update);
+      window.removeEventListener("scroll", update, true);
+    };
+  }, [hovered, isLoggedIn]);
+
   const handleClick = async (e) => {
     e.stopPropagation();
     if (!getAuthToken()) {
@@ -67,6 +111,7 @@ const ScrapStarButton = ({ article, size = 18, style = {}, onChange }) => {
 
   return (
     <div
+      ref={wrapperRef}
       style={{
         position: "relative",
         display: "inline-flex",
@@ -103,27 +148,33 @@ const ScrapStarButton = ({ article, size = 18, style = {}, onChange }) => {
         {scrapped ? "★" : "☆"}
       </button>
 
-      {!getAuthToken() && hovered && (
-        <div
-          style={{
-            position: "absolute",
-            top: "calc(100% + 8px)",
-            left: "50%",
-            transform: "translateX(-50%)",
-            background: "rgba(20, 20, 20, 0.95)",
-            color: "#ffcc80",
-            padding: "6px 10px",
-            borderRadius: "8px",
-            fontSize: "0.75rem",
-            whiteSpace: "nowrap",
-            border: "1px solid rgba(255, 140, 66, 0.35)",
-            boxShadow: "0 6px 18px rgba(0,0,0,0.35)",
-            zIndex: 20,
-          }}
-        >
-          로그인 후 이용해주세요.
-        </div>
-      )}
+      {!isLoggedIn &&
+        hovered &&
+        typeof document !== "undefined" &&
+        createPortal(
+          <div
+            ref={tooltipRef}
+            style={{
+              position: "fixed",
+              top: tooltipPos.top,
+              left: tooltipPos.left,
+              transform: "translateX(-50%)",
+              background: "rgba(20, 20, 20, 0.95)",
+              color: "#ffcc80",
+              padding: "6px 10px",
+              borderRadius: "8px",
+              fontSize: "0.75rem",
+              whiteSpace: "nowrap",
+              border: "1px solid rgba(255, 140, 66, 0.35)",
+              boxShadow: "0 6px 18px rgba(0,0,0,0.35)",
+              zIndex: 20000,
+              pointerEvents: "none",
+            }}
+          >
+            로그인 후 이용해주세요.
+          </div>,
+          document.body,
+        )}
 
       <ScrapCommentModal
         isOpen={commentOpen}
