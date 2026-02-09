@@ -13,6 +13,7 @@ const request = async (path, options = {}) => {
     headers,
     body,
     responseType = "json",
+    signal,
   } = options;
 
   const token = getAuthToken();
@@ -22,6 +23,7 @@ const request = async (path, options = {}) => {
     method,
     headers: { ...defaultHeaders, ...authHeader, ...headers },
     body: body ? JSON.stringify(body) : undefined,
+    signal,
   });
 
   if (!response.ok) {

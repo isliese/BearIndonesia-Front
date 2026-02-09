@@ -32,11 +32,13 @@ const UnifiedNewsPage = ({ setSelectedNews }) => {
   const [wordCloudLoading, setWordCloudLoading] = useState(false);
   const [wordCloudError, setWordCloudError] = useState("");
   const wordCloudUrlRef = useRef("");
+  const wordCloudAbortRef = useRef(null);
   const [showNewsletter, setShowNewsletter] = useState(false);
   const [newsletterUrl, setNewsletterUrl] = useState("");
   const [newsletterLoading, setNewsletterLoading] = useState(false);
   const [newsletterError, setNewsletterError] = useState("");
   const newsletterUrlRef = useRef("");
+  const newsletterAbortRef = useRef(null);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [articles, setArticles] = useState([]);
@@ -510,87 +512,109 @@ const UnifiedNewsPage = ({ setSelectedNews }) => {
   }, [excelYear, excelMonth]);
 
 
-  const generateWordCloud = async () => {
-    if (!wcStartDate || !wcEndDate) {
-      alert("기간을 선택해 주세요.");
-      return;
-    }
-    setShowWordCloud(true);
-    setWordCloudLoading(true);
-    setWordCloudError("");
-    setWordCloudUrl("");
+	  const generateWordCloud = async () => {
+	    if (!wcStartDate || !wcEndDate) {
+	      alert("기간을 선택해 주세요.");
+	      return;
+	    }
+	    setShowWordCloud(true);
+	    setWordCloudLoading(true);
+	    setWordCloudError("");
+	    setWordCloudUrl("");
 
-    // Back에 워드클라우드 생성 요청 (사용자가 입력한 기간을 보냄)
-    try {
-      const blob = await request("/api/wordcloud", {
-        method: "POST",
-        body: { startDate: wcStartDate, endDate: wcEndDate },
-        responseType: "blob",
-      });
-      if (!blob || blob.size === 0) {
-        throw new Error("이미지 바이너리를 받지 못했습니다.");
-      }
-      if (wordCloudUrlRef.current) {
+	    // Back에 워드클라우드 생성 요청 (사용자가 입력한 기간을 보냄)
+	    try {
+	      if (wordCloudAbortRef.current) {
+	        wordCloudAbortRef.current.abort();
+	      }
+	      const controller = new AbortController();
+	      wordCloudAbortRef.current = controller;
+	      const blob = await request("/api/wordcloud", {
+	        method: "POST",
+	        body: { startDate: wcStartDate, endDate: wcEndDate },
+	        responseType: "blob",
+	        signal: controller.signal,
+	      });
+	      if (!blob || blob.size === 0) {
+	        throw new Error("이미지 바이너리를 받지 못했습니다.");
+	      }
+	      if (wordCloudUrlRef.current) {
         URL.revokeObjectURL(wordCloudUrlRef.current);
       }
-      const objectUrl = URL.createObjectURL(blob);
-      wordCloudUrlRef.current = objectUrl;
-      setWordCloudUrl(objectUrl);
-    } catch (error) {
-      console.error("워드클라우드 생성 실패:", error);
-      setWordCloudError("워드클라우드를 생성하지 못했습니다.");
-    } finally {
-      setWordCloudLoading(false);
-    }
-  };
+	      const objectUrl = URL.createObjectURL(blob);
+	      wordCloudUrlRef.current = objectUrl;
+	      setWordCloudUrl(objectUrl);
+	    } catch (error) {
+	      if (error?.name === "AbortError") return;
+	      console.error("워드클라우드 생성 실패:", error);
+	      setWordCloudError("워드클라우드를 생성하지 못했습니다.");
+	    } finally {
+	      setWordCloudLoading(false);
+	    }
+	  };
 
-  useEffect(() => {
-    return () => {
-      if (wordCloudUrlRef.current) {
-        URL.revokeObjectURL(wordCloudUrlRef.current);
-      }
-      if (newsletterUrlRef.current) {
-        URL.revokeObjectURL(newsletterUrlRef.current);
-      }
-    };
-  }, []);
+	  useEffect(() => {
+	    return () => {
+	      if (wordCloudAbortRef.current) {
+	        wordCloudAbortRef.current.abort();
+	      }
+	      if (newsletterAbortRef.current) {
+	        newsletterAbortRef.current.abort();
+	      }
+	      if (wordCloudUrlRef.current) {
+	        URL.revokeObjectURL(wordCloudUrlRef.current);
+	      }
+	      if (newsletterUrlRef.current) {
+	        URL.revokeObjectURL(newsletterUrlRef.current);
+	      }
+	    };
+	  }, []);
 
-  const openNewsletter = async () => {
-    if (!newsletterYear || !newsletterMonth) {
-      alert("연도와 월을 선택해 주세요.");
-      return;
-    }
-    setShowNewsletter(true);
-    setNewsletterLoading(true);
-    setNewsletterError("");
-    setNewsletterUrl("");
+	  const openNewsletter = async () => {
+	    if (!newsletterYear || !newsletterMonth) {
+	      alert("연도와 월을 선택해 주세요.");
+	      return;
+	    }
+	    setShowNewsletter(true);
+	    setNewsletterLoading(true);
+	    setNewsletterError("");
+	    setNewsletterUrl("");
 
-    // 뉴스레터 api 호출
-    try {
-      const safeMonth = String(newsletterMonth).padStart(2, "0");
-      const blob = await request(`/api/newsletter?year=${newsletterYear}&month=${safeMonth}`, {
-        responseType: "blob",
-      });
-      if (!blob || blob.size === 0) {
-        throw new Error("PDF 바이너리를 받지 못했습니다.");
-      }
-      if (newsletterUrlRef.current) {
-        URL.revokeObjectURL(newsletterUrlRef.current);
-      }
-      const objectUrl = URL.createObjectURL(blob);
-      newsletterUrlRef.current = objectUrl;
-      setNewsletterUrl(objectUrl);
-    } catch (error) {
-      console.error("뉴스레터 생성 실패:", error);
-      if (error?.status === 404 || error?.status === 403) {
-        setNewsletterError("해당 연월에 충분한 뉴스가 없습니다.");
-      } else {
+	    // 뉴스레터 api 호출
+	    try {
+	      if (newsletterAbortRef.current) {
+	        newsletterAbortRef.current.abort();
+	      }
+	      const controller = new AbortController();
+	      newsletterAbortRef.current = controller;
+	      const safeMonth = String(newsletterMonth).padStart(2, "0");
+	      const blob = await request(`/api/newsletter?year=${newsletterYear}&month=${safeMonth}`, {
+	        responseType: "blob",
+	        signal: controller.signal,
+	      });
+	      if (!blob || blob.size === 0) {
+	        throw new Error("PDF 바이너리를 받지 못했습니다.");
+	      }
+		      if (newsletterUrlRef.current) {
+		        URL.revokeObjectURL(newsletterUrlRef.current);
+		      }
+		      const fileName = `뉴스레터-${newsletterYear}-${safeMonth}.pdf`;
+		      const file = new File([blob], fileName, { type: "application/pdf" });
+		      const objectUrl = URL.createObjectURL(file);
+		      newsletterUrlRef.current = objectUrl;
+		      setNewsletterUrl(objectUrl);
+		    } catch (error) {
+	      if (error?.name === "AbortError") return;
+	      console.error("뉴스레터 생성 실패:", error);
+	      if (error?.status === 404 || error?.status === 403) {
+	        setNewsletterError("해당 연월에 충분한 뉴스가 없습니다.");
+	      } else {
         setNewsletterError("뉴스레터를 생성하지 못했습니다.");
       }
     } finally {
-      setNewsletterLoading(false);
-    }
-  };
+	      setNewsletterLoading(false);
+	    }
+	  };
 
   const sidebarWidth = 260;
   const effectiveSidebarWidth = isMobile ? 0 : (isSidebarCollapsed ? 0 : sidebarWidth);
@@ -697,16 +721,22 @@ const UnifiedNewsPage = ({ setSelectedNews }) => {
       </div>
 
       {/* 워드클라우드 모달 */}
-      <WordCloudModal
-        isOpen={showWordCloud}
-        onClose={() => {
-          setShowWordCloud(false);
-          if (wordCloudUrlRef.current) {
-            URL.revokeObjectURL(wordCloudUrlRef.current);
-            wordCloudUrlRef.current = "";
-          }
-          setWordCloudUrl("");
-        }}
+	      <WordCloudModal
+	        isOpen={showWordCloud}
+	        onClose={() => {
+	          setShowWordCloud(false);
+	          if (wordCloudAbortRef.current) {
+	            wordCloudAbortRef.current.abort();
+	            wordCloudAbortRef.current = null;
+	          }
+	          setWordCloudLoading(false);
+	          setWordCloudError("");
+	          if (wordCloudUrlRef.current) {
+	            URL.revokeObjectURL(wordCloudUrlRef.current);
+	            wordCloudUrlRef.current = "";
+	          }
+	          setWordCloudUrl("");
+	        }}
         imageUrl={wordCloudUrl}
         isLoading={wordCloudLoading}
         errorMessage={wordCloudError}
@@ -715,16 +745,22 @@ const UnifiedNewsPage = ({ setSelectedNews }) => {
       />
 
       {/* 뉴스레터 모달 */}
-      <NewsletterModal
-        isOpen={showNewsletter}
-        onClose={() => {
-          setShowNewsletter(false);
-          if (newsletterUrlRef.current) {
-            URL.revokeObjectURL(newsletterUrlRef.current);
-            newsletterUrlRef.current = "";
-          }
-          setNewsletterUrl("");
-        }}
+	      <NewsletterModal
+	        isOpen={showNewsletter}
+	        onClose={() => {
+	          setShowNewsletter(false);
+	          if (newsletterAbortRef.current) {
+	            newsletterAbortRef.current.abort();
+	            newsletterAbortRef.current = null;
+	          }
+	          setNewsletterLoading(false);
+	          setNewsletterError("");
+	          if (newsletterUrlRef.current) {
+	            URL.revokeObjectURL(newsletterUrlRef.current);
+	            newsletterUrlRef.current = "";
+	          }
+	          setNewsletterUrl("");
+	        }}
         pdfUrl={newsletterUrl}
         isLoading={newsletterLoading}
         errorMessage={newsletterError}
