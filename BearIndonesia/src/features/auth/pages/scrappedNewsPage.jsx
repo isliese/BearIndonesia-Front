@@ -112,10 +112,10 @@ const ScrappedNewsPage = ({ setSelectedNews }) => {
                 >
                   <ScrapStarButton article={item} size={18} style={{ position: "absolute", top: 12, left: 12 }} />
 
-                  <div style={{ color: "#d0d0d0", fontSize: "0.85rem", marginBottom: "0.3rem" }}>
+                  <div style={{ color: "#d0d0d0", fontSize: "0.85rem", marginBottom: "0.3rem", paddingLeft: "1.75rem" }}>
                     {item.source || "출처 미상"} · {item.date || "날짜 없음"}
                   </div>
-                  <div style={{ fontSize: "1.05rem", fontWeight: 600, color: "white", marginBottom: "0.5rem" }}>
+                  <div style={{ fontSize: "1.05rem", fontWeight: 600, color: "white", marginBottom: "0.5rem", marginTop: "0.75rem" }}>
                     {item.korTitle || item.title || "제목 없음"}
                   </div>
                   {item?.comment ? (
