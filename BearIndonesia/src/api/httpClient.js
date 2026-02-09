@@ -6,8 +6,9 @@ const defaultHeaders = {
   "Content-Type": "application/json",
 };
 
+const isAbsoluteUrl = (value) => /^https?:\/\//i.test(String(value || ""));
+
 const request = async (path, options = {}) => {
-  const url = `${BASE_URL}${path}`;
   const {
     method = "GET",
     headers,
@@ -15,6 +16,8 @@ const request = async (path, options = {}) => {
     responseType = "json",
     signal,
   } = options;
+
+  const url = isAbsoluteUrl(path) ? String(path) : `${BASE_URL}${path}`;
 
   const token = getAuthToken();
   const authHeader = token ? { Authorization: `Bearer ${token}` } : {};
@@ -27,6 +30,27 @@ const request = async (path, options = {}) => {
   });
 
   if (!response.ok) {
+    if (response.status === 401) {
+      try {
+        window.dispatchEvent(new Event("app-auth-required"));
+      } catch {
+        // ignore
+      }
+      const error = new Error("로그인이 필요합니다.");
+      error.status = response.status;
+      throw error;
+    }
+    if (response.status === 403) {
+      try {
+        window.dispatchEvent(new CustomEvent("app-toast", { detail: { message: "권한이 없습니다.", type: "info" } }));
+      } catch {
+        // ignore
+      }
+      const error = new Error("권한이 없습니다.");
+      error.status = response.status;
+      throw error;
+    }
+
     const errorText = await response.text().catch(() => "");
     let errorData = null;
     if (errorText) {
@@ -51,8 +75,30 @@ const request = async (path, options = {}) => {
   if (responseType === "blob") return response.blob();
   if (responseType === "text") return response.text();
   if (response.status === 204) return null;
+  const contentType = response.headers.get("content-type") || "";
   const text = await response.text();
   if (!text) return null;
+
+  // Defensive: avoid crashing on HTML (e.g., dev server index.html) when JSON was expected.
+  if (responseType === "json") {
+    const looksLikeHtml = /^\s*</.test(text);
+    const isJson = contentType.toLowerCase().includes("application/json");
+    if (!isJson && looksLikeHtml) {
+      const error = new Error(`JSON 응답이 필요하지만 HTML을 받았습니다. 백엔드 주소(VITE_API_BASE_URL) 설정을 확인해주세요. (${url})`);
+      error.status = response.status;
+      error.body = text.slice(0, 200);
+      throw error;
+    }
+    try {
+      return JSON.parse(text);
+    } catch {
+      const error = new Error(`JSON 파싱에 실패했습니다. (${url})`);
+      error.status = response.status;
+      error.body = text.slice(0, 200);
+      throw error;
+    }
+  }
+
   return JSON.parse(text);
 };
 

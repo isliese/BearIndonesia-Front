@@ -49,3 +49,7 @@ export const getDisplayName = (user) => {
   if (user.email) return String(user.email).split("@")[0];
   return "User";
 };
+
+export const isAdminUser = (user) => {
+  return String(user?.role || "").toUpperCase() === "ADMIN";
+};

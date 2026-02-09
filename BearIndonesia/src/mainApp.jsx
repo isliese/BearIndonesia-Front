@@ -13,8 +13,11 @@ import LoginPage from './features/auth/pages/loginPage.jsx';
 import SignupPage from './features/auth/pages/signupPage.jsx';
 import ProfilePage from './features/auth/pages/profilePage.jsx';
 import ScrappedNewsPage from './features/auth/pages/scrappedNewsPage.jsx';
+import SalesPage from './features/admin/pages/salesPage.jsx';
+import AdminUsersPage from './features/admin/pages/adminUsersPage.jsx';
 import { fetchMe } from './api/authApi';
 import { getAuthToken, setAuthSession, clearAuthSession } from './utils/auth';
+import { clearScrapCache } from './utils/scrapStorage';
 
 const MainApp = () => {
   const [selectedNews, setSelectedNews] = useState(null);
@@ -50,6 +53,23 @@ const MainApp = () => {
       active = false;
     };
   }, []);
+
+  useEffect(() => {
+    const handler = () => {
+      clearAuthSession();
+      clearScrapCache();
+      try {
+        window.dispatchEvent(new CustomEvent("app-toast", { detail: { message: "로그인이 필요합니다.", type: "info" } }));
+      } catch {
+        // ignore
+      }
+      const from = `${location.pathname}${location.search}`;
+      if (location.pathname === "/login") return;
+      navigate("/login", { state: { from } });
+    };
+    window.addEventListener("app-auth-required", handler);
+    return () => window.removeEventListener("app-auth-required", handler);
+  }, [navigate, location.pathname, location.search]);
 
   useEffect(() => {
     const key = `${location.pathname}${location.search}`;
@@ -164,6 +184,8 @@ const MainApp = () => {
             element={<SearchResultsPage setSelectedNews={setSelectedNews} />}
           />
           <Route path="/report/competitor" element={<CompetitorReportPage />} />
+          <Route path="/sales" element={<SalesPage />} />
+          <Route path="/admin/users" element={<AdminUsersPage />} />
           <Route
             path="*"
             element={<HomePage onSearch={handleSearch} setSelectedNews={setSelectedNews} />}

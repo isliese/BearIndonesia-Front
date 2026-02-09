@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import AReumiUser from '../assets/images/AReumi_User.png';
-import { clearAuthSession, getAuthUser, getDisplayName } from '../utils/auth';
+import { clearAuthSession, getAuthUser, getDisplayName, isAdminUser } from '../utils/auth';
 import { clearScrapCache } from '../utils/scrapStorage';
 import { useMediaQuery } from "../hooks/useMediaQuery";
 
@@ -17,11 +17,14 @@ const Navigation = () => {
   const location = useLocation();
   const isMobile = useMediaQuery("(max-width: 768px)");
 
+  const isAdmin = isAdminUser(authUser);
   const navItems = [
     { id: 'about', label: '\uc11c\ube44\uc2a4 \uc18c\uac1c', to: '/about' },
     { id: 'news', label: 'News', to: '/news' },
     { id: 'calendar', label: '\uc778\ud130\ub809\ud2f0\ube0c \uce98\ub9b0\ub354', to: '/calendar' },
-    { id: 'report', label: 'Report', to: '/report/competitor' }
+    { id: 'report', label: 'Report', to: '/report/competitor' },
+    ...(isAdmin ? [{ id: 'sales', label: 'Sales', to: '/sales' }] : []),
+    ...(isAdmin ? [{ id: 'admin', label: 'Admin', to: '/admin/users' }] : []),
   ];
 
   const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
