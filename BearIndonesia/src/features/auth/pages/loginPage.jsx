@@ -28,7 +28,10 @@ const LoginPage = () => {
           detail: { message: "로그인 되었습니다.", type: "success" },
         })
       );
-      navigate(location.state?.from || "/");
+      const from = typeof location.state?.from === "string" ? location.state.from : "";
+      const role = String(data?.user?.role || "").toUpperCase();
+      const destination = role === "ADMIN" ? "/" : (from || "/");
+      navigate(destination, { replace: true });
     } catch (err) {
       setError(err?.message || "로그인에 실패했습니다.");
     }
