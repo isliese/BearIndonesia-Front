@@ -1,12 +1,23 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { fetchAdminUsers, updateUserRole } from "../../../api/adminApi";
 import { getAuthUser, isAdminUser } from "../../../utils/auth";
 
 const AdminUsersPage = () => {
-  const authUser = useMemo(() => getAuthUser(), []);
+  const [authUser, setAuthUser] = useState(() => getAuthUser());
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    const update = () => setAuthUser(getAuthUser());
+    update();
+    window.addEventListener("authchange", update);
+    window.addEventListener("storage", update);
+    return () => {
+      window.removeEventListener("authchange", update);
+      window.removeEventListener("storage", update);
+    };
+  }, []);
 
   useEffect(() => {
     if (!isAdminUser(authUser)) return;

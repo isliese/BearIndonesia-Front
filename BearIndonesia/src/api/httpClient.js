@@ -22,10 +22,15 @@ const request = async (path, options = {}) => {
   const token = getAuthToken();
   const authHeader = token ? { Authorization: `Bearer ${token}` } : {};
 
+  const isFormData = typeof FormData !== "undefined" && body instanceof FormData;
+  const resolvedHeaders = isFormData
+    ? { ...authHeader, ...headers }
+    : { ...defaultHeaders, ...authHeader, ...headers };
+
   const response = await fetch(url, {
     method,
-    headers: { ...defaultHeaders, ...authHeader, ...headers },
-    body: body ? JSON.stringify(body) : undefined,
+    headers: resolvedHeaders,
+    body: body ? (isFormData ? body : JSON.stringify(body)) : undefined,
     signal,
   });
 

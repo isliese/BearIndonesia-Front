@@ -1,5 +1,6 @@
 import { request } from "./httpClient";
 
+// Admin-only APIs (always call backend base URL, not frontend route)
 const API_BASE = import.meta.env?.VITE_API_BASE_URL || "";
 const joinUrl = (base, path) => {
   const b = String(base || "").replace(/\/+$/, "");
@@ -23,3 +24,4 @@ export const updateUserRole = (id, role) => {
     body: { role },
   });
 };
+
