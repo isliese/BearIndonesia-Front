@@ -12,9 +12,11 @@ const SalesPage = () => {
   const [loadingHtml, setLoadingHtml] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
+  const [dots, setDots] = useState("");
 
   const [title, setTitle] = useState("");
   const [file, setFile] = useState(null);
+  const fileInputRef = useRef(null);
 
   const iframeRef = useRef(null);
   const [html, setHtml] = useState("");
@@ -87,6 +89,7 @@ const SalesPage = () => {
       const created = await uploadSalesReport({ file, title: title.trim() });
       setTitle("");
       setFile(null);
+      if (fileInputRef.current) fileInputRef.current.value = "";
       await loadList();
       if (created?.id) setSelectedId(created.id);
       window.dispatchEvent(new CustomEvent("app-toast", { detail: { message: "업로드되었습니다.", type: "success" } }));
@@ -99,12 +102,24 @@ const SalesPage = () => {
 
   const selected = reports.find((r) => r.id === selectedId) || null;
   const selectedTitle = selected ? (selected.title || selected.fileName || `Report #${selected.id}`) : "Sales Report";
+  const isGenerating = uploading || (loadingHtml && !html);
 
   const normalizePdfTitle = (value) => {
     const raw = String(value || "Sales Report").trim();
     const withoutBadChars = raw.replace(/[\\/:*?"<>|]/g, "-");
     return withoutBadChars.slice(0, 120) || "Sales Report";
   };
+
+  useEffect(() => {
+    if (!isGenerating) {
+      setDots("");
+      return undefined;
+    }
+    const id = window.setInterval(() => {
+      setDots((prev) => (prev.length >= 3 ? "." : `${prev}.`));
+    }, 450);
+    return () => window.clearInterval(id);
+  }, [isGenerating]);
 
   const handleSavePdf = () => {
     const iframe = iframeRef.current;
@@ -212,7 +227,7 @@ const SalesPage = () => {
           </div>
 
           <div style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "14px", padding: "0.8rem", marginBottom: "1rem" }}>
-            <div style={{ color: "#ffb86b", fontWeight: 800, marginBottom: "0.5rem" }}>업로드</div>
+            <div style={{ color: "#ffb86b", fontWeight: 800, marginBottom: "0.5rem" }}>파일 업로드</div>
             <input
               value={title}
               onChange={(e) => setTitle(e.target.value)}
@@ -230,6 +245,7 @@ const SalesPage = () => {
               }}
             />
             <input
+              ref={fileInputRef}
               type="file"
               accept=".xlsx,.xls"
               onChange={(e) => setFile(e.target.files?.[0] || null)}
@@ -254,6 +270,11 @@ const SalesPage = () => {
             >
               {uploading ? "업로드 중..." : "업로드"}
             </button>
+            {uploading && (
+              <div style={{ marginTop: "0.55rem", color: "#ffb86b", fontSize: "0.85rem", fontWeight: 800 }}>
+                AI Sales 리포트를 생성 중입니다{dots}
+              </div>
+            )}
             <div style={{ marginTop: "0.6rem", color: "#b0b0b0", fontSize: "0.82rem", lineHeight: 1.35 }}>
               .xlsx 파일만 업로드 가능합니다. <br />
               업로드된 리포트는 모든 ADMIN 유저가 조회할 수 있어요.
@@ -354,9 +375,20 @@ const SalesPage = () => {
 
           {selectedId && (
             <div style={{ flex: 1, borderRadius: "14px", border: "1px solid rgba(255,255,255,0.10)", overflow: "hidden", background: "rgba(10,10,20,0.35)" }}>
-              {loadingHtml && (
+              {(loadingHtml || uploading) && (
                 <div style={{ padding: "1rem", color: "#b0b0b0" }}>
-                  시각화 페이지를 불러오는 중...
+                  {isGenerating ? (
+                    <div style={{ color: "#ffb86b", fontWeight: 900 }}>
+                      AI Sales 리포트를 생성 중입니다{dots}
+                    </div>
+                  ) : (
+                    "시각화 페이지를 불러오는 중..."
+                  )}
+                  {isGenerating && (
+                    <div style={{ marginTop: "0.4rem", color: "#b0b0b0", fontSize: "0.9rem" }}>
+                      잠시만 기다려주세요.
+                    </div>
+                  )}
                 </div>
               )}
               {!loadingHtml && html && (
