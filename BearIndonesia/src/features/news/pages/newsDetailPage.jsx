@@ -34,14 +34,27 @@ const NewsDetailPage = ({ news }) => {
   const titleKO   = resolvedNews.korTitle || '';
   const titleID   = resolvedNews.title || '';
   const summaryKO = resolvedNews.korSummary || '';
-  const summaryID = resolvedNews.idSummary || resolvedNews.summary || '';
+  const containsHangul = (value) => /[ㄱ-ㅎㅏ-ㅣ가-힣]/.test(String(value || ""));
+  const summaryIDRaw = resolvedNews.idSummary || resolvedNews.id_summary || "";
+  const summaryFallback = resolvedNews.summary || "";
+  const summaryID = summaryIDRaw || (containsHangul(summaryFallback) ? "" : summaryFallback);
   const semanticConfidence = resolvedNews.semanticConfidence ?? null;
   const tagMismatch = resolvedNews.tagMismatch ?? false;
   const categoryMismatch = resolvedNews.categoryMismatch ?? false;
   const showDev = import.meta.env.MODE !== "production";
   const imageURL = resolvedNews.img || '';
   const contentKO = resolvedNews.korContent || '';
-  const contentID = resolvedNews.content || '';
+  const contentCandidate =
+    resolvedNews.originalContent ||
+    resolvedNews.original_content ||
+    resolvedNews.rawContent ||
+    resolvedNews.raw_content ||
+    resolvedNews.idContent ||
+    resolvedNews.id_content ||
+    resolvedNews.content ||
+    "";
+  // If "원문" 탭에서 한국어(한글) 본문이 노출되는 경우가 있어 방어: 한글이 포함되면 원문으로 간주하지 않음.
+  const contentID = containsHangul(contentCandidate) ? "" : String(contentCandidate || "");
   const insight   = resolvedNews.insight || resolvedNews.insight || '';
   const author    = resolvedNews.source || '';
   const date      = resolvedNews.date || '';
@@ -98,7 +111,8 @@ const NewsDetailPage = ({ news }) => {
           </strong>
         );
       } else {
-        const lines = part.split('\n');
+        const normalized = String(part).replace(/\r\n/g, "\n").replace(/\n{2,}/g, "\n");
+        const lines = normalized.split("\n");
         lines.forEach((line, j) => {
           nodes.push(<React.Fragment key={`t-${i}-${j}`}>{line}</React.Fragment>);
           if (j < lines.length - 1) nodes.push(<br key={`br-${i}-${j}`} />);
@@ -110,14 +124,20 @@ const NewsDetailPage = ({ news }) => {
 
   const renderParagraphs = (text) => {
     if (!text) return null;
-    const lines = String(text).split(/\n/);
-    return lines.map((line, index) => {
-      const indented = `    ${line}`;
+    // Keep indentation, but collapse multiple newlines into a single paragraph break.
+    const normalized = String(text).replace(/\r\n/g, "\n").replace(/\n{2,}/g, "\n");
+    const paragraphs = normalized
+      .split("\n")
+      .map((p) => p.trim())
+      .filter(Boolean);
+
+    return paragraphs.map((p, index) => {
+      const indented = `    ${p}`;
       return (
         <p
           key={`p-${index}`}
           style={{
-            margin: index === lines.length - 1 ? 0 : "0 0 1rem 0",
+            margin: index === paragraphs.length - 1 ? 0 : "0 0 0.9rem 0",
             lineHeight: 1.45,
             whiteSpace: "pre-wrap",
           }}
@@ -314,11 +334,11 @@ const NewsDetailPage = ({ news }) => {
               <button
                 onClick={() => setContentTab("ko")}
                 style={{
-                  padding: '1rem 12rem',
+                  padding: '1rem 0',
                   background: contentTab === "ko" ? 'rgba(255, 255, 255, 0.08)' : 'transparent',
                   border: 'none',
                   borderTopLeftRadius: '12px',
-                  borderTopRightRadius: '12px',
+                  borderTopRightRadius: '0px',
                   color: contentTab === "ko" ? '#ff8c42' : 'rgba(255, 255, 255, 0.6)',
                   fontSize: '1rem',
                   fontWeight: contentTab === "ko" ? '600' : '400',
@@ -327,8 +347,9 @@ const NewsDetailPage = ({ news }) => {
                   position: 'relative',
                   borderBottom: contentTab === "ko" ? 'none' : '1px solid rgba(255, 255, 255, 0.1)',
                   whiteSpace: 'nowrap',
-                  flexShrink: 0,
-                  minWidth: '160px',
+                  flex: 1,
+                  minWidth: 0,
+                  textAlign: 'center',
                 }}
                 onMouseEnter={(e) => {
                   if (contentTab !== "ko") {
@@ -347,10 +368,10 @@ const NewsDetailPage = ({ news }) => {
               <button
                 onClick={() => setContentTab("id")}
                 style={{
-                  padding: '1rem 12rem',
+                  padding: '1rem 0',
                   background: contentTab === "id" ? 'rgba(255, 255, 255, 0.08)' : 'transparent',
                   border: 'none',
-                  borderTopLeftRadius: '12px',
+                  borderTopLeftRadius: '0px',
                   borderTopRightRadius: '12px',
                   color: contentTab === "id" ? '#ff8c42' : 'rgba(255, 255, 255, 0.6)',
                   fontSize: '1rem',
@@ -360,7 +381,9 @@ const NewsDetailPage = ({ news }) => {
                   position: 'relative',
                   borderBottom: contentTab === "id" ? 'none' : '1px solid rgba(255, 255, 255, 0.1)',
                   whiteSpace: 'nowrap',
-                  flexShrink: 0,
+                  flex: 1,
+                  minWidth: 0,
+                  textAlign: 'center',
                 }}
                 onMouseEnter={(e) => {
                   if (contentTab !== "id") {
@@ -373,7 +396,7 @@ const NewsDetailPage = ({ news }) => {
                   }
                 }}
               >
-                인도네시아어
+                원문
               </button>
             </div>
 
@@ -487,6 +510,11 @@ const NewsDetailPage = ({ news }) => {
                 </>
               ) : (
                 <>
+                  {!summaryID && !contentID && (
+                    <div style={{ marginBottom: '1.2rem', color: '#b0b0b0' }}>
+                      원문 데이터가 없습니다. 상단의 <span style={{ color: '#ffae66', fontWeight: 700 }}>원문 기사 보기 ↗</span> 링크를 이용해주세요.
+                    </div>
+                  )}
                   {/* AI 요약(인도네시아어) */}
                   {summaryID && (
                     <div style={{ marginBottom: '2.5rem' }}>
