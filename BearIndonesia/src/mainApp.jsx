@@ -150,7 +150,7 @@ const MainApp = () => {
         style={{
           flex: 1,
           overflowY: 'auto',
-          overflowX: 'hidden'
+          overflowX: 'auto'
         }}
       >
         <Routes>
