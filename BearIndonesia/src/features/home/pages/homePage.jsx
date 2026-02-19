@@ -7,7 +7,7 @@ import CnbcLogo from "../../../assets/images/CNBC.png";
 import CnnLogo from "../../../assets/images/CNN.png";
 import DetikLogo from "../../../assets/images/detik.png";
 import FarmasetikaLogo from "../../../assets/images/farmasetika.png";
-import MohLogo from "../../../assets/images/moh.png";
+import MohLogo from "../../../assets/images/MOH.png";
 import MarketbisnisLogo from "../../../assets/images/marketbisnis.png";
 import NasionalkontanLogo from "../../../assets/images/nasionalkontan.png";
 import SindonewsLogo from "../../../assets/images/sindonews.png";
