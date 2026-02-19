@@ -1,5 +1,5 @@
 // 홈 페이지
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { useLocation, useNavigate, useNavigationType } from 'react-router-dom';
 import { useMediaQuery } from "../../../hooks/useMediaQuery";
 import BpomLogo from "../../../assets/images/bpom.png";
@@ -154,13 +154,67 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
   }, [newsItems, authUser]);
 
   const [searchTerm, setSearchTerm] = useState('');
+  const [recentSearches, setRecentSearches] = useState(() => {
+    try {
+      const raw = localStorage.getItem("recentSearchTerms");
+      const parsed = raw ? JSON.parse(raw) : [];
+      return Array.isArray(parsed) ? parsed.filter(Boolean).slice(0, 8) : [];
+    } catch {
+      return [];
+    }
+  });
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const searchBoxRef = useRef(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedNewsStand, setSelectedNewsStand] = useState(null);
   const [hoveredStand, setHoveredStand] = useState(null);
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (searchBoxRef.current && !searchBoxRef.current.contains(event.target)) {
+        setIsSearchFocused(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const saveRecentSearch = (value) => {
+    const q = String(value || "").trim();
+    if (!q) return;
+    setRecentSearches((prev) => {
+      const next = [q, ...prev.filter((item) => item !== q)].slice(0, 8);
+      try {
+        localStorage.setItem("recentSearchTerms", JSON.stringify(next));
+      } catch {
+        // ignore localStorage errors
+      }
+      return next;
+    });
+  };
+
   const handleSearch = () => {
-    if (searchTerm.trim()) {
-      onSearch(searchTerm);
+    const term = searchTerm.trim();
+    if (term) {
+      saveRecentSearch(term);
+      onSearch(term);
+      setIsSearchFocused(false);
+    }
+  };
+
+  const handleRecentSearchClick = (term) => {
+    setSearchTerm(term);
+    saveRecentSearch(term);
+    onSearch(term);
+    setIsSearchFocused(false);
+  };
+
+  const handleClearRecentSearches = () => {
+    setRecentSearches([]);
+    try {
+      localStorage.removeItem("recentSearchTerms");
+    } catch {
+      // ignore localStorage errors
     }
   };
 
@@ -248,16 +302,20 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
         AI 기반으로 인도네시아 제약 산업의 최신 뉴스와 허가 정보를 빠르고 정확하게 제공합니다. <br/> 
         검색을 통해 원하는 정보를 빠르게 찾아보세요.
       </p>
-      <div style={{
-        position: 'relative',
-        width: '100%',
-        maxWidth: '1040px'
-      }}>
+      <div
+        ref={searchBoxRef}
+        style={{
+          position: 'relative',
+          width: '100%',
+          maxWidth: '1040px'
+        }}
+      >
         <input
           className="home-search-input"
           type="text"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
+          onFocus={() => setIsSearchFocused(true)}
           onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
           placeholder="제약 회사명, 의약품명 등을 검색해보세요!"
           style={{
@@ -294,6 +352,86 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
           검색
         </button>
 
+        {isSearchFocused && (
+          <div
+            style={{
+              position: "absolute",
+              top: "calc(100% + 10px)",
+              left: 0,
+              width: "100%",
+              background: "rgba(14, 22, 43, 0.96)",
+              border: "1px solid rgba(255, 140, 66, 0.28)",
+              borderRadius: "16px",
+              boxShadow: "0 14px 28px rgba(0, 0, 0, 0.25)",
+              zIndex: 20,
+              padding: "0.7rem 0.8rem",
+              boxSizing: "border-box",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                marginBottom: "0.45rem",
+              }}
+            >
+              <span style={{ color: "#d0d0d0", fontSize: "0.8rem" }}>최근 검색어</span>
+              {recentSearches.length > 0 && (
+                <button
+                  type="button"
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={handleClearRecentSearches}
+                  style={{
+                    border: "none",
+                    background: "transparent",
+                    color: "#ffb067",
+                    fontSize: "0.74rem",
+                    cursor: "pointer",
+                    padding: 0,
+                  }}
+                >
+                  전체 삭제
+                </button>
+              )}
+            </div>
+
+            {recentSearches.length === 0 ? (
+              <div style={{ color: "#a8a8a8", fontSize: "0.78rem", textAlign: "left", padding: "0.2rem 0" }}>
+                최근 검색어가 없습니다.
+              </div>
+            ) : (
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.22rem" }}>
+                {recentSearches.map((term) => (
+                  <button
+                    key={term}
+                    type="button"
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={() => handleRecentSearchClick(term)}
+                    style={{
+                      textAlign: "left",
+                      border: "none",
+                      background: "transparent",
+                      color: "#f0f0f0",
+                      padding: "0.38rem 0.2rem",
+                      borderRadius: "8px",
+                      cursor: "pointer",
+                      fontSize: "0.86rem",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = "rgba(255, 255, 255, 0.08)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = "transparent";
+                    }}
+                  >
+                    {term}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       <div style={{

@@ -345,6 +345,15 @@ const SearchResultsPage = ({ setSelectedNews }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const isMobile = useMediaQuery("(max-width: 768px)");
+  const [recentSearches, setRecentSearches] = useState(() => {
+    try {
+      const raw = localStorage.getItem("recentSearchTerms");
+      const parsed = raw ? JSON.parse(raw) : [];
+      return Array.isArray(parsed) ? parsed.filter(Boolean).slice(0, 8) : [];
+    } catch {
+      return [];
+    }
+  });
   const [authUser, setAuthUser] = useState(() => getAuthUser());
   const [sortBy, setSortBy] = useState("relevance");
   const [filterType, setFilterType] = useState("all");
@@ -418,6 +427,20 @@ const SearchResultsPage = ({ setSelectedNews }) => {
     performSearch(searchTerm, sortBy, filterType);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchTerm, sortBy, filterType]);
+
+  useEffect(() => {
+    const q = String(searchTerm || "").trim();
+    if (!q) return;
+    setRecentSearches((prev) => {
+      const next = [q, ...prev.filter((item) => item !== q)].slice(0, 8);
+      try {
+        localStorage.setItem("recentSearchTerms", JSON.stringify(next));
+      } catch {
+        // ignore
+      }
+      return next;
+    });
+  }, [searchTerm]);
 
   // 동적 태그 팩셋 계산 (검색 결과에 기반)
   const tagFacets = useMemo(() => {
@@ -529,6 +552,56 @@ const SearchResultsPage = ({ setSelectedNews }) => {
           <div style={{ color: "#999", fontSize: "0.74rem" }}>
             인도네시아 제약 산업 관련 최신 정보를 확인하세요 (한국어/영어 검색 지원)
           </div>
+
+          {recentSearches.length > 0 && (
+            <div style={{ marginTop: "0.62rem", display: "flex", alignItems: "center", justifyContent: "center", gap: "0.45rem", flexWrap: "wrap" }}>
+              <span style={{ color: "#b9b9b9", fontSize: "0.72rem" }}>최근 검색어</span>
+              {recentSearches.map((term) => (
+                <button
+                  key={term}
+                  type="button"
+                  onClick={() => {
+                    if (term === searchTerm) return;
+                    navigate(`/search?query=${encodeURIComponent(term)}`, { state: { from: location.state?.from || "/news" } });
+                  }}
+                  style={{
+                    padding: "0.26rem 0.52rem",
+                    borderRadius: "999px",
+                    border: "1px solid rgba(255,255,255,0.22)",
+                    background: "rgba(255,255,255,0.08)",
+                    color: "#e5e5e5",
+                    fontSize: "0.7rem",
+                    cursor: "pointer",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {term}
+                </button>
+              ))}
+              <button
+                type="button"
+                onClick={() => {
+                  setRecentSearches([]);
+                  try {
+                    localStorage.removeItem("recentSearchTerms");
+                  } catch {
+                    // ignore
+                  }
+                }}
+                style={{
+                  padding: "0.24rem 0.5rem",
+                  borderRadius: "999px",
+                  border: "1px solid rgba(255,140,66,0.38)",
+                  background: "transparent",
+                  color: "#ffb067",
+                  fontSize: "0.68rem",
+                  cursor: "pointer",
+                }}
+              >
+                전체 삭제
+              </button>
+            </div>
+          )}
         </div>
 
         {/* 필터 및 정렬 옵션 */}
