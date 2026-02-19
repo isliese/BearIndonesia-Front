@@ -71,7 +71,18 @@ const AdminUsersPage = () => {
 
   return (
     <div style={{ maxWidth: 1200, margin: "0 auto", padding: "2rem 1.2rem", boxSizing: "border-box" }}>
-      <h1 style={{ color: "#ff8c42", marginBottom: "1rem" }}>Admin · Users</h1>
+      <h1
+        style={{
+          fontSize: "clamp(1.36rem, 1.7vw, 1.65rem)",
+          color: "#ff8c42",
+          textAlign: "center",
+          marginTop: 0,
+          marginBottom: "0.5rem",
+          paddingTop: "0.2rem",
+        }}
+      >
+        Admin · Users
+      </h1>
       <div style={{ color: "#b0b0b0", marginBottom: "1.5rem" }}>유저 권한(Role)을 관리합니다.</div>
 
       {loading && <div style={{ color: "#b0b0b0" }}>불러오는 중...</div>}

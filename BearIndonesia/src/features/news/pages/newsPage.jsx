@@ -637,7 +637,7 @@ const UnifiedNewsPage = ({ setSelectedNews }) => {
 	    }
 	  };
 
-  const sidebarWidth = 260;
+  const sidebarWidth = 224;
   const effectiveSidebarWidth = isMobile ? 0 : (isSidebarCollapsed ? 0 : sidebarWidth);
 
   return (
@@ -663,7 +663,7 @@ const UnifiedNewsPage = ({ setSelectedNews }) => {
           boxSizing: "border-box",
         }}
       >
-        <h1 style={{ fontSize: "clamp(1.9rem, 2.5vw, 2.3rem)", color: "#ff8c42", textAlign: "center", marginBottom: "1.6rem", paddingTop: "1.5rem" }}>
+        <h1 style={{ fontSize: "clamp(1.36rem, 1.7vw, 1.65rem)", color: "#ff8c42", textAlign: "center", marginBottom: "0.5rem", paddingTop: "0.2rem" }}>
           News
         </h1>
 

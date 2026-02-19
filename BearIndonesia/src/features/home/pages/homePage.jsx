@@ -227,11 +227,11 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
       justifyContent: 'center',
       minHeight: 'calc(100vh - 200px)',
       textAlign: 'center',
-      padding: '2rem'
+      padding: '1.35rem'
     }}>
       <h1 style={{
-        fontSize: 'clamp(2.2rem, 4vw, 3.5rem)',
-        marginBottom: '1rem',
+        fontSize: 'clamp(1.75rem, 3vw, 2.7rem)',
+        marginBottom: '0.72rem',
         background: 'linear-gradient(135deg, #ff8c42, #ffa726)',
         WebkitBackgroundClip: 'text',
         WebkitTextFillColor: 'transparent',
@@ -240,10 +240,10 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
         BearIndonesia
       </h1>
       <p style={{
-        fontSize: 'clamp(1.05rem, 1.6vw, 1.4rem)',
+        fontSize: 'clamp(0.9rem, 1.2vw, 1.1rem)',
         color: '#b0b0b0',
-        marginBottom: '3rem',
-        maxWidth: '1000px'
+        marginBottom: '1.8rem',
+        maxWidth: '860px'
       }}>
         AI 기반으로 인도네시아 제약 산업의 최신 뉴스와 허가 정보를 빠르고 정확하게 제공합니다. <br/> 
         검색을 통해 원하는 정보를 빠르게 찾아보세요.
@@ -251,7 +251,7 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
       <div style={{
         position: 'relative',
         width: '100%',
-        maxWidth: '1200px'
+        maxWidth: '1040px'
       }}>
         <input
           className="home-search-input"
@@ -262,8 +262,8 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
           placeholder="제약 회사명, 의약품명 등을 검색해보세요!"
           style={{
             width: '100%',
-            padding: '1em 6.4rem 1em 1.4rem',
-            fontSize: '1.2rem',
+            padding: '0.84em 5.8rem 0.84em 1.2rem',
+            fontSize: '1rem',
             border: '2px solid rgba(255, 140, 66, 0.3)',
             borderRadius: '50px',
             background: 'rgba(255, 255, 255, 0.1)',
@@ -284,7 +284,7 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
             transform: 'translateY(-50%)',
             background: '#ff8c42',
             border: 'none',
-            padding: '0.7rem 1.5rem',
+            padding: '0.58rem 1.2rem',
             borderRadius: '50px',
             color: 'white',
             cursor: 'pointer',
@@ -298,10 +298,10 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
 
       <div style={{
         width: '100%',
-        maxWidth: '1200px',
-        marginTop: '2.5rem',
+        maxWidth: '1040px',
+        marginTop: '1.5rem',
         display: 'flex',
-        gap: '2rem',
+        gap: '1.2rem',
         justifyContent: 'center',
         alignItems: 'stretch',
         flexWrap: 'wrap'
@@ -309,12 +309,12 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
         {/* News Stand Section */}
         <div style={{
           width: '100%',
-          flex: '1 1 480px',
+          flex: '1 1 420px',
           background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(15, 52, 96, 0.15))',
           backdropFilter: 'blur(15px)',
           border: '1px solid rgba(255, 255, 255, 0.12)',
           borderRadius: '20px',
-          padding: '1.8rem',
+          padding: '1.25rem',
           boxShadow: '0 8px 32px rgba(0, 0, 0, 0.18)'
         }}>
           <div style={{
@@ -331,7 +331,7 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
               marginRight: '12px'
             }}></div>
             <h2 style={{
-              fontSize: '1.7rem',
+              fontSize: '1.35rem',
               color: '#d5f5f2',
               margin: '0',
               fontWeight: '600'
@@ -342,7 +342,7 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
           <div style={{
             display: 'grid',
             gridTemplateColumns: isMobile ? 'repeat(2, minmax(0, 1fr))' : 'repeat(auto-fit, minmax(160px, 1fr))',
-            gap: '1rem'
+            gap: '0.72rem'
           }}>
             {newsStandItems.map((item) => (
               (() => {
@@ -363,13 +363,13 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
                         background: 'rgba(255,255,255,0.08)',
                         border: '1px solid rgba(255,255,255,0.16)',
                         borderRadius: '16px',
-                        padding: '0.9rem',
+                        padding: '0.72rem',
                         cursor: disabled ? 'not-allowed' : 'pointer',
                         transition: 'all 0.25s ease',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        minHeight: '110px',
+                        minHeight: '92px',
                         width: "100%",
                         opacity: disabled ? 0.7 : 1,
                       }}
@@ -391,7 +391,7 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
 	                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', alignItems: 'center' }}>
 	                        <div
 	                          style={{
-	                            height: isMobile ? '56px' : '72px',
+	                            height: isMobile ? '48px' : '60px',
 	                            width: '100%',
 	                            display: 'flex',
 	                            alignItems: 'center',
@@ -402,14 +402,14 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
 	                            src={item.image}
 	                            alt={item.name}
 	                            style={{
-	                              maxWidth: isMobile ? (item.name === "Bisnis" ? '150px' : '95px') : (item.name === "Bisnis" ? '190px' : '120px'),
-	                              maxHeight: isMobile ? '56px' : '72px',
+	                              maxWidth: isMobile ? (item.name === "Bisnis" ? '128px' : '84px') : (item.name === "Bisnis" ? '162px' : '102px'),
+	                              maxHeight: isMobile ? '48px' : '60px',
 	                              objectFit: 'contain',
 	                              filter: 'drop-shadow(0 4px 10px rgba(0,0,0,0.25))'
 	                            }}
 	                          />
 	                        </div>
-                        <span style={{ fontSize: '0.85rem', color: '#d9e7ef', letterSpacing: '0.02em' }}>
+                        <span style={{ fontSize: '0.78rem', color: '#d9e7ef', letterSpacing: '0.02em' }}>
                           {item.name}
                         </span>
                       </div>
@@ -447,12 +447,12 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
         {/* Top Headlines Section */}
         <div style={{
           width: '100%',
-          flex: '1 1 480px',
+          flex: '1 1 420px',
           background: 'linear-gradient(135deg, rgba(255, 140, 66, 0.1), rgba(255, 167, 38, 0.05))',
           backdropFilter: 'blur(15px)',
           border: '1px solid rgba(255, 140, 66, 0.2)',
           borderRadius: '20px',
-          padding: '2rem',
+          padding: '1.3rem',
           boxShadow: '0 8px 32px rgba(255, 140, 66, 0.1)'
         }}>
           <div style={{
@@ -469,7 +469,7 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
               marginRight: '12px'
             }}></div>
             <h2 style={{
-              fontSize: '1.8rem',
+              fontSize: '1.4rem',
               color: '#ff8c42',
               margin: '0',
               fontWeight: '600'
@@ -483,7 +483,7 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
             padding: 0, 
             margin: 0, 
             display: 'grid', 
-            gap: '0.8rem' 
+            gap: '0.62rem' 
           }}>
             {newsLoading && (
               <li style={{ color: '#b0b0b0', textAlign: 'center', padding: '0.5rem 0' }}>
@@ -512,7 +512,7 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
                   background: 'rgba(255,255,255,0.06)',
                   border: '1px solid rgba(255,140,66,0.20)',
                   borderRadius: '14px',
-                  padding: '0.9rem 1rem',
+                  padding: '0.7rem 0.8rem',
                   cursor: 'pointer',
                   transition: 'all 0.25s ease'
                 }}
@@ -529,8 +529,8 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
               >
                 <div
                   style={{
-                    width: '56px',
-                    height: '56px',
+                    width: '50px',
+                    height: '50px',
                     borderRadius: '12px',
                     overflow: 'hidden',
                     border: '1px solid rgba(255,255,255,0.18)',
@@ -553,7 +553,7 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
                 </div>
                 <div>
                   <div style={{ 
-                    fontSize: '1.05rem', 
+                    fontSize: '0.95rem', 
                     color: '#fff', 
                     fontWeight: 600, 
                     lineHeight: 1.35,
@@ -563,7 +563,7 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
                   </div>
                   <div style={{ 
                     marginTop: '0.25rem', 
-                    fontSize: '0.86rem', 
+                    fontSize: '0.8rem', 
                     color: '#c8c8c8' 
                   }}>
                     {item.date} · {item.source}
@@ -572,11 +572,11 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
                 <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
                   <ScrapStarButton article={item} size={16} />
                   <span style={{
-                    fontSize: '0.8rem',
+                    fontSize: '0.72rem',
                     color: '#ff8c42',
                     border: '1px solid rgba(255,140,66,0.35)',
                     background: 'rgba(255,140,66,0.10)',
-                    padding: '0.25rem 0.5rem',
+                    padding: '0.2rem 0.4rem',
                     borderRadius: '10px',
                     whiteSpace: 'nowrap'
                   }}>
@@ -612,8 +612,8 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
               background: 'linear-gradient(135deg, rgba(30, 30, 40, 0.95), rgba(20, 20, 30, 0.95))',
               border: '1px solid rgba(255, 140, 66, 0.3)',
               borderRadius: '24px',
-              padding: '2.5rem',
-              maxWidth: '450px',
+              padding: '2rem',
+              maxWidth: '400px',
               width: '90%',
               boxShadow: '0 20px 60px rgba(0, 0, 0, 0.5)'
             }}
@@ -624,15 +624,15 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
                 src={selectedNewsStand.image}
                 alt={selectedNewsStand.name}
                 style={{
-                  maxWidth: '140px',
-                  maxHeight: '60px',
+                  maxWidth: '120px',
+                  maxHeight: '52px',
                   objectFit: 'contain',
                   marginBottom: '1rem',
                   filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.3))'
                 }}
               />
               <h3 style={{
-                fontSize: '1.6rem',
+                fontSize: '1.32rem',
                 color: '#fff',
                 margin: '0.5rem 0 0.3rem 0',
                 fontWeight: '600'
@@ -648,9 +648,9 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
                   background: 'rgba(255, 255, 255, 0.1)',
                   border: 'none',
                   borderRadius: '14px',
-                  padding: '1rem 1.5rem',
+                  padding: '0.85rem 1.2rem',
                   color: '#ff8c42',
-                  fontSize: '1.1rem',
+                  fontSize: '0.96rem',
                   fontWeight: '600',
                   cursor: 'pointer',
                   transition: 'all 0.3s ease',
@@ -675,9 +675,9 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
                   background: 'rgba(255, 255, 255, 0.1)',
                   border: 'none',
                   borderRadius: '14px',
-                  padding: '1rem 1.5rem',
+                  padding: '0.85rem 1.2rem',
                   color: '#ff8c42',
-                  fontSize: '1.1rem',
+                  fontSize: '0.96rem',
                   fontWeight: '600',
                   cursor: 'pointer',
                   transition: 'all 0.3s ease',

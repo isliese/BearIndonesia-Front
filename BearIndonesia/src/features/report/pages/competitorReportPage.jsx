@@ -428,7 +428,7 @@ const CompetitorReportPage = () => {
           <div style={dashboardCardStyle}>
             <div style={titleRow}>
               <h2 style={sectionTitleLarge}>기간별 리포트</h2>
-              <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.45rem" }}>
                 <label style={filterLabel}>기간 필터</label>
                 <input
                   type="date"
@@ -475,7 +475,7 @@ const CompetitorReportPage = () => {
                     {normalizedRangeIssues.length === 0 && (
                       <div style={{ color: "#b0b0b0" }}>데이터 없음</div>
                     )}
-                    <div style={{ display: "grid", gap: "0.45rem" }}>
+                    <div style={{ display: "grid", gap: "0.34rem" }}>
                       {normalizedRangeIssues.map((row, idx) => (
                         <div key={`range-title-${idx}`} style={rankRow}>
                           <span>{idx + 1}. {row.normalizedTitle}</span>
@@ -490,10 +490,10 @@ const CompetitorReportPage = () => {
                     {overallKeywordRanks.length === 0 && (
                       <div style={{ color: "#b0b0b0" }}>데이터 없음</div>
                     )}
-                    <div style={{ display: "grid", gap: "0.6rem" }}>
+                    <div style={{ display: "grid", gap: "0.42rem" }}>
                       {overallKeywordRanks.map((row) => (
-                        <div key={row.keyword} style={{ display: "grid", gridTemplateColumns: "160px 1fr 60px", gap: "0.8rem", alignItems: "center" }}>
-                          <div style={{ color: "#e6e6e6" }}>{row.keyword}</div>
+                        <div key={row.keyword} style={{ display: "grid", gridTemplateColumns: "140px 1fr 52px", gap: "0.55rem", alignItems: "center" }}>
+                          <div style={{ color: "#e6e6e6", fontSize: "0.82rem" }}>{row.keyword}</div>
                           <div style={barTrack}>
                             <div
                               style={{
@@ -502,7 +502,7 @@ const CompetitorReportPage = () => {
                               }}
                             />
                           </div>
-                          <div style={{ textAlign: "right", color: "#ffb86b", fontWeight: 600 }}>{row.count}</div>
+                          <div style={{ textAlign: "right", color: "#ffb86b", fontWeight: 600, fontSize: "0.8rem" }}>{row.count}</div>
                         </div>
                       ))}
                     </div>
@@ -524,7 +524,7 @@ const CompetitorReportPage = () => {
             </div>
             {isCompetitorSectionOpen && (
               <>
-                <div style={{ display: "flex", alignItems: "center", gap: "0.8rem", flexWrap: "wrap", marginBottom: "1.25rem" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", flexWrap: "wrap", marginBottom: "0.9rem" }}>
                   {competitorKeywords.map((kw) => (
                     <button
                       key={kw}
@@ -542,7 +542,7 @@ const CompetitorReportPage = () => {
 
                 <div style={summaryCardStyle}>
                   <h3 style={sectionTitle}>동향 요약</h3>
-                  <div style={{ color: "#dcdcdc", lineHeight: 1.6 }}>
+                  <div style={{ color: "#dcdcdc", lineHeight: 1.52, fontSize: "0.88rem" }}>
                     {trendSummaryText || "요약 데이터 없음"}
                   </div>
                 </div>
@@ -553,7 +553,7 @@ const CompetitorReportPage = () => {
                     {selectedMentions.length === 0 && (
                       <div style={{ color: "#b0b0b0" }}>데이터 없음</div>
                     )}
-                    <div style={{ display: "grid", gap: "0.6rem" }}>
+                    <div style={{ display: "grid", gap: "0.45rem" }}>
                       {selectedMentions.slice(0, 10).map((row) => (
                         <div key={`${row.keyword}-${row.tag}`} style={rankRow}>
                           <span>{row.tag}</span>
@@ -568,7 +568,7 @@ const CompetitorReportPage = () => {
                     {selectedArticles.length === 0 && (
                       <div style={{ color: "#b0b0b0" }}>데이터 없음</div>
                     )}
-                    <div style={{ display: "grid", gap: "0.8rem" }}>
+                    <div style={{ display: "grid", gap: "0.62rem" }}>
                       {selectedArticles.map((a) => (
                         <a
                           key={`${a.keyword}-${a.link}`}
@@ -577,21 +577,21 @@ const CompetitorReportPage = () => {
                           rel="noreferrer"
                           style={{
                             display: "grid",
-                            gridTemplateColumns: "60px 1fr auto",
-                            gap: "0.8rem",
+                            gridTemplateColumns: "52px 1fr auto",
+                            gap: "0.6rem",
                             textDecoration: "none",
                             color: "white",
-                            padding: "0.8rem",
-                            borderRadius: "14px",
+                            padding: "0.62rem",
+                            borderRadius: "12px",
                             background: "rgba(255,255,255,0.06)",
                             border: "1px solid rgba(255,255,255,0.08)",
                           }}
                         >
                           <div
                             style={{
-                              width: "60px",
-                              height: "60px",
-                              borderRadius: "12px",
+                              width: "52px",
+                              height: "52px",
+                              borderRadius: "10px",
                               overflow: "hidden",
                               background: "rgba(255,255,255,0.1)",
                             }}
@@ -604,25 +604,25 @@ const CompetitorReportPage = () => {
                                 loading="lazy"
                               />
                             ) : (
-                              <div style={{ fontSize: "0.75rem", color: "#bbb", textAlign: "center", paddingTop: "20px" }}>
+                              <div style={{ fontSize: "0.68rem", color: "#bbb", textAlign: "center", paddingTop: "17px" }}>
                                 No Image
                               </div>
                             )}
                           </div>
                           <div>
-                            <div style={{ fontWeight: 600, marginBottom: "0.25rem" }}>
+                            <div style={{ fontWeight: 600, marginBottom: "0.18rem", fontSize: "0.86rem" }}>
                               {a.korTitle || a.title}
                             </div>
-                            <div style={{ fontSize: "0.85rem", color: "#cfcfcf" }}>
+                            <div style={{ fontSize: "0.76rem", color: "#cfcfcf" }}>
                               {a.date} · {a.source}
                             </div>
                             {(a.korSummary || a.idSummary) && (
-                              <div style={{ fontSize: "0.82rem", color: "#b8b8b8", marginTop: "0.4rem" }}>
+                              <div style={{ fontSize: "0.74rem", color: "#b8b8b8", marginTop: "0.28rem" }}>
                                 {toShortSentence(a.korSummary || a.idSummary, 95)}
                               </div>
                             )}
                           </div>
-                          <div style={{ alignSelf: "center", color: "#ffb86b", fontWeight: 600, whiteSpace: "nowrap" }}>
+                          <div style={{ alignSelf: "center", color: "#ffb86b", fontWeight: 600, whiteSpace: "nowrap", fontSize: "0.78rem" }}>
                             중요도 {a.importance ?? "-"}
                           </div>
                         </a>
@@ -643,76 +643,79 @@ const CompetitorReportPage = () => {
 const pageStyle = {
   display: "flex",
   flexDirection: "column",
-  gap: "1.5rem",
-  padding: "2rem 1.2rem",
-  maxWidth: 1180,
+  gap: "0.72rem",
+  padding: "clamp(0.58rem, 0.95vw, 0.9rem) clamp(0.5rem, 1.1vw, 0.76rem)",
+  maxWidth: 1240,
   width: "100%",
   margin: "0 auto",
   color: "white",
 };
 
 const pageTitleStyle = {
-  fontSize: "clamp(1.9rem, 2.5vw, 2.3rem)",
+  fontSize: "clamp(1.36rem, 1.7vw, 1.65rem)",
   color: "#ff8c42",
   textAlign: "center",
   margin: 0,
-  marginBottom: "0.8rem",
-  paddingTop: "0.3rem",
+  marginBottom: "0.42rem",
+  paddingTop: "0.2rem",
 };
 
 const titleRow = {
   display: "flex",
   alignItems: "center",
   justifyContent: "space-between",
-  gap: "1rem",
-  marginBottom: "0.6rem",
+  gap: "0.55rem",
+  marginBottom: "0.3rem",
   flexWrap: "wrap",
 };
 
 const periodStyle = {
   color: "#d0d0d0",
-  fontSize: "0.9rem",
-  marginBottom: "0.8rem",
+  fontSize: "0.76rem",
+  marginBottom: "0.42rem",
 };
 
 const filterLabel = {
   color: "#d8d8d8",
-  fontSize: "0.85rem",
+  fontSize: "0.72rem",
 };
 
 const dateInputStyle = {
-  padding: "0.4rem 0.6rem",
-  borderRadius: "10px",
+  padding: "0.28rem 0.42rem",
+  borderRadius: "8px",
   border: "1px solid rgba(255,255,255,0.2)",
   background: "rgba(10,10,20,0.6)",
   color: "white",
   outline: "none",
+  fontSize: "0.76rem",
 };
 
 const primaryButton = {
-  padding: "0.55rem 1.2rem",
-  borderRadius: "12px",
+  padding: "0.38rem 0.8rem",
+  borderRadius: "9px",
   border: "none",
   background: "linear-gradient(135deg, #ff8c42, #ffa726)",
   color: "white",
   fontWeight: 600,
+  fontSize: "0.76rem",
   cursor: "pointer",
 };
 
 const toggleButtonStyle = {
-  padding: "0.48rem 0.95rem",
-  borderRadius: "10px",
+  padding: "0.34rem 0.66rem",
+  borderRadius: "8px",
   border: "1px solid rgba(255, 184, 107, 0.5)",
   background: "rgba(255, 184, 107, 0.12)",
   color: "#ffcf9f",
   fontWeight: 600,
+  fontSize: "0.74rem",
   cursor: "pointer",
 };
 
 const cardStyle = {
   background: "rgba(255,255,255,0.06)",
-  borderRadius: "18px",
-  padding: "1.2rem",
+  borderRadius: "14px",
+  padding: "0.7rem",
   border: "1px solid rgba(255,255,255,0.1)",
   backdropFilter: "blur(10px)",
 };
@@ -720,38 +723,41 @@ const cardStyle = {
 const sectionTitleLarge = {
   margin: 0,
   color: "#ffb86b",
-  fontSize: "1.25rem",
+  fontSize: "0.92rem",
 };
 
 const sectionTitle = {
   margin: 0,
-  marginBottom: "1rem",
+  marginBottom: "0.5rem",
   color: "#ffb86b",
-  fontSize: "1.1rem",
+  fontSize: "0.84rem",
 };
 
 const infoBoxStyle = {
   background: "rgba(255,255,255,0.08)",
-  padding: "1rem",
-  borderRadius: "14px",
+  padding: "0.82rem",
+  borderRadius: "12px",
   color: "#ddd",
+  fontSize: "0.82rem",
 };
 
 const errorBoxStyle = {
   background: "rgba(255, 99, 71, 0.15)",
-  padding: "1rem",
-  borderRadius: "14px",
+  padding: "0.82rem",
+  borderRadius: "12px",
   color: "#ffb3a7",
   border: "1px solid rgba(255, 99, 71, 0.4)",
+  fontSize: "0.82rem",
 };
 
 const rankRow = {
   display: "flex",
   justifyContent: "space-between",
-  padding: "0.6rem 0.8rem",
-  borderRadius: "12px",
+  padding: "0.36rem 0.52rem",
+  borderRadius: "9px",
   background: "rgba(255,255,255,0.05)",
   border: "1px solid rgba(255,255,255,0.08)",
+  fontSize: "0.78rem",
 };
 
 const rankCount = {
@@ -761,21 +767,21 @@ const rankCount = {
 
 const rankMeta = {
   color: "#b8b8b8",
-  fontSize: "0.8rem",
+  fontSize: "0.68rem",
 };
 
 const chipStyle = {
   background: "rgba(255, 140, 66, 0.18)",
   color: "#ffb86b",
-  padding: "0.35rem 0.7rem",
+  padding: "0.22rem 0.46rem",
   borderRadius: "999px",
   border: "1px solid rgba(255, 140, 66, 0.45)",
-  fontSize: "0.8rem",
+  fontSize: "0.68rem",
   cursor: "pointer",
 };
 
 const barTrack = {
-  height: "10px",
+  height: "7px",
   borderRadius: "999px",
   background: "rgba(255,255,255,0.08)",
   overflow: "hidden",
@@ -789,33 +795,33 @@ const barFill = {
 
 const groupGridStyle = {
   display: "grid",
-  gap: "1rem",
+  gap: "0.62rem",
   gridTemplateColumns: "1fr",
 };
 
 const dashboardGridStyle = {
   display: "grid",
-  gap: "2rem",
-  gridTemplateColumns: "repeat(auto-fit, minmax(360px, 1fr))",
+  gap: "0.82rem",
+  gridTemplateColumns: "repeat(auto-fit, minmax(clamp(220px, 24vw, 290px), 1fr))",
   alignItems: "start",
 };
 
 const subCardStyle = {
   background: "rgba(255,255,255,0.04)",
-  borderRadius: "14px",
-  padding: "1.2rem",
+  borderRadius: "11px",
+  padding: "0.7rem",
   border: "1px solid rgba(255,255,255,0.08)",
 };
 
 const dashboardCardStyle = {
   ...cardStyle,
-  padding: "1.5rem",
+  padding: "0.82rem",
 };
 
 const summaryCardStyle = {
   ...subCardStyle,
-  marginTop: "2rem",
-  marginBottom: "2rem",
+  marginTop: "0.82rem",
+  marginBottom: "0.82rem",
 };
 
 const modalOverlay = {
@@ -825,15 +831,15 @@ const modalOverlay = {
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  padding: "2rem",
+  padding: "1.25rem",
   zIndex: 20,
 };
 
 const modalCard = {
-  width: "min(820px, 92vw)",
+  width: "min(760px, 92vw)",
   background: "rgba(20, 20, 35, 0.95)",
-  borderRadius: "20px",
-  padding: "1.5rem",
+  borderRadius: "14px",
+  padding: "0.92rem",
   border: "1px solid rgba(255,255,255,0.12)",
   backdropFilter: "blur(16px)",
 };
@@ -842,41 +848,44 @@ const modalHeader = {
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
-  marginBottom: "1rem",
+  marginBottom: "0.72rem",
 };
 
 const closeButton = {
   background: "rgba(255,255,255,0.12)",
   border: "none",
-  borderRadius: "10px",
-  padding: "0.4rem 0.8rem",
+  borderRadius: "7px",
+  padding: "0.24rem 0.5rem",
   color: "#f0f0f0",
   cursor: "pointer",
+  fontSize: "0.72rem",
 };
 
 const modalSectionTitle = {
-  marginTop: "1rem",
-  marginBottom: "0.6rem",
+  marginTop: "0.58rem",
+  marginBottom: "0.34rem",
   color: "#f7cba2",
   fontWeight: 700,
+  fontSize: "0.82rem",
 };
 
 const modalGrid = {
   display: "grid",
-  gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
-  gap: "0.8rem",
+  gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))",
+  gap: "0.5rem",
 };
 
 const modalItemButton = {
   background: "rgba(255,255,255,0.06)",
-  borderRadius: "14px",
-  padding: "0.8rem",
+  borderRadius: "10px",
+  padding: "0.5rem",
   border: "1px solid rgba(255,255,255,0.08)",
   display: "grid",
-  gap: "0.3rem",
+  gap: "0.18rem",
   textAlign: "left",
   color: "white",
   cursor: "pointer",
+  fontSize: "0.74rem",
 };
 
 export default CompetitorReportPage;

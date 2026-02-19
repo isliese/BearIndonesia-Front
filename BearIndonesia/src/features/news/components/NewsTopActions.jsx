@@ -45,10 +45,13 @@ const NewsTopActions = ({
       style={{
         display: "flex",
         justifyContent: "center",
-        gap: "1rem",
-        marginBottom: "2rem",
-        flexWrap: "wrap",
+        gap: "0.5rem",
+        marginBottom: "0.75rem",
+        flexWrap: isMobile ? "wrap" : "nowrap",
         alignItems: "center",
+        width: "100%",
+        overflowX: "visible",
+        paddingBottom: 0,
         ...(isMobile
           ? {
               flexDirection: "column",
@@ -61,10 +64,12 @@ const NewsTopActions = ({
       <div
         style={{
           display: "flex",
-          gap: "0.5rem",
+          gap: "0.35rem",
           alignItems: "center",
+          justifyContent: "center",
+          flex: "0 0 auto",
           background: "rgba(100, 181, 246, 0.1)",
-          padding: "0.5rem 1rem",
+          padding: "0.35rem 0.55rem",
           borderRadius: "50px",
           border: "1px solid rgba(100, 181, 246, 0.3)",
           ...(isMobile
@@ -89,10 +94,12 @@ const NewsTopActions = ({
             background: "rgba(255,255,255,0.1)",
             border: "1px solid rgba(255,255,255,0.2)",
             borderRadius: "8px",
-            padding: "0.4rem",
+            padding: "0.28rem 0.4rem",
             color: "white",
-            fontSize: "0.85rem",
-            ...(isMobile ? { flex: "1 1 150px", minWidth: 0 } : null),
+            fontSize: "0.78rem",
+            ...(isMobile ? { flex: "1 1 150px", minWidth: 0 } : { width: "128px", minWidth: "128px" }),
+            height: isMobile ? undefined : "36px",
+            boxSizing: "border-box",
           }}
         />
         <span style={{ color: "white" }}>~</span>
@@ -108,10 +115,12 @@ const NewsTopActions = ({
             background: "rgba(255,255,255,0.1)",
             border: "1px solid rgba(255,255,255,0.2)",
             borderRadius: "8px",
-            padding: "0.4rem",
+            padding: "0.28rem 0.4rem",
             color: "white",
-            fontSize: "0.85rem",
-            ...(isMobile ? { flex: "1 1 150px", minWidth: 0 } : null),
+            fontSize: "0.78rem",
+            ...(isMobile ? { flex: "1 1 150px", minWidth: 0 } : { width: "128px", minWidth: "128px" }),
+            height: isMobile ? undefined : "36px",
+            boxSizing: "border-box",
           }}
         />
         <div style={{ position: "relative", display: "inline-flex" }}>
@@ -125,11 +134,17 @@ const NewsTopActions = ({
               border: "1px solid rgba(100, 181, 246, 0.35)",
               color: "white",
               cursor: wordCloudLoading ? "not-allowed" : "pointer",
-              fontSize: "0.9rem",
+              fontSize: "0.78rem",
               fontWeight: "bold",
               opacity: wordCloudLoading ? 0.6 : 1,
-              padding: "0.35rem 0.9rem",
+              padding: "0.28rem 0.55rem",
               borderRadius: "999px",
+              height: isMobile ? undefined : "36px",
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              lineHeight: 1,
+              whiteSpace: "nowrap",
               transition: "transform 0.15s ease, background 0.2s ease, box-shadow 0.2s ease",
               boxShadow: isWcHover ? "0 6px 14px rgba(100, 181, 246, 0.25)" : "none",
               transform: isWcHover ? "translateY(-1px)" : "translateY(0)",
@@ -166,10 +181,12 @@ const NewsTopActions = ({
       <div
         style={{
           display: "flex",
-          gap: "0.5rem",
+          gap: "0.35rem",
           alignItems: "center",
+          justifyContent: "center",
+          flex: "0 0 auto",
           background: "rgba(76, 175, 80, 0.1)",
-          padding: "0.5rem 1rem",
+          padding: "0.35rem 0.55rem",
           borderRadius: "50px",
           border: "1px solid rgba(76, 175, 80, 0.3)",
           ...(isMobile
@@ -191,10 +208,12 @@ const NewsTopActions = ({
             background: "rgba(255,255,255,0.1)",
             border: "1px solid rgba(255,255,255,0.2)",
             borderRadius: "8px",
-            padding: "0.4rem",
+            padding: "0.28rem 0.4rem",
             color: "white",
-            fontSize: "0.85rem",
-            ...(isMobile ? { flex: "1 1 110px", minWidth: 0 } : null),
+            fontSize: "0.78rem",
+            ...(isMobile ? { flex: "1 1 110px", minWidth: 0 } : { width: "82px", minWidth: "82px" }),
+            height: isMobile ? undefined : "36px",
+            boxSizing: "border-box",
           }}
         >
           {selectableYears.map((year) => (
@@ -212,10 +231,12 @@ const NewsTopActions = ({
             background: "rgba(255,255,255,0.1)",
             border: "1px solid rgba(255,255,255,0.2)",
             borderRadius: "8px",
-            padding: "0.4rem",
+            padding: "0.28rem 0.4rem",
             color: "white",
-            fontSize: "0.85rem",
-            ...(isMobile ? { flex: "1 1 90px", minWidth: 0 } : null),
+            fontSize: "0.78rem",
+            ...(isMobile ? { flex: "1 1 90px", minWidth: 0 } : { width: "72px", minWidth: "72px" }),
+            height: isMobile ? undefined : "36px",
+            boxSizing: "border-box",
           }}
         >
           {getSelectableMonths(excelYear).map((month) => (
@@ -233,10 +254,16 @@ const NewsTopActions = ({
             border: "1px solid rgba(76, 175, 80, 0.35)",
             color: "white",
             cursor: "pointer",
-            fontSize: "0.9rem",
+            fontSize: "0.78rem",
             fontWeight: "bold",
-            padding: "0.35rem 0.9rem",
+            padding: "0.28rem 0.55rem",
             borderRadius: "999px",
+            height: isMobile ? undefined : "36px",
+            display: "inline-flex",
+            alignItems: "center",
+            justifyContent: "center",
+            lineHeight: 1,
+            whiteSpace: "nowrap",
             transition: "transform 0.15s ease, background 0.2s ease, box-shadow 0.2s ease",
             boxShadow: isExcelHover ? "0 6px 14px rgba(76, 175, 80, 0.25)" : "none",
             transform: isExcelHover ? "translateY(-1px)" : "translateY(0)",
@@ -250,10 +277,12 @@ const NewsTopActions = ({
       <div
         style={{
           display: "flex",
-          gap: "0.5rem",
+          gap: "0.35rem",
           alignItems: "center",
+          justifyContent: "center",
+          flex: "0 0 auto",
           background: "rgba(255, 140, 66, 0.1)",
-          padding: "0.5rem 1rem",
+          padding: "0.35rem 0.55rem",
           borderRadius: "50px",
           border: "1px solid rgba(255, 140, 66, 0.35)",
           ...(isMobile
@@ -275,10 +304,12 @@ const NewsTopActions = ({
             background: "rgba(255,255,255,0.1)",
             border: "1px solid rgba(255,255,255,0.2)",
             borderRadius: "8px",
-            padding: "0.4rem",
+            padding: "0.28rem 0.4rem",
             color: "white",
-            fontSize: "0.85rem",
-            ...(isMobile ? { flex: "1 1 110px", minWidth: 0 } : null),
+            fontSize: "0.78rem",
+            ...(isMobile ? { flex: "1 1 110px", minWidth: 0 } : { width: "82px", minWidth: "82px" }),
+            height: isMobile ? undefined : "36px",
+            boxSizing: "border-box",
           }}
         >
           {selectableYears.map((year) => (
@@ -296,10 +327,12 @@ const NewsTopActions = ({
             background: "rgba(255,255,255,0.1)",
             border: "1px solid rgba(255,255,255,0.2)",
             borderRadius: "8px",
-            padding: "0.4rem",
+            padding: "0.28rem 0.4rem",
             color: "white",
-            fontSize: "0.85rem",
-            ...(isMobile ? { flex: "1 1 90px", minWidth: 0 } : null),
+            fontSize: "0.78rem",
+            ...(isMobile ? { flex: "1 1 90px", minWidth: 0 } : { width: "72px", minWidth: "72px" }),
+            height: isMobile ? undefined : "36px",
+            boxSizing: "border-box",
           }}
         >
           {getSelectableMonths(newsletterYear).map((month) => (
@@ -319,10 +352,16 @@ const NewsTopActions = ({
             border: "1px solid rgba(255, 140, 66, 0.45)",
             color: "white",
             cursor: newsletterLoading ? "not-allowed" : "pointer",
-            fontSize: "0.9rem",
+            fontSize: "0.78rem",
             fontWeight: "bold",
-            padding: "0.35rem 0.9rem",
+            padding: "0.28rem 0.55rem",
             borderRadius: "999px",
+            height: isMobile ? undefined : "36px",
+            display: "inline-flex",
+            alignItems: "center",
+            justifyContent: "center",
+            lineHeight: 1,
+            whiteSpace: "nowrap",
             transition: "transform 0.15s ease, background 0.2s ease, box-shadow 0.2s ease",
             boxShadow: isNewsletterHover ? "0 6px 14px rgba(255, 140, 66, 0.25)" : "none",
             transform: isNewsletterHover ? "translateY(-1px)" : "translateY(0)",

@@ -21,13 +21,13 @@ const AboutPage = () => {
 
   const shellStyle = useMemo(
     () => ({
-      maxWidth: '980px',
+      maxWidth: '860px',
       width: '100%',
       background: 'rgba(255, 255, 255, 0.1)',
       backdropFilter: 'blur(10px)',
-      borderRadius: '18px',
+      borderRadius: '15px',
       border: '1px solid rgba(255,255,255,0.12)',
-      padding: 'clamp(1.4rem, 3.5vw, 2rem)',
+      padding: 'clamp(1rem, 2.6vw, 1.45rem)',
       boxSizing: 'border-box',
     }),
     [],
@@ -36,8 +36,8 @@ const AboutPage = () => {
   const cardStyle = useMemo(
     () => ({
       background: 'rgba(255, 140, 66, 0.08)',
-      padding: '1rem 1.1rem',
-      borderRadius: '14px',
+      padding: '0.75rem 0.82rem',
+      borderRadius: '12px',
       border: '1px solid rgba(255, 140, 66, 0.18)',
     }),
     [],
@@ -128,7 +128,7 @@ const AboutPage = () => {
         justifyContent: 'flex-start',
         minHeight: 'calc(100vh - 80px)',
         textAlign: 'center',
-        padding: 'clamp(1.5rem, 5vw, 3rem) clamp(1.25rem, 4vw, 2rem)',
+        padding: 'clamp(1rem, 3.6vw, 2rem) clamp(0.95rem, 3vw, 1.45rem)',
         boxSizing: 'border-box',
       }}
     >
@@ -136,9 +136,9 @@ const AboutPage = () => {
       <div
         style={{
           ...shellStyle,
-          paddingTop: 'clamp(1.2rem, 3.2vw, 2rem)',
-          marginTop: 'clamp(16px, 4vw, 46px)',
-          marginBottom: 'clamp(1.1rem, 4vw, 2rem)',
+          paddingTop: 'clamp(0.9rem, 2.4vw, 1.35rem)',
+          marginTop: 'clamp(10px, 3vw, 28px)',
+          marginBottom: 'clamp(0.8rem, 3vw, 1.25rem)',
         }}
       >
         <div
@@ -146,13 +146,13 @@ const AboutPage = () => {
             display: 'flex',
             alignItems: 'baseline',
             justifyContent: 'center',
-            gap: '0.6rem',
+            gap: '0.45rem',
             flexWrap: 'wrap',
           }}
         >
           <div
             style={{
-              fontSize: 'clamp(1.55rem, 2.2vw, 2rem)',
+              fontSize: 'clamp(1.25rem, 1.7vw, 1.55rem)',
               fontWeight: 900,
               color: '#ff8c42',
             }}
@@ -162,7 +162,7 @@ const AboutPage = () => {
           <div
             style={{
               color: '#d0d0d0',
-              fontSize: 'clamp(0.95rem, 1.1vw, 1.05rem)',
+              fontSize: 'clamp(0.78rem, 0.9vw, 0.9rem)',
             }}
           >
             AI 기반 제약 산업 뉴스 · 허가 정보 · 인사이트
@@ -172,10 +172,10 @@ const AboutPage = () => {
         <p
           style={{
             color: '#d0d0d0',
-            lineHeight: '1.8',
-            margin: '1rem auto 0',
-            maxWidth: 820,
-            fontSize: 'clamp(0.96rem, 1.1vw, 1.05rem)',
+            lineHeight: '1.7',
+            margin: '0.72rem auto 0',
+            maxWidth: 720,
+            fontSize: 'clamp(0.8rem, 0.95vw, 0.9rem)',
           }}
         >
           복잡하고 빠르게 변화하는 인도네시아 제약 시장, 정보의 홍수 속에서 핵심을 놓치고 계신가요? <br></br>
@@ -184,39 +184,39 @@ const AboutPage = () => {
       </div>
 
       {/* Features */}
-      <div style={{ ...shellStyle, marginBottom: 'clamp(1.1rem, 4vw, 2rem)' }}>
-        <h2 style={{ fontSize: '1.5rem', marginBottom: '1rem', color: '#ff8c42' }}>주요 기능</h2>
+      <div style={{ ...shellStyle, marginBottom: 'clamp(0.8rem, 3vw, 1.35rem)' }}>
+        <h2 style={{ fontSize: '1.24rem', marginBottom: '0.72rem', color: '#ff8c42' }}>주요 기능</h2>
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-            gap: '1rem',
-            marginTop: '1.2rem',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+            gap: '0.72rem',
+            marginTop: '0.82rem',
           }}
         >
           {features.map((f) => (
             <div key={f.title} style={cardStyle}>
-              <div style={{ color: '#ffb86b', fontWeight: 900, marginBottom: '0.35rem' }}>{f.title}</div>
-              <div style={{ color: '#b0b0b0', fontSize: '0.92rem', lineHeight: 1.55 }}>{f.desc}</div>
+              <div style={{ color: '#ffb86b', fontWeight: 900, marginBottom: '0.25rem', fontSize: '0.86rem' }}>{f.title}</div>
+              <div style={{ color: '#b0b0b0', fontSize: '0.8rem', lineHeight: 1.46 }}>{f.desc}</div>
             </div>
           ))}
         </div>
       </div>
 
       {/* How to use */}
-      <div style={{ ...shellStyle, marginBottom: 'clamp(2.5rem, 8vw, 90px)' }}>
-        <h2 style={{ fontSize: '1.5rem', marginBottom: '0.75rem', color: '#ff8c42' }}>사용 방법</h2>
+      <div style={{ ...shellStyle, marginBottom: 'clamp(1.6rem, 6vw, 64px)' }}>
+        <h2 style={{ fontSize: '1.24rem', marginBottom: '0.55rem', color: '#ff8c42' }}>사용 방법</h2>
         <div
           style={{
             color: '#d0d0d0',
-            lineHeight: 1.7,
-            fontSize: 'clamp(0.96rem, 1.08vw, 1.05rem)',
+            lineHeight: 1.6,
+            fontSize: 'clamp(0.8rem, 0.92vw, 0.88rem)',
           }}
         >
           BearIndonesia는 아직 개발 중이며, 실사용자 피드백을 통해 사용 경험을 지속적으로 개선하고 기능을 확장해나갈 예정입니다.
         </div>
 
-        <div style={{ display: 'grid', gap: '1rem', marginTop: '1.2rem' }}>
+        <div style={{ display: 'grid', gap: '0.72rem', marginTop: '0.82rem' }}>
           {steps.map((s) => (
             <div key={s.title} style={cardStyle}>
               <div
@@ -224,11 +224,11 @@ const AboutPage = () => {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  gap: '0.8rem',
+                  gap: '0.62rem',
                   flexWrap: 'wrap',
                 }}
               >
-                <div style={{ color: '#ff8c42', fontWeight: 900 }}>{s.title}</div>
+                <div style={{ color: '#ff8c42', fontWeight: 900, fontSize: '0.84rem' }}>{s.title}</div>
                 <button
                   type="button"
                   onClick={() => navigate(s.cta.to)}
@@ -236,23 +236,24 @@ const AboutPage = () => {
                     background: 'transparent',
                     border: '1px solid rgba(255, 140, 66, 0.35)',
                     color: 'white',
-                    padding: '0.35rem 0.7rem',
-                    borderRadius: '12px',
+                    padding: '0.28rem 0.56rem',
+                    borderRadius: '10px',
                     cursor: 'pointer',
                     whiteSpace: 'nowrap',
                     fontWeight: 800,
+                    fontSize: '0.76rem',
                   }}
                 >
                   {s.cta.label}
                 </button>
               </div>
-              <div style={{ marginTop: '0.45rem', color: '#b0b0b0', fontSize: '0.92rem', lineHeight: 1.55 }}>{s.desc}</div>
+              <div style={{ marginTop: '0.34rem', color: '#b0b0b0', fontSize: '0.8rem', lineHeight: 1.46 }}>{s.desc}</div>
             </div>
           ))}
         </div>
 
         {isAdmin && (
-          <div style={{ marginTop: '1.1rem', color: '#b0b0b0', fontSize: '0.9rem', lineHeight: 1.5 }}>
+          <div style={{ marginTop: '0.82rem', color: '#b0b0b0', fontSize: '0.8rem', lineHeight: 1.45 }}>
             ADMIN 계정이라면 상단 메뉴에서 <span style={{ color: '#ffb86b', fontWeight: 900 }}>Sales</span> /{' '}
             <span style={{ color: '#ffb86b', fontWeight: 900 }}>Admin</span> 기능을 사용할 수 있어요.
           </div>

@@ -23,7 +23,7 @@ const NewsDetailPage = ({ news }) => {
   if (!resolvedNews) {
     return (
       <div style={{
-        padding: '2rem', display: 'flex', justifyContent: 'center',
+        padding: '1.4rem', display: 'flex', justifyContent: 'center',
         alignItems: 'center', height: '50vh', color: '#ff8c42', fontSize: '1.2rem'
       }}>
         뉴스 데이터를 불러올 수 없습니다.
@@ -65,7 +65,7 @@ const NewsDetailPage = ({ news }) => {
     return (
       <div
         style={{
-          padding: "2rem",
+          padding: "1.4rem",
           display: "flex",
           flexDirection: "column",
           gap: "1rem",
@@ -149,20 +149,20 @@ const NewsDetailPage = ({ news }) => {
   };
 
   return (
-    <div style={{ padding: '2rem 1rem', minHeight: 'calc(100vh - 80px)' }}>
-      <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem' }}>
-        <div style={{ width: '60px', display: 'flex', justifyContent: 'center', flexShrink: 0 }}>
+    <div style={{ padding: '1rem 0.68rem', minHeight: 'calc(100vh - 80px)' }}>
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '0.72rem' }}>
+        <div style={{ width: '52px', display: 'flex', justifyContent: 'center', flexShrink: 0 }}>
           {/* 뒤로가기 */}
           <button
             onClick={() => navigate(location.state?.from || '/news', { state: { preserveScroll: true } })}
             style={{
               position: 'sticky',
-              top: '3rem',
+              top: '2.2rem',
               background: 'rgba(255, 255, 255, 0.1)',
               border: '1px solid rgba(255, 140, 66, 0.5)', 
               borderRadius: '50%',
-              width: '50px', 
-              height: '50px', 
+              width: '44px', 
+              height: '44px', 
               color: '#ff8c42', 
               fontSize: '1.5rem',
               cursor: 'pointer', 
@@ -185,11 +185,11 @@ const NewsDetailPage = ({ news }) => {
           </button>
         </div>
 
-        <div style={{ maxWidth: '900px', width: '100%', marginTop: '1rem' }}>
+        <div style={{ maxWidth: '820px', width: '100%', marginTop: '0.6rem' }}>
           <div style={{
             background: 'rgba(255, 255, 255, 0.08)', 
             backdropFilter: 'blur(20px)',
-            borderRadius: '25px', 
+            borderRadius: '20px', 
             border: '1px solid rgba(255, 255, 255, 0.1)',
             overflow: 'hidden', 
             boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)'
@@ -197,16 +197,16 @@ const NewsDetailPage = ({ news }) => {
           {/* 헤더 */}
           <div style={{
             background: 'linear-gradient(135deg, rgba(255, 140, 66, 0.15), rgba(255, 167, 38, 0.15))',
-            padding: '3rem 3rem 2rem',
+            padding: '2.2rem 2.1rem 1.4rem',
             borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
           }}>
             {/* 제목 + 드롭다운 */}
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "1rem", marginTop: "0.8rem" }}>
-              <h1 style={{
-                fontSize: '2.2rem', 
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "0.85rem", marginTop: "0.4rem" }}>
+                <h1 style={{
+                fontSize: 'clamp(1.45rem, 2.2vw, 1.95rem)', 
                 fontWeight: '700', 
                 lineHeight: '1.3',
-                marginBottom: '2rem', 
+                marginBottom: '1.25rem', 
                 marginTop: '-0.5rem',
                 color: 'white',
                 textShadow: '0 2px 10px rgba(0, 0, 0, 0.3)',
@@ -230,7 +230,7 @@ const NewsDetailPage = ({ news }) => {
                     color: "white",
                     border: "1px solid rgba(255,255,255,0.3)",
                     borderRadius: "8px",
-                    padding: "0.5rem 0.8rem",
+                    padding: "0.4rem 0.65rem",
                     fontSize: "0.9rem",
                     cursor: "pointer",
                     flexShrink: 0
@@ -245,9 +245,9 @@ const NewsDetailPage = ({ news }) => {
             {/* 메타 */}
             <div style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-              gap: '1.5rem',
-              marginBottom: '0.75rem'
+              gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))',
+              gap: '0.9rem',
+              marginBottom: '0.5rem'
             }}>
               <div>
                 <div style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '0.9rem' }}>언론사</div>

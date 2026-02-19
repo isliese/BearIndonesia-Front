@@ -99,10 +99,10 @@ const NewsTagFilter = ({ activeSection, currentSectionTags, activeTags, setActiv
   return (
     <div
       style={{
-        maxWidth: 1304,
+        maxWidth: 1600,
         width: "100%",
         margin: "0 auto 2rem",
-        padding: "1.5rem",
+        padding: "1.1rem",
         background: "rgba(255, 255, 255, 0.05)",
         backdropFilter: "blur(10px)",
         borderRadius: "16px",
@@ -110,7 +110,7 @@ const NewsTagFilter = ({ activeSection, currentSectionTags, activeTags, setActiv
         boxSizing: "border-box",
       }}
     >
-      <div style={{ color: "#ff8c42", fontWeight: 700, marginBottom: "1rem", fontSize: "1.1rem" }}>
+      <div style={{ color: "#ff8c42", fontWeight: 700, marginBottom: "0.75rem", fontSize: "1rem" }}>
         {activeSection} :
       </div>
 

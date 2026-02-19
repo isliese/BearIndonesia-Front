@@ -6,6 +6,7 @@ import { useMediaQuery } from "../../../hooks/useMediaQuery";
 
 const NewsGrid = ({ articles, onOpen }) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
+  const isTablet = useMediaQuery("(max-width: 1200px)");
 
   return (
     <div
@@ -21,11 +22,14 @@ const NewsGrid = ({ articles, onOpen }) => {
       <div
         style={{
           display: "grid",
-          // 화면이 줄어도 항상 3열 유지 (필요 시 가로 스크롤)
-          gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 420px)",
-          gap: isMobile ? "14px" : "22px",
-          width: isMobile ? "100%" : "1304px",
-          maxWidth: isMobile ? "560px" : "1304px",
+          gridTemplateColumns: isMobile
+            ? "1fr"
+            : isTablet
+              ? "repeat(2, minmax(0, 1fr))"
+              : "repeat(3, minmax(0, 1fr))",
+          gap: isMobile ? "12px" : "16px",
+          width: "100%",
+          maxWidth: isMobile ? "680px" : "min(1600px, 100%)",
           margin: "0 auto",
           marginBottom: "2.5rem",
         }}

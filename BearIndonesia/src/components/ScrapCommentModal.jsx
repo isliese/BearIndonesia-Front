@@ -52,10 +52,10 @@ const ScrapCommentModal = ({ isOpen, value, onChange, onClose, onSave }) => {
         }}
         role="dialog"
         aria-modal="true"
-        aria-label="스크랩 코멘트"
+        aria-label="스크랩 코멘트 작성"
       >
         <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: "0.75rem" }}>
-          <div style={{ color: "white", fontWeight: 700, fontSize: "1.1rem" }}>코멘트 작성</div>
+          <div style={{ color: "white", fontWeight: 700, fontSize: "1.1rem" }}>코멘트 작성 (선택)</div>
           <div style={{ color: "#b0b0b0", fontSize: "0.9rem" }}>
             ({len}/{MAX_LEN})
           </div>
@@ -66,7 +66,7 @@ const ScrapCommentModal = ({ isOpen, value, onChange, onClose, onSave }) => {
             ref={textareaRef}
             value={safeValue}
             onChange={(e) => onChange?.(e.target.value.slice(0, MAX_LEN))}
-            placeholder="스크랩할 때 남겨둘 메모를 적어주세요 (최대 300자)"
+            placeholder="스크랩할 기사에 대한 메모를 적어주세요. (최대 300자)"
             rows={5}
             style={{
               width: "100%",
@@ -111,7 +111,7 @@ const ScrapCommentModal = ({ isOpen, value, onChange, onClose, onSave }) => {
               fontWeight: 700,
             }}
           >
-            스크랩 저장
+            저장
           </button>
         </div>
       </div>
@@ -120,3 +120,4 @@ const ScrapCommentModal = ({ isOpen, value, onChange, onClose, onSave }) => {
 };
 
 export default ScrapCommentModal;
+

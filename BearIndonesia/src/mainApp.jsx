@@ -153,44 +153,54 @@ const MainApp = () => {
           overflowX: 'auto'
         }}
       >
-        <Routes>
-          <Route
-            path="/"
-            element={<HomePage onSearch={handleSearch} setSelectedNews={setSelectedNews} />}
-          />
-          <Route
-            path="/news"
-            element={<NewsPage setSelectedNews={setSelectedNews} />}
-          />
-          <Route
-            path="/section-news"
-            element={<SectionNewsPage setSelectedNews={setSelectedNews} />}
-          />
-          <Route
-            path="/calendar"
-            element={<CalendarPage setSelectedNews={setSelectedNews} />}
-          />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignupPage />} />
-          <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/scrap" element={<ScrappedNewsPage setSelectedNews={setSelectedNews} />} />
-          <Route
-            path="/news/detail"
-            element={<NewsDetailPage news={selectedNews} />}
-          />
-          <Route
-            path="/search"
-            element={<SearchResultsPage setSelectedNews={setSelectedNews} />}
-          />
-          <Route path="/report/competitor" element={<CompetitorReportPage />} />
-          <Route path="/sales" element={<SalesPage />} />
-          <Route path="/admin/users" element={<AdminUsersPage />} />
-          <Route
-            path="*"
-            element={<HomePage onSearch={handleSearch} setSelectedNews={setSelectedNews} />}
-          />
-        </Routes>
+        <div
+          style={{
+            width: '100%',
+            maxWidth: '1400px',
+            margin: '0 auto',
+            padding: '0 clamp(1.2rem, 4.2vw, 5rem)',
+            boxSizing: 'border-box',
+          }}
+        >
+          <Routes>
+            <Route
+              path="/"
+              element={<HomePage onSearch={handleSearch} setSelectedNews={setSelectedNews} />}
+            />
+            <Route
+              path="/news"
+              element={<NewsPage setSelectedNews={setSelectedNews} />}
+            />
+            <Route
+              path="/section-news"
+              element={<SectionNewsPage setSelectedNews={setSelectedNews} />}
+            />
+            <Route
+              path="/calendar"
+              element={<CalendarPage setSelectedNews={setSelectedNews} />}
+            />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignupPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/scrap" element={<ScrappedNewsPage setSelectedNews={setSelectedNews} />} />
+            <Route
+              path="/news/detail"
+              element={<NewsDetailPage news={selectedNews} />}
+            />
+            <Route
+              path="/search"
+              element={<SearchResultsPage setSelectedNews={setSelectedNews} />}
+            />
+            <Route path="/report/competitor" element={<CompetitorReportPage />} />
+            <Route path="/sales" element={<SalesPage />} />
+            <Route path="/admin/users" element={<AdminUsersPage />} />
+            <Route
+              path="*"
+              element={<HomePage onSearch={handleSearch} setSelectedNews={setSelectedNews} />}
+            />
+          </Routes>
+        </div>
       </div>
     </div>
   );

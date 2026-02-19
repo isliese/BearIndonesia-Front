@@ -4,6 +4,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import ScrapStarButton from '../../../components/ScrapStarButton';
 import { getAuthUser, isAdminUser } from '../../../utils/auth';
+import { useMediaQuery } from '../../../hooks/useMediaQuery';
 
 // API 호출 함수
 const searchAPI = async (searchTerm, sortBy = 'relevance', filterType = 'all') => {
@@ -197,8 +198,8 @@ const SearchCard = ({ article, onOpen, searchTerm, onTagClick }) => {
         position: "relative",
         background: "rgba(255, 255, 255, 0.1)",
         backdropFilter: "blur(10px)",
-        borderRadius: "15px",
-        padding: "1.5rem",
+        borderRadius: "13px",
+        padding: "1rem",
         transition: "all 0.3s ease",
         cursor: "pointer",
         overflow: "hidden",
@@ -215,11 +216,11 @@ const SearchCard = ({ article, onOpen, searchTerm, onTagClick }) => {
       }}
     >
       <ScrapStarButton article={article} style={{ position: "absolute", top: 12, right: 12 }} />
-      <div style={{ display: "flex", alignItems: "center", marginBottom: "1rem" }}>
+      <div style={{ display: "flex", alignItems: "center", marginBottom: "0.72rem" }}>
         <div
           style={{
-            width: "40px",
-            height: "40px",
+            width: "34px",
+            height: "34px",
             borderRadius: "50%",
             background: "linear-gradient(135deg, #ff8c42, #ffa726)",
             display: "flex",
@@ -233,15 +234,15 @@ const SearchCard = ({ article, onOpen, searchTerm, onTagClick }) => {
           {avatar}
         </div>
         <div style={{ flex: 1 }}>
-          <div style={{ color: "#b0b0b0", fontSize: "0.9rem" }}>{author}</div>
+          <div style={{ color: "#b0b0b0", fontSize: "0.8rem" }}>{author}</div>
         </div>
         <div
           style={{
             background: getMatchTypeColor(article?.matchType || 'other'),
             color: "white",
             padding: "0.25rem 0.5rem",
-            borderRadius: "12px",
-            fontSize: "0.75rem",
+            borderRadius: "10px",
+            fontSize: "0.68rem",
             fontWeight: "bold",
           }}
         >
@@ -251,9 +252,9 @@ const SearchCard = ({ article, onOpen, searchTerm, onTagClick }) => {
 
       <div 
         style={{ 
-          fontSize: "1.25rem", 
+          fontSize: "1.02rem", 
           fontWeight: "bold", 
-          marginBottom: "0.75rem", 
+          marginBottom: "0.55rem", 
           color: "white",
           lineHeight: "1.4"
         }}
@@ -263,9 +264,9 @@ const SearchCard = ({ article, onOpen, searchTerm, onTagClick }) => {
       
       <div style={{ 
         color: "#d0d0d0", 
-        marginBottom: "1rem", 
+        marginBottom: "0.72rem", 
         lineHeight: "1.6",
-        fontSize: "0.95rem"
+        fontSize: "0.84rem"
       }}>
         <span style={{ color: "#ff8c42", fontWeight: "600" }}>AI 요약: </span>
         {renderHighlighted(isExpanded ? koSummary : truncatedSummary, searchTerm)}
@@ -283,7 +284,7 @@ const SearchCard = ({ article, onOpen, searchTerm, onTagClick }) => {
               cursor: "pointer",
               padding: "0.2rem 0.5rem",
               marginLeft: "0.5rem",
-              fontSize: "0.85rem",
+              fontSize: "0.78rem",
               fontWeight: "600",
               textDecoration: "underline"
             }}
@@ -298,10 +299,10 @@ const SearchCard = ({ article, onOpen, searchTerm, onTagClick }) => {
         justifyContent: "space-between", 
         alignItems: "flex-end", 
         color: "#999", 
-        fontSize: "0.85rem",
-        gap: "1rem"
+        fontSize: "0.78rem",
+        gap: "0.7rem"
       }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "0.7rem" }}>
           <span>{article.date}</span>
           <span style={{ 
             color: '#FFD700',
@@ -321,8 +322,8 @@ const SearchCard = ({ article, onOpen, searchTerm, onTagClick }) => {
                   background: "rgba(255, 140, 66, 0.2)",
                   color: "#ff8c42",
                   padding: "0.2rem 0.5rem",
-                  borderRadius: "10px",
-                  fontSize: "0.75rem",
+                  borderRadius: "9px",
+                  fontSize: "0.68rem",
                   cursor: "pointer",
                   transition: "all 0.2s ease",
                   whiteSpace: "nowrap"
@@ -345,8 +346,8 @@ const SearchCard = ({ article, onOpen, searchTerm, onTagClick }) => {
                 background: "rgba(255, 255, 255, 0.1)",
                 color: "#bbb",
                 padding: "0.2rem 0.5rem",
-                borderRadius: "10px",
-                fontSize: "0.75rem"
+                borderRadius: "9px",
+                fontSize: "0.68rem"
               }}
             >
               태그 없음
@@ -363,6 +364,7 @@ const SearchResultsPage = ({ setSelectedNews }) => {
   const searchTerm = searchParams.get("query") || "";
   const navigate = useNavigate();
   const location = useLocation();
+  const isMobile = useMediaQuery("(max-width: 768px)");
   const [authUser, setAuthUser] = useState(() => getAuthUser());
   const [sortBy, setSortBy] = useState("relevance");
   const [filterType, setFilterType] = useState("all");
@@ -478,21 +480,21 @@ const SearchResultsPage = ({ setSelectedNews }) => {
   }, [filteredResults, authUser]);
 
   return (
-    <div style={{ position: 'relative', padding: '2rem 1rem', minHeight: 'calc(100vh - 80px)' }}>
+    <div style={{ position: 'relative', padding: '0.85rem 0.68rem', minHeight: 'calc(100vh - 80px)' }}>
       {/* 뒤로가기 버튼 */}
       <button
         onClick={() => navigate(location.state?.from || '/news')}
         style={{
           position: 'absolute',
-          top: '5rem',
-          left: '6rem',
+          top: '3.6rem',
+          left: '2.6rem',
           background: 'rgba(255, 255, 255, 0.1)',
           border: '1px solid rgba(255, 140, 66, 0.5)',
           borderRadius: '50%',
-          width: '50px',
-          height: '50px',
+          width: '40px',
+          height: '40px',
           color: '#ff8c42',
-          fontSize: '1.5rem',
+          fontSize: '1.2rem',
           cursor: 'pointer',
           display: 'flex',
           alignItems: 'center',
@@ -512,20 +514,22 @@ const SearchResultsPage = ({ setSelectedNews }) => {
         <span style={{ fontSize: '1.1rem' }}>←</span>
       </button>
 
-      <div style={{ maxWidth: "1400px", margin: "0 auto", paddingTop: "2rem" }}>
+      <div style={{ maxWidth: "1080px", margin: "0 auto", paddingTop: "0.32rem" }}>
         {/* 검색 결과 헤더 */}
         <div style={{ 
           textAlign: "center", 
-          marginBottom: "2rem",
+          marginBottom: "0.85rem",
           background: "rgba(255, 140, 66, 0.05)",
-          padding: "2rem",
-          borderRadius: "20px",
+          padding: "0.8rem",
+          borderRadius: "14px",
           border: "1px solid rgba(255, 140, 66, 0.2)"
         }}>
           <h1 style={{ 
-            fontSize: "2.5rem", 
+            fontSize: "clamp(1.36rem, 1.7vw, 1.65rem)", 
             color: "#ff8c42", 
-            marginBottom: "1rem",
+            marginBottom: "0.52rem",
+            marginTop: 0,
+            paddingTop: "0.2rem",
             background: 'linear-gradient(135deg, #ff8c42, #ffa726)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
@@ -534,7 +538,7 @@ const SearchResultsPage = ({ setSelectedNews }) => {
             검색 결과
           </h1>
 	          <p style={{ 
-	            fontSize: "1.2rem", 
+	            fontSize: "0.74rem", 
 	            color: "#b0b0b0",
 	            marginBottom: "0.5rem"
 	          }}>
@@ -543,7 +547,7 @@ const SearchResultsPage = ({ setSelectedNews }) => {
 	              {visibleResults.length}개
 	            </span>의 검색 결과
 	          </p>
-          <div style={{ color: "#999", fontSize: "0.9rem" }}>
+          <div style={{ color: "#999", fontSize: "0.74rem" }}>
             인도네시아 제약 산업 관련 최신 정보를 확인하세요 (한국어/영어 검색 지원)
           </div>
         </div>
@@ -552,8 +556,8 @@ const SearchResultsPage = ({ setSelectedNews }) => {
         <div style={{ 
           display: "flex", 
           justifyContent: "center", 
-          gap: "1rem", 
-          marginBottom: "1rem",
+          gap: "0.55rem", 
+          marginBottom: "0.62rem",
           flexWrap: "wrap"
         }}>
           <select
@@ -562,10 +566,10 @@ const SearchResultsPage = ({ setSelectedNews }) => {
             style={{
               background: "rgba(255, 255, 255, 0.1)",
               border: "1px solid rgba(255, 140, 66, 0.3)",
-              borderRadius: "25px",
-              padding: "0.7rem 1rem",
+              borderRadius: "18px",
+              padding: "0.4rem 0.62rem",
               color: "white",
-              fontSize: "0.9rem",
+              fontSize: "0.74rem",
               cursor: "pointer",
               outline: "none"
             }}
@@ -581,14 +585,14 @@ const SearchResultsPage = ({ setSelectedNews }) => {
               <button
                 onClick={clearTags}
                 style={{
-                  padding: "0.6rem 1rem",
+                  padding: "0.4rem 0.62rem",
                   background: "transparent",
                   border: "1px solid rgba(255, 140, 66, 0.5)",
-                  borderRadius: "25px",
+                  borderRadius: "18px",
                   color: "#ff8c42",
                   cursor: "pointer",
                   transition: "all 0.3s ease",
-                  fontSize: "0.85rem",
+                  fontSize: "0.72rem",
                 }}
               >
                 전체 해제 ✕
@@ -603,15 +607,15 @@ const SearchResultsPage = ({ setSelectedNews }) => {
                   onClick={() => toggleTag(name)}
                   title={`${name} (${count}개 결과)`}
                   style={{
-                    padding: "0.6rem 1rem",
+                    padding: "0.4rem 0.62rem",
                     background: active ? "#ff8c42" : "rgba(255, 255, 255, 0.1)",
                     border: "1px solid",
                     borderColor: active ? "#ff8c42" : "rgba(255, 255, 255, 0.2)",
-                    borderRadius: "25px",
+                    borderRadius: "18px",
                     color: "white",
                     cursor: "pointer",
                     transition: "all 0.3s ease",
-                    fontSize: "0.85rem",
+                    fontSize: "0.72rem",
                   }}
                 >
                   {name} <span style={{opacity:0.7}}>({count})</span>
@@ -630,7 +634,7 @@ const SearchResultsPage = ({ setSelectedNews }) => {
           }}>
             <div style={{ 
               fontSize: "2rem", 
-              marginBottom: "1rem",
+              marginBottom: "0.7rem",
               animation: "spin 1s linear infinite"
             }}>⟳</div>
             <h3>검색 중...</h3>
@@ -645,7 +649,7 @@ const SearchResultsPage = ({ setSelectedNews }) => {
             padding: "3rem",
             color: "#f44336"
           }}>
-            <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>⚠️</div>
+            <div style={{ fontSize: "3rem", marginBottom: "0.7rem" }}>⚠️</div>
             <h3>오류 발생</h3>
             <p style={{ color: "#b0b0b0" }}>{error}</p>
             <button
@@ -654,7 +658,7 @@ const SearchResultsPage = ({ setSelectedNews }) => {
                 background: "#ff8c42",
                 border: "none",
                 padding: "0.7rem 1.5rem",
-                borderRadius: "25px",
+                borderRadius: "18px",
                 color: "white",
                 cursor: "pointer",
                 marginTop: "1rem"
@@ -670,8 +674,10 @@ const SearchResultsPage = ({ setSelectedNews }) => {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(clamp(280px, 90vw, 440px), 1fr))",
-              gap: "1.5rem",
+              gridTemplateColumns: isMobile
+                ? "1fr"
+                : "repeat(3, minmax(0, 1fr))",
+              gap: "0.85rem",
             }}
           >
 	            {visibleResults.map((article) => (
@@ -701,11 +707,11 @@ const SearchResultsPage = ({ setSelectedNews }) => {
 	            padding: "3rem",
 	            color: "#b0b0b0"
 	          }}>
-            <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>🔍</div>
-            <h3 style={{ color: "#ff8c42", marginBottom: "1rem" }}>검색 결과가 없습니다</h3>
+            <div style={{ fontSize: "3rem", marginBottom: "0.7rem" }}>🔍</div>
+            <h3 style={{ color: "#ff8c42", marginBottom: "0.7rem" }}>검색 결과가 없습니다</h3>
             <p>"{searchTerm}"에 대한 결과를 찾을 수 없습니다.</p>
             <p>다른 검색어를 시도해보시거나 필터를 변경해보세요.</p>
-            <div style={{ marginTop: "1.5rem", fontSize: "0.9rem" }}>
+            <div style={{ marginTop: "1.5rem", fontSize: "0.78rem" }}>
               <strong>검색 팁:</strong><br />
               • 한국어: "칼베파마", "메트포르민", "3상 임상시험"<br />
               • English: "Kalbe Farma", "Metformin", "Phase III"
@@ -716,13 +722,13 @@ const SearchResultsPage = ({ setSelectedNews }) => {
         {/* 하단 안내 */}
         <div style={{
           textAlign: "center",
-          marginTop: "3rem",
-          padding: "1.5rem",
+          marginTop: "1.4rem",
+          padding: "1rem",
           background: "rgba(255, 140, 66, 0.05)",
-          borderRadius: "15px",
+          borderRadius: "12px",
           border: "1px solid rgba(255, 140, 66, 0.1)"
         }}>
-          <p style={{ color: "#b0b0b0", fontSize: "0.9rem", margin: "0" }}>
+          <p style={{ color: "#b0b0b0", fontSize: "0.78rem", margin: "0" }}>
             더 정확한 검색을 원하시면 구체적인 키워드를 사용해보세요. 
             <br />
             한국어/영어 모두 지원 | 예: "Kalbe Farma", "메트포르민", "Phase III", "임상시험" 등

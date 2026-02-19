@@ -188,53 +188,53 @@ const CalendarPage = ({ setSelectedNews }) => {
     <div
       className="calendar-container"
       onMouseUp={handleMouseUp}
-      style={{ padding: '1.5rem', minHeight: 'calc(100vh - 80px)', paddingTop: '3rem' }}
+      style={{ padding: '0.85rem 0.68rem', minHeight: 'calc(100vh - 80px)', paddingTop: '0.9rem' }}
       key={`page-${calendarKey}`}
     >
-      <h1 style={{ fontSize: '2.1rem', textAlign: 'center', marginBottom: '1.25rem', color: '#ff8c42' }}>
+      <h1 style={{ fontSize: 'clamp(1.36rem, 1.7vw, 1.65rem)', textAlign: 'center', marginTop: 0, marginBottom: '0.5rem', paddingTop: '0.2rem', color: '#ff8c42' }}>
         인터렉티브 캘린더
       </h1>
 
-      <div style={{ display: 'flex', gap: '1rem', maxWidth: '1200px', margin: '0 auto', flexWrap: isDesktop ? 'nowrap' : 'wrap', alignItems: 'stretch' }}>
+      <div style={{ display: 'flex', gap: '0.62rem', maxWidth: '1020px', margin: '0 auto', flexWrap: isDesktop ? 'nowrap' : 'wrap', alignItems: 'stretch' }}>
         {/* 캘린더 */}
-        <div style={{ flex: '2 1 clamp(320px, 60vw, 720px)', minWidth: 0, background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(10px)', borderRadius: '12px', padding: '1.1rem' }}>
+        <div style={{ flex: '2 1 clamp(300px, 55vw, 620px)', minWidth: 0, background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(10px)', borderRadius: '11px', padding: '0.72rem' }}>
           {/* 헤더 */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.55rem' }}>
             <button
               type="button"
               onMouseDown={() => changeMonth(-1)}
-              style={{ background: '#ff8c42', border: 'none', borderRadius: '8px', padding: '0.4rem 0.8rem', color: 'white', cursor: 'pointer', fontSize: '0.95rem' }}
+              style={{ background: '#ff8c42', border: 'none', borderRadius: '8px', padding: '0.3rem 0.62rem', color: 'white', cursor: 'pointer', fontSize: '0.82rem' }}
             >←</button>
-            <h2 style={{ color: 'white', fontSize: '1.3rem', margin: 0 }}>
+            <h2 style={{ color: 'white', fontSize: '1.08rem', margin: 0 }}>
               {currentDate.getFullYear()}년 {monthNames[currentDate.getMonth()]}
             </h2>
             <button
               type="button"
               onMouseDown={() => changeMonth(1)}
-              style={{ background: '#ff8c42', border: 'none', borderRadius: '8px', padding: '0.4rem 0.8rem', color: 'white', cursor: 'pointer', fontSize: '0.95rem' }}
+              style={{ background: '#ff8c42', border: 'none', borderRadius: '8px', padding: '0.3rem 0.62rem', color: 'white', cursor: 'pointer', fontSize: '0.82rem' }}
             >→</button>
           </div>
 
           {/* 범례 */}
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginBottom: '0.75rem', padding: '0.4rem', background: 'rgba(255,255,255,0.05)', borderRadius: '8px' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '0.72rem', marginBottom: '0.55rem', padding: '0.32rem', background: 'rgba(255,255,255,0.05)', borderRadius: '8px' }}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#ff4444', marginRight: 6 }} />
-              <span style={{ fontSize: '0.85rem', color: '#d0d0d0' }}>중요도 높음</span>
+              <span style={{ fontSize: '0.75rem', color: '#d0d0d0' }}>중요도 높음</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#ff8c42', marginRight: 6 }} />
-              <span style={{ fontSize: '0.85rem', color: '#d0d0d0' }}>중요도 보통</span>
+              <span style={{ fontSize: '0.75rem', color: '#d0d0d0' }}>중요도 보통</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#4caf50', marginRight: 6 }} />
-              <span style={{ fontSize: '0.85rem', color: '#d0d0d0' }}>중요도 낮음</span>
+              <span style={{ fontSize: '0.75rem', color: '#d0d0d0' }}>중요도 낮음</span>
             </div>
           </div>
 
           {/* 요일 */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 3, marginBottom: '0.4rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 3, marginBottom: '0.3rem' }}>
             {dayNames.map(day => (
-              <div key={day} style={{ textAlign: 'center', padding: '0.4rem', color: '#b0b0b0', fontSize: '0.85rem', fontWeight: 'bold' }}>{day}</div>
+              <div key={day} style={{ textAlign: 'center', padding: '0.3rem', color: '#b0b0b0', fontSize: '0.75rem', fontWeight: 'bold' }}>{day}</div>
             ))}
           </div>
 
@@ -258,22 +258,22 @@ const CalendarPage = ({ setSelectedNews }) => {
                   onMouseEnter={() => handleMouseEnter(day)}
                   style={{
                     position: 'relative',
-                    minHeight: 44,
-                    padding: '0.4rem',
+                    minHeight: 38,
+                    padding: '0.3rem',
                     background: selected ? 'rgba(255, 140, 66, 0.28)' :
                                isToday ? 'rgba(255, 140, 66, 0.08)' : 'transparent',
                     color: isCurrentMonth ? 'white' : '#666',
                     cursor: 'pointer',
                     borderRadius: 7,
                     transition: 'all 0.2s ease',
-                    fontSize: '0.85rem'
+                    fontSize: '0.75rem'
                   }}
                 >
                   <div>{day.getDate()}</div>
                   {newsCount > 0 && (
                     <>
                       <div style={{ position: 'absolute', bottom: 3, right: 3, width: 7, height: 7, borderRadius: '50%', background: getPriorityColorLocal(priority) }} />
-                      <div style={{ position: 'absolute', top: 2, right: 2, fontSize: 9, background: 'rgba(255, 140, 66, 0.8)', borderRadius: 9, padding: '1px 4px', color: 'white', minWidth: 12, textAlign: 'center' }}>
+                      <div style={{ position: 'absolute', top: 2, right: 2, fontSize: 8, background: 'rgba(255, 140, 66, 0.8)', borderRadius: 8, padding: '1px 3px', color: 'white', minWidth: 11, textAlign: 'center' }}>
                         {newsCount}
                       </div>
                     </>
@@ -287,9 +287,9 @@ const CalendarPage = ({ setSelectedNews }) => {
         {/* 선택된 날짜 범위 뉴스 목록 */}
         <div
           key={`side-${calendarKey}`}
-          style={{ flex: '1 1 clamp(280px, 35vw, 420px)', minWidth: 0, background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(10px)', borderRadius: '12px', padding: '1.1rem' }}
+          style={{ flex: '1 1 clamp(260px, 34vw, 380px)', minWidth: 0, background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(10px)', borderRadius: '11px', padding: '0.82rem' }}
         >
-          <h3 style={{ textAlign: 'center', color: '#ff8c42', marginBottom: '0.85rem', fontSize: '1.05rem' }}>
+          <h3 style={{ textAlign: 'center', color: '#ff8c42', marginBottom: '0.62rem', fontSize: '0.9rem' }}>
             {selectedRange.start ? (
               selectedRange.end && selectedRange.start.getTime() !== selectedRange.end.getTime() ? 
               `${selectedRange.start.getMonth() + 1}월 ${selectedRange.start.getDate()}일 ~ ${selectedRange.end.getMonth() + 1}월 ${selectedRange.end.getDate()}일 뉴스 (${selectedNews.length}개)`
@@ -302,7 +302,7 @@ const CalendarPage = ({ setSelectedNews }) => {
               {loadError}
             </div>
           ) : selectedNews.length > 0 ? (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', maxHeight: 500, overflowY: 'auto' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.55rem', maxHeight: 450, overflowY: 'auto' }}>
               {selectedNews.map((news, index) => (
                 <div 
                   key={`${news.id || index}-${news.displayDate}`}
@@ -312,8 +312,8 @@ const CalendarPage = ({ setSelectedNews }) => {
                   }}
                   style={{
                     background: 'rgba(255,255,255,0.05)',
-                    borderRadius: 9,
-                    padding: '0.85rem',
+                    borderRadius: 8,
+                    padding: '0.65rem',
                     borderLeft: `3px solid ${getPriorityColorLocal(news.priority)}`,
                     cursor: 'pointer',
                     transition: 'all 0.2s ease'
@@ -322,19 +322,19 @@ const CalendarPage = ({ setSelectedNews }) => {
                   onMouseLeave={(e) => { e.currentTarget.style.opacity = 1; }}
                 >
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "0.6rem" }}>
-                    <div style={{ fontSize: '0.95rem', color: 'white', marginBottom: '0.4rem', lineHeight: 1.35 }}>
+                    <div style={{ fontSize: '0.82rem', color: 'white', marginBottom: '0.3rem', lineHeight: 1.35 }}>
                       {news.korTitle || news.title || '제목 없음'}
                     </div>
                     <ScrapStarButton article={news} size={16} />
                   </div>
-                  <div style={{ fontSize: '0.8rem', color: '#ccc', marginBottom: '0.4rem' }}>
+                  <div style={{ fontSize: '0.72rem', color: '#ccc', marginBottom: '0.3rem' }}>
                     {news.displayDate}
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontSize: '0.78rem', background: 'rgba(255,140,66,0.18)', color: '#ff8c42', padding: '0.2rem 0.6rem', borderRadius: 14 }}>
+                    <span style={{ fontSize: '0.7rem', background: 'rgba(255,140,66,0.18)', color: '#ff8c42', padding: '0.16rem 0.46rem', borderRadius: 12 }}>
                       {news.type}
                     </span>
-                    <span style={{ fontSize: '0.78rem', color: getPriorityColorLocal(news.priority), fontWeight: 'bold' }}>
+                    <span style={{ fontSize: '0.7rem', color: getPriorityColorLocal(news.priority), fontWeight: 'bold' }}>
                       {news.priority === 'high' ? '높음' : news.priority === 'medium' ? '보통' : '낮음'}
                     </span>
                   </div>
@@ -342,7 +342,7 @@ const CalendarPage = ({ setSelectedNews }) => {
               ))}
             </div>
           ) : (
-            <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', color: '#b0b0b0', fontSize: '1.05rem', lineHeight: 1.35, padding: '1.5rem', marginTop: '45%' }}>
+            <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', color: '#b0b0b0', fontSize: '0.9rem', lineHeight: 1.35, padding: '1.5rem', marginTop: '45%' }}>
               {hasSelectedRange ? 
                 '선택된 날짜 범위에는 뉴스가 없습니다.' :
                 '캘린더에서 날짜를 드래그하여 뉴스를 확인하세요.'

@@ -56,7 +56,7 @@ const NewsFilterPanel = ({
 
   return (
     <>
-      <div style={{ maxWidth: 1304, width: "100%", margin: "0 auto 1rem", boxSizing: "border-box" }}>
+      <div style={{ maxWidth: 1600, width: "100%", margin: "0 auto 1rem", boxSizing: "border-box" }}>
         <button
           onClick={onToggle}
           style={{
@@ -81,10 +81,10 @@ const NewsFilterPanel = ({
       {isOpen && (
         <div
           style={{
-            maxWidth: 1304,
+            maxWidth: 1600,
             width: "100%",
             margin: "0 auto 2rem",
-            padding: "1.5rem",
+            padding: "1.15rem",
             background: "rgba(255, 255, 255, 0.05)",
             backdropFilter: "blur(10px)",
             borderRadius: "16px",
@@ -92,7 +92,7 @@ const NewsFilterPanel = ({
             boxSizing: "border-box",
           }}
         >
-          <div style={{ marginBottom: "1.5rem", display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+          <div style={{ marginBottom: "1.2rem", display: "flex", gap: "0.8rem", flexWrap: "wrap" }}>
             <div style={{ color: "#ff8c42", fontWeight: 700, fontSize: "1rem", paddingTop: "0.4rem" }}>
               정렬
             </div>
@@ -119,7 +119,7 @@ const NewsFilterPanel = ({
             </div>
           </div>
 
-          <div style={{ marginBottom: "1.5rem" }}>
+          <div style={{ marginBottom: "1.2rem" }}>
             <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap", marginBottom: showHourOptions || showCustomDate ? "0.8rem" : "0" }}>
               <div style={{ color: "#ff8c42", fontWeight: 700, paddingTop: "0.4rem", fontSize: "1rem" }}>
                 기간

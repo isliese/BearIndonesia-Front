@@ -57,8 +57,8 @@ const NewsSidebar = ({
             position: "fixed",
             top: "clamp(92px, 12vw, 132px)",
             left: "12px",
-            width: "36px",
-            height: "36px",
+            width: "34px",
+            height: "34px",
             borderRadius: "10px",
             border: "none",
             background: "rgba(255, 255, 255, 0.08)",
@@ -75,16 +75,16 @@ const NewsSidebar = ({
           <img
             src={menuIcon}
             alt=""
-            style={{ width: "30px", height: "30px", display: "block" }}
+            style={{ width: "26px", height: "26px", display: "block" }}
           />
         </button>
       )}
       <div
         style={{
-        width: isCollapsed ? "0px" : "260px",
+        width: isCollapsed ? "0px" : "224px",
         background: "rgba(255, 255, 255, 0.05)",
         backdropFilter: "blur(10px)",
-        padding: isMobile ? "112px 0 0" : "80px 0 0",
+        padding: isMobile ? "108px 0 0" : "76px 0 0",
         borderRight: isCollapsed ? "none" : "1px solid rgba(255, 255, 255, 0.1)",
         position: "fixed",
         top: 0,
@@ -106,8 +106,8 @@ const NewsSidebar = ({
           position: "absolute",
           top: isMobile ? "clamp(92px, 12vw, 132px)" : "92px",
           right: "12px",
-          width: "36px",
-          height: "36px",
+          width: "34px",
+          height: "34px",
           borderRadius: "10px",
           border: "none",
           background: "rgba(255, 255, 255, 0.08)",
@@ -123,29 +123,29 @@ const NewsSidebar = ({
         <img
           src={menuIcon}
           alt=""
-          style={{ width: "30px", height: "30px", display: "block" }}
+          style={{ width: "26px", height: "26px", display: "block" }}
         />
       </button>
 
       {!isCollapsed && (
-        <div style={{ padding: "4.5rem 1rem 1rem" }}>
+        <div style={{ padding: "4.2rem 0.85rem 0.9rem" }}>
         <h2
         style={{
           color: "#ff8c42",
-          marginTop: "1.5rem",
-          marginBottom: "1.5rem",
-          fontSize: "1.3rem",
+          marginTop: "1.2rem",
+          marginBottom: "1.1rem",
+          fontSize: "1.12rem",
           textAlign: "center",
         }}
       >
         분야별 뉴스
         </h2>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: "0.7rem" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "0.55rem" }}>
         <div
           onClick={() => handleSectionChange("all")}
           style={{
-            padding: "1rem",
+            padding: "0.82rem",
             borderRadius: "12px",
             cursor: "pointer",
             background: activeSection === "all" ? "#ff8c42" : "rgba(255,255,255,0.1)",
@@ -154,6 +154,7 @@ const NewsSidebar = ({
             transition: "all 0.3s ease",
             userSelect: "none",
             fontWeight: activeSection === "all" ? "bold" : "normal",
+            fontSize: "0.92rem",
           }}
         >
           전체
@@ -164,7 +165,7 @@ const NewsSidebar = ({
             key={section}
             onClick={() => handleSectionChange(section)}
             style={{
-              padding: "1rem",
+              padding: "0.82rem",
               borderRadius: "12px",
               cursor: "pointer",
               background: activeSection === section ? "#ff8c42" : "rgba(255,255,255,0.1)",
@@ -173,6 +174,7 @@ const NewsSidebar = ({
               transition: "all 0.3s ease",
               userSelect: "none",
               fontWeight: activeSection === section ? "bold" : "normal",
+              fontSize: "0.92rem",
             }}
           >
             {section}

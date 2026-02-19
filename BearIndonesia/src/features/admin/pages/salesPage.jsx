@@ -187,7 +187,17 @@ const SalesPage = () => {
       }}
     >
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "1rem", flexWrap: "wrap" }}>
-        <h1 style={{ color: "#ff8c42", margin: 0 }}>Sales</h1>
+        <h1
+          style={{
+            fontSize: "clamp(1.36rem, 1.7vw, 1.65rem)",
+            color: "#ff8c42",
+            textAlign: "center",
+            margin: 0,
+            paddingTop: "0.2rem",
+          }}
+        >
+          Sales
+        </h1>
         <div style={{ color: "#b0b0b0", fontSize: "0.95rem" }}>
           Raw Excel 업로드 → 시각화 페이지(HTML) 생성/조회
         </div>

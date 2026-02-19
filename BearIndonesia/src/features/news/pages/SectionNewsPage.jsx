@@ -212,12 +212,12 @@ const SectionNewsPage = ({ setSelectedNews }) => {
   };
 
   return (
-    <div style={{ display: "flex", padding: "2rem", height: "100vh" }}>
+    <div style={{ display: "flex", padding: "1rem 0.8rem", minHeight: "calc(100vh - 80px)" }}>
       {/* 왼쪽 카테고리 메뉴 */}
       <div
         style={{
-          width: "150px",
-          marginLeft: "2rem",
+          width: "140px",
+          marginLeft: "0.8rem",
           marginBottom: "5rem",
           display: "flex",
           flexDirection: "column",
@@ -252,9 +252,9 @@ const SectionNewsPage = ({ setSelectedNews }) => {
         style={{
           flex: 1,
           overflowY: "auto",
-          marginTop: "1rem",
+          marginTop: "0.6rem",
           maxHeight: "100vh",
-          paddingRight: "1rem",
+          paddingRight: "0.7rem",
           display: "flex",
           justifyContent: "center",
         }}
@@ -262,17 +262,19 @@ const SectionNewsPage = ({ setSelectedNews }) => {
         {/* 리스트 전체 너비 컨테이너 */}
         <div
           style={{
-            width: "78%",
-            maxWidth: "1100px",
-            minWidth: "720px",
+            width: "100%",
+            maxWidth: "1120px",
+            minWidth: "680px",
             margin: "0 auto",
           }}
         >
           <h1
             style={{
-              marginBottom: "1.5rem",
+              marginBottom: "0.5rem",
               color: "#ff8c42",
-              fontSize: "2rem",
+              fontSize: "clamp(1.36rem, 1.7vw, 1.65rem)",
+              textAlign: "center",
+              paddingTop: "0.2rem",
             }}
           >
             분야별 뉴스

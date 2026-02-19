@@ -49,8 +49,8 @@ const NewsCard = ({ article, onOpen }) => {
         position: "relative",
         background: dimmed ? "rgba(255, 255, 255, 0.06)" : "rgba(255, 255, 255, 0.1)",
         backdropFilter: "blur(10px)",
-        borderRadius: isMobile ? "14px" : "16px",
-        padding: isMobile ? "0.9rem" : "clamp(0.95rem, 1.4vw, 1.2rem)",
+        borderRadius: isMobile ? "13px" : "14px",
+        padding: isMobile ? "0.78rem" : "clamp(0.72rem, 0.95vw, 0.92rem)",
         transition: "all 0.25s ease",
         cursor: "pointer",
         overflow: "hidden",
@@ -86,11 +86,11 @@ const NewsCard = ({ article, onOpen }) => {
           검증 필요
         </div>
       )}
-      <div style={{ display: "flex", alignItems: "center", marginBottom: "clamp(0.55rem, 1vw, 0.8rem)" }}>
+      <div style={{ display: "flex", alignItems: "center", marginBottom: "clamp(0.45rem, 0.8vw, 0.66rem)" }}>
         <div
           style={{
-            width: "clamp(34px, 3.4vw, 40px)",
-            height: "clamp(34px, 3.4vw, 40px)",
+            width: "clamp(30px, 2.8vw, 36px)",
+            height: "clamp(30px, 2.8vw, 36px)",
             borderRadius: "50%",
             background: "linear-gradient(135deg, #ff8c42, #ffa726)",
             display: "flex",
@@ -104,19 +104,19 @@ const NewsCard = ({ article, onOpen }) => {
         >
           {avatar}
         </div>
-        <div style={{ color: "#b0b0b0", fontSize: "clamp(0.82rem, 1vw, 0.9rem)" }}>{author}</div>
+        <div style={{ color: "#b0b0b0", fontSize: "clamp(0.76rem, 0.85vw, 0.84rem)" }}>{author}</div>
       </div>
 
-      <div style={{ fontSize: isMobile ? "1.05rem" : "clamp(1.05rem, 1.35vw, 1.25rem)", fontWeight: 700, marginBottom: "0.55rem", color: "white" }}>
+      <div style={{ fontSize: isMobile ? "0.95rem" : "clamp(0.88rem, 0.95vw, 1.02rem)", fontWeight: 700, marginBottom: "0.42rem", color: "white" }}>
         {koTitle}
       </div>
 
       <div
         style={{
           color: "#d0d0d0",
-          marginBottom: "clamp(0.7rem, 1vw, 0.9rem)",
+          marginBottom: "clamp(0.5rem, 0.75vw, 0.72rem)",
           lineHeight: 1.6,
-          fontSize: isMobile ? "0.92rem" : "clamp(0.95rem, 1.1vw, 1.05rem)",
+          fontSize: isMobile ? "0.84rem" : "clamp(0.8rem, 0.82vw, 0.92rem)",
           display: "-webkit-box",
           WebkitLineClamp: 5,
           WebkitBoxOrient: "vertical",
@@ -132,7 +132,7 @@ const NewsCard = ({ article, onOpen }) => {
           justifyContent: "space-between",
           alignItems: "center",
           color: "#999",
-          fontSize: "clamp(0.8rem, 0.98vw, 0.9rem)",
+          fontSize: "clamp(0.72rem, 0.82vw, 0.82rem)",
         }}
       >
         <span>{article.date}</span>
@@ -140,9 +140,9 @@ const NewsCard = ({ article, onOpen }) => {
           style={{
             background: "rgba(255, 140, 66, 0.18)",
             color: "#ff8c42",
-            padding: "0.25rem 0.6rem",
+            padding: "0.22rem 0.52rem",
             borderRadius: "14px",
-            fontSize: "clamp(0.75rem, 0.9vw, 0.8rem)",
+            fontSize: "clamp(0.68rem, 0.75vw, 0.76rem)",
             border: "1px solid rgba(255,140,66,0.35)",
           }}
         >
