@@ -507,12 +507,13 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
                 style={{
                   display: 'grid',
                   gridTemplateColumns: '64px 1fr auto',
-                  alignItems: 'center',
+                  alignItems: 'stretch',
                   gap: '0.6rem',
                   background: 'rgba(255,255,255,0.06)',
                   border: '1px solid rgba(255,140,66,0.20)',
                   borderRadius: '14px',
                   padding: '0.7rem 0.8rem',
+                  minHeight: '82px',
                   cursor: 'pointer',
                   transition: 'all 0.25s ease'
                 }}
@@ -551,13 +552,18 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
                     <span style={{ color: '#cfcfcf', fontSize: '0.75rem' }}>No Image</span>
                   )}
                 </div>
-                <div>
+                <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '50px' }}>
                   <div style={{ 
                     fontSize: '0.95rem', 
                     color: '#fff', 
                     fontWeight: 600, 
                     lineHeight: 1.35,
-                    textAlign: 'left'
+                    textAlign: 'left',
+                    display: '-webkit-box',
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: 'vertical',
+                    overflow: 'hidden',
+                    minHeight: '2.56rem'
                   }}>
                     {item.korTitle || item.title || "(제목 없음)"}
                   </div>
@@ -569,7 +575,7 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
                     {item.date} · {item.source}
                   </div>
                 </div>
-                <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
+                <div style={{ display: "flex", alignItems: "flex-end", gap: "0.4rem", justifyContent: "flex-end" }}>
                   <ScrapStarButton article={item} size={16} />
                   <span style={{
                     fontSize: '0.72rem',

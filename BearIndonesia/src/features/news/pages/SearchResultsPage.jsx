@@ -84,24 +84,6 @@ function getInitials(text = "") {
   return (initials || s.slice(0, 2)).toUpperCase();
 }
 
-const getMatchTypeColor = (matchType) => {
-  switch (matchType) {
-    case 'company': return '#4CAF50'; 
-    case 'drug': return '#2196F3';
-    case 'clinical': return '#FF9800';
-    default: return '#ff8c42';
-  }
-};
-
-const getMatchTypeLabel = (matchType) => {
-  switch (matchType) {
-    case 'company': return '제약회사';
-    case 'drug': return '의약품';
-    case 'clinical': return '임상단계';
-    default: return '기타';
-  }
-};
-
 /* tagsJson 혹은 article.tags를 안전하게 배열 문자열로 변환 */
 const parseTags = (article) => {
   if (Array.isArray(article?.tags)) {
@@ -196,10 +178,13 @@ const SearchCard = ({ article, onOpen, searchTerm, onTagClick }) => {
     <div
       style={{
         position: "relative",
+        display: "flex",
+        flexDirection: "column",
         background: "rgba(255, 255, 255, 0.1)",
         backdropFilter: "blur(10px)",
         borderRadius: "13px",
         padding: "1rem",
+        minHeight: "280px",
         transition: "all 0.3s ease",
         cursor: "pointer",
         overflow: "hidden",
@@ -236,18 +221,6 @@ const SearchCard = ({ article, onOpen, searchTerm, onTagClick }) => {
         <div style={{ flex: 1 }}>
           <div style={{ color: "#b0b0b0", fontSize: "0.8rem" }}>{author}</div>
         </div>
-        <div
-          style={{
-            background: getMatchTypeColor(article?.matchType || 'other'),
-            color: "white",
-            padding: "0.25rem 0.5rem",
-            borderRadius: "10px",
-            fontSize: "0.68rem",
-            fontWeight: "bold",
-          }}
-        >
-          {getMatchTypeLabel(article?.matchType || 'other')}
-        </div>
       </div>
 
       <div 
@@ -256,7 +229,12 @@ const SearchCard = ({ article, onOpen, searchTerm, onTagClick }) => {
           fontWeight: "bold", 
           marginBottom: "0.55rem", 
           color: "white",
-          lineHeight: "1.4"
+          lineHeight: "1.4",
+          display: "-webkit-box",
+          WebkitLineClamp: 2,
+          WebkitBoxOrient: "vertical",
+          overflow: "hidden",
+          minHeight: "2.8rem",
         }}
       >
         {renderHighlighted(koTitle, searchTerm)}
@@ -264,7 +242,7 @@ const SearchCard = ({ article, onOpen, searchTerm, onTagClick }) => {
       
       <div style={{ 
         color: "#d0d0d0", 
-        marginBottom: "0.72rem", 
+        marginBottom: 0, 
         lineHeight: "1.6",
         fontSize: "0.84rem"
       }}>
@@ -300,7 +278,9 @@ const SearchCard = ({ article, onOpen, searchTerm, onTagClick }) => {
         alignItems: "flex-end", 
         color: "#999", 
         fontSize: "0.78rem",
-        gap: "0.7rem"
+        gap: "0.7rem",
+        marginTop: "auto",
+        paddingTop: "0.72rem",
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: "0.7rem" }}>
           <span>{article.date}</span>

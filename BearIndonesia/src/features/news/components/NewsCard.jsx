@@ -47,10 +47,13 @@ const NewsCard = ({ article, onOpen }) => {
       onClick={onOpen}
       style={{
         position: "relative",
+        display: "flex",
+        flexDirection: "column",
         background: dimmed ? "rgba(255, 255, 255, 0.06)" : "rgba(255, 255, 255, 0.1)",
         backdropFilter: "blur(10px)",
         borderRadius: isMobile ? "13px" : "14px",
         padding: isMobile ? "0.78rem" : "clamp(0.72rem, 0.95vw, 0.92rem)",
+        minHeight: isMobile ? "252px" : "272px",
         transition: "all 0.25s ease",
         cursor: "pointer",
         overflow: "hidden",
@@ -107,14 +110,27 @@ const NewsCard = ({ article, onOpen }) => {
         <div style={{ color: "#b0b0b0", fontSize: "clamp(0.76rem, 0.85vw, 0.84rem)" }}>{author}</div>
       </div>
 
-      <div style={{ fontSize: isMobile ? "0.95rem" : "clamp(0.88rem, 0.95vw, 1.02rem)", fontWeight: 700, marginBottom: "0.42rem", color: "white" }}>
+      <div
+        style={{
+          fontSize: isMobile ? "0.95rem" : "clamp(0.88rem, 0.95vw, 1.02rem)",
+          fontWeight: 700,
+          marginBottom: "0.42rem",
+          color: "white",
+          display: "-webkit-box",
+          WebkitLineClamp: 2,
+          WebkitBoxOrient: "vertical",
+          overflow: "hidden",
+          lineHeight: 1.4,
+          minHeight: isMobile ? "2.66rem" : "2.8rem",
+        }}
+      >
         {koTitle}
       </div>
 
       <div
         style={{
           color: "#d0d0d0",
-          marginBottom: "clamp(0.5rem, 0.75vw, 0.72rem)",
+          marginBottom: 0,
           lineHeight: 1.6,
           fontSize: isMobile ? "0.84rem" : "clamp(0.8rem, 0.82vw, 0.92rem)",
           display: "-webkit-box",
@@ -133,6 +149,8 @@ const NewsCard = ({ article, onOpen }) => {
           alignItems: "center",
           color: "#999",
           fontSize: "clamp(0.72rem, 0.82vw, 0.82rem)",
+          marginTop: "auto",
+          paddingTop: "clamp(0.5rem, 0.75vw, 0.72rem)",
         }}
       >
         <span>{article.date}</span>
