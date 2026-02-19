@@ -84,7 +84,7 @@ const NewsSidebar = ({
         width: isCollapsed ? "0px" : "224px",
         background: "rgba(255, 255, 255, 0.05)",
         backdropFilter: "blur(10px)",
-        padding: isMobile ? "108px 0 0" : "76px 0 0",
+        padding: isMobile ? "96px 0 0" : "64px 0 0",
         borderRight: isCollapsed ? "none" : "1px solid rgba(255, 255, 255, 0.1)",
         position: "fixed",
         top: 0,
@@ -128,11 +128,11 @@ const NewsSidebar = ({
       </button>
 
       {!isCollapsed && (
-        <div style={{ padding: "4.2rem 0.85rem 0.9rem" }}>
+        <div style={{ padding: "3.6rem 0.85rem 0.9rem" }}>
         <h2
         style={{
           color: "#ff8c42",
-          marginTop: "1.2rem",
+          marginTop: "0.7rem",
           marginBottom: "1.1rem",
           fontSize: "1.12rem",
           textAlign: "center",

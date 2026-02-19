@@ -191,7 +191,7 @@ const CalendarPage = ({ setSelectedNews }) => {
       style={{ padding: '0.9rem 0.68rem 1rem', minHeight: 'calc(100vh - 80px)' }}
       key={`page-${calendarKey}`}
     >
-      <h1 style={{ fontSize: 'clamp(1.36rem, 1.7vw, 1.65rem)', textAlign: 'center', width: '100%', lineHeight: 1.2, margin: 0, marginBottom: '0.42rem', paddingTop: '0.2rem', color: '#ff8c42' }}>
+      <h1 style={{ fontSize: 'clamp(1.36rem, 1.7vw, 1.65rem)', textAlign: 'center', width: '100%', lineHeight: 1.2, margin: 0, marginBottom: '0.72rem', paddingTop: '0.2rem', color: '#ff8c42' }}>
         Interactive Calendar
       </h1>
 
