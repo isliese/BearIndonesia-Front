@@ -368,6 +368,14 @@ const CompetitorReportPage = () => {
     return out;
   }, [mentionedKeywords]);
 
+  const insightsByKeyword = useMemo(() => {
+    const out = {};
+    (report?.insights || []).forEach((row) => {
+      if (row?.keyword) out[row.keyword] = row.summary || "";
+    });
+    return out;
+  }, [report]);
+
   const selectedMentions = mentionedByKeyword[selectedKeyword] || [];
   const normalizedRangeIssues = useMemo(() => {
     const rows = rangeIssueTitles || [];
@@ -397,6 +405,8 @@ const CompetitorReportPage = () => {
     return strict.slice(0, ISSUE_TOP_COUNT);
   }, [rangeIssueTitles]);
   const trendSummaryText = useMemo(() => {
+    const serverSummary = (insightsByKeyword[selectedKeyword] || "").trim();
+    if (serverSummary) return serverSummary;
     return buildNarrativeSummary({
       keyword: selectedKeyword,
       mentions: selectedMentions,
@@ -405,7 +415,7 @@ const CompetitorReportPage = () => {
       startDate,
       endDate,
     });
-  }, [selectedKeyword, selectedMentions, selectedArticles, totalsByKeyword, startDate, endDate]);
+  }, [selectedKeyword, selectedMentions, selectedArticles, totalsByKeyword, startDate, endDate, insightsByKeyword]);
 
   return (
     <div style={pageStyle}>
