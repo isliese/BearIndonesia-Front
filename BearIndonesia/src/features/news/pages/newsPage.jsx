@@ -657,13 +657,13 @@ const UnifiedNewsPage = ({ setSelectedNews }) => {
         ref={mainContentRef}
         style={{
           flex: 1,
-          padding: isMobile ? "0.9rem 0.95rem" : "clamp(0.5rem, 1.5vw, 1rem)",
+          padding: "0.9rem 0.95rem 1rem",
           marginLeft: `${effectiveSidebarWidth}px`,
           transition: "margin 0.3s ease",
           boxSizing: "border-box",
         }}
       >
-        <h1 style={{ fontSize: "clamp(1.36rem, 1.7vw, 1.65rem)", color: "#ff8c42", textAlign: "center", marginBottom: "0.5rem", paddingTop: "0.2rem" }}>
+        <h1 style={{ fontSize: "clamp(1.36rem, 1.7vw, 1.65rem)", color: "#ff8c42", textAlign: "center", width: "100%", lineHeight: 1.2, margin: 0, marginBottom: "0.42rem", paddingTop: "0.2rem" }}>
           News
         </h1>
 

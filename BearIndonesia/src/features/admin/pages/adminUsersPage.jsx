@@ -70,14 +70,16 @@ const AdminUsersPage = () => {
   }
 
   return (
-    <div style={{ maxWidth: 1200, margin: "0 auto", padding: "2rem 1.2rem", boxSizing: "border-box" }}>
+    <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0.9rem 1.2rem 1rem", boxSizing: "border-box" }}>
       <h1
         style={{
           fontSize: "clamp(1.36rem, 1.7vw, 1.65rem)",
           color: "#ff8c42",
           textAlign: "center",
-          marginTop: 0,
-          marginBottom: "0.5rem",
+          width: "100%",
+          lineHeight: 1.2,
+          margin: 0,
+          marginBottom: "0.42rem",
           paddingTop: "0.2rem",
         }}
       >

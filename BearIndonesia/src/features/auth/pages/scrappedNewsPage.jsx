@@ -59,15 +59,17 @@ const ScrappedNewsPage = ({ setSelectedNews }) => {
   }
 
   return (
-    <div style={{ padding: "2rem 1rem", minHeight: "calc(100vh - 80px)" }}>
+    <div style={{ padding: "0.9rem 1rem 1rem", minHeight: "calc(100vh - 80px)" }}>
       <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
         <h1
           style={{
             fontSize: "clamp(1.36rem, 1.7vw, 1.65rem)",
             color: "#ff8c42",
             textAlign: "center",
-            marginTop: 0,
-            marginBottom: "0.5rem",
+            width: "100%",
+            lineHeight: 1.2,
+            margin: 0,
+            marginBottom: "0.42rem",
             paddingTop: "0.2rem",
           }}
         >

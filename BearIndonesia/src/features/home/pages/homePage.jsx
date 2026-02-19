@@ -339,11 +339,11 @@ const HomePage = ({ onSearch, setSelectedNews = () => {} }) => {
               News Stand
             </h2>
           </div>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: isMobile ? 'repeat(2, minmax(0, 1fr))' : 'repeat(auto-fit, minmax(160px, 1fr))',
-            gap: '0.72rem'
-          }}>
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: isMobile ? 'repeat(2, minmax(0, 1fr))' : 'repeat(4, minmax(0, 1fr))',
+              gap: '0.72rem'
+            }}>
             {newsStandItems.map((item) => (
               (() => {
                 const tooltip = disabledStandMessages[item.name];

@@ -182,23 +182,26 @@ const SalesPage = () => {
       style={{
         maxWidth: 1400,
         margin: "0 auto",
-        padding: "1.5rem 1.2rem",
+        padding: "0.9rem 1.2rem 1rem",
         boxSizing: "border-box",
       }}
     >
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "1rem", flexWrap: "wrap" }}>
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "0.35rem" }}>
         <h1
           style={{
             fontSize: "clamp(1.36rem, 1.7vw, 1.65rem)",
             color: "#ff8c42",
             textAlign: "center",
+            width: "100%",
+            lineHeight: 1.2,
             margin: 0,
+            marginBottom: "0.42rem",
             paddingTop: "0.2rem",
           }}
         >
           Sales
         </h1>
-        <div style={{ color: "#b0b0b0", fontSize: "0.95rem" }}>
+        <div style={{ color: "#b0b0b0", fontSize: "0.95rem", textAlign: "center" }}>
           Raw Excel 업로드 → 시각화 페이지(HTML) 생성/조회
         </div>
       </div>

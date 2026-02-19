@@ -43,11 +43,11 @@ const ScrapCommentModal = ({ isOpen, value, onChange, onClose, onSave }) => {
       <div
         onClick={(e) => e.stopPropagation()}
         style={{
-          width: "min(560px, 100%)",
+          width: "min(500px, 100%)",
           background: "linear-gradient(135deg, rgba(30, 30, 40, 0.96), rgba(20, 20, 30, 0.96))",
           border: "1px solid rgba(255, 140, 66, 0.28)",
-          borderRadius: "18px",
-          padding: "1.25rem",
+          borderRadius: "16px",
+          padding: "1rem",
           boxShadow: "0 20px 60px rgba(0,0,0,0.45)",
         }}
         role="dialog"
@@ -61,20 +61,20 @@ const ScrapCommentModal = ({ isOpen, value, onChange, onClose, onSave }) => {
           </div>
         </div>
 
-        <div style={{ marginTop: "0.9rem" }}>
+        <div style={{ marginTop: "0.75rem" }}>
           <textarea
             ref={textareaRef}
             value={safeValue}
             onChange={(e) => onChange?.(e.target.value.slice(0, MAX_LEN))}
             placeholder="스크랩할 기사에 대한 메모를 적어주세요. (최대 300자)"
-            rows={5}
+            rows={4}
             style={{
               width: "100%",
               resize: "none",
               background: "rgba(255,255,255,0.06)",
               border: "1px solid rgba(255,255,255,0.14)",
               borderRadius: "12px",
-              padding: "0.9rem",
+              padding: "0.75rem",
               color: "white",
               outline: "none",
               lineHeight: 1.5,
@@ -83,7 +83,7 @@ const ScrapCommentModal = ({ isOpen, value, onChange, onClose, onSave }) => {
           />
         </div>
 
-        <div style={{ display: "flex", justifyContent: "flex-end", gap: "0.6rem", marginTop: "1rem" }}>
+        <div style={{ display: "flex", justifyContent: "flex-end", gap: "0.5rem", marginTop: "0.82rem" }}>
           <button
             type="button"
             onClick={onClose}

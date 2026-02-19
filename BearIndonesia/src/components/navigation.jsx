@@ -19,9 +19,9 @@ const Navigation = () => {
 
   const isAdmin = isAdminUser(authUser);
   const navItems = [
-    { id: 'about', label: '\uc11c\ube44\uc2a4 \uc18c\uac1c', to: '/about' },
+    { id: 'about', label: 'About', to: '/about' },
     { id: 'news', label: 'News', to: '/news' },
-    { id: 'calendar', label: '\uc778\ud130\ub809\ud2f0\ube0c \uce98\ub9b0\ub354', to: '/calendar' },
+    { id: 'calendar', label: 'Interactive Calendar', to: '/calendar' },
     { id: 'report', label: 'Report', to: '/report/competitor' },
     ...(isAdmin ? [{ id: 'sales', label: 'Sales', to: '/sales' }] : []),
     ...(isAdmin ? [{ id: 'admin', label: 'Admin', to: '/admin/users' }] : []),

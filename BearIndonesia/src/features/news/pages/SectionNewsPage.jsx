@@ -212,7 +212,7 @@ const SectionNewsPage = ({ setSelectedNews }) => {
   };
 
   return (
-    <div style={{ display: "flex", padding: "1rem 0.8rem", minHeight: "calc(100vh - 80px)" }}>
+    <div style={{ display: "flex", padding: "0.9rem 0.8rem 1rem", minHeight: "calc(100vh - 80px)" }}>
       {/* 왼쪽 카테고리 메뉴 */}
       <div
         style={{
@@ -252,7 +252,7 @@ const SectionNewsPage = ({ setSelectedNews }) => {
         style={{
           flex: 1,
           overflowY: "auto",
-          marginTop: "0.6rem",
+          marginTop: "0",
           maxHeight: "100vh",
           paddingRight: "0.7rem",
           display: "flex",
@@ -270,10 +270,13 @@ const SectionNewsPage = ({ setSelectedNews }) => {
         >
           <h1
             style={{
-              marginBottom: "0.5rem",
+              margin: 0,
+              marginBottom: "0.42rem",
               color: "#ff8c42",
               fontSize: "clamp(1.36rem, 1.7vw, 1.65rem)",
               textAlign: "center",
+              width: "100%",
+              lineHeight: 1.2,
               paddingTop: "0.2rem",
             }}
           >

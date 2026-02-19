@@ -480,7 +480,7 @@ const SearchResultsPage = ({ setSelectedNews }) => {
   }, [filteredResults, authUser]);
 
   return (
-    <div style={{ position: 'relative', padding: '0.85rem 0.68rem', minHeight: 'calc(100vh - 80px)' }}>
+    <div style={{ position: 'relative', padding: '0.9rem 0.68rem 1rem', minHeight: 'calc(100vh - 80px)' }}>
       {/* 뒤로가기 버튼 */}
       <button
         onClick={() => navigate(location.state?.from || '/news')}
@@ -527,13 +527,12 @@ const SearchResultsPage = ({ setSelectedNews }) => {
           <h1 style={{ 
             fontSize: "clamp(1.36rem, 1.7vw, 1.65rem)", 
             color: "#ff8c42", 
-            marginBottom: "0.52rem",
-            marginTop: 0,
+            textAlign: "center",
+            width: "100%",
+            lineHeight: 1.2,
+            margin: 0,
+            marginBottom: "0.42rem",
             paddingTop: "0.2rem",
-            background: 'linear-gradient(135deg, #ff8c42, #ffa726)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text'
           }}>
             검색 결과
           </h1>

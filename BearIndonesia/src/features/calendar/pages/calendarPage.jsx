@@ -188,11 +188,11 @@ const CalendarPage = ({ setSelectedNews }) => {
     <div
       className="calendar-container"
       onMouseUp={handleMouseUp}
-      style={{ padding: '0.85rem 0.68rem', minHeight: 'calc(100vh - 80px)', paddingTop: '0.9rem' }}
+      style={{ padding: '0.9rem 0.68rem 1rem', minHeight: 'calc(100vh - 80px)' }}
       key={`page-${calendarKey}`}
     >
-      <h1 style={{ fontSize: 'clamp(1.36rem, 1.7vw, 1.65rem)', textAlign: 'center', marginTop: 0, marginBottom: '0.5rem', paddingTop: '0.2rem', color: '#ff8c42' }}>
-        인터렉티브 캘린더
+      <h1 style={{ fontSize: 'clamp(1.36rem, 1.7vw, 1.65rem)', textAlign: 'center', width: '100%', lineHeight: 1.2, margin: 0, marginBottom: '0.42rem', paddingTop: '0.2rem', color: '#ff8c42' }}>
+        Interactive Calendar
       </h1>
 
       <div style={{ display: 'flex', gap: '0.62rem', maxWidth: '1020px', margin: '0 auto', flexWrap: isDesktop ? 'nowrap' : 'wrap', alignItems: 'stretch' }}>
